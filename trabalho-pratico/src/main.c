@@ -4,6 +4,7 @@
 #include <glib.h>
 #include "../include/parse.h"
 #include "../include/users.h"
+#include "../include/rides.h"
 
 int main(int argc, char **argv){
     FILE *fp = NULL;
@@ -13,19 +14,34 @@ int main(int argc, char **argv){
         fp = stdin;
     }
     else{
-        while (i<=1) {
+        while (i<=2) {
             switch (i)
             {
                 case 1:
-                    filename = strdup(argv[1]);
-                    strcat (filename,"users.csv");
                     GHashTable *user = g_hash_table_new(g_str_hash, g_str_equal);
+                    filename = strdup(argv[1]);
+                    if(!realloc (filename, (strlen (argv[1]) + strlen ("drivers.csv"))*sizeof(char))) return 3;
+                    strcat (filename,"users.csv");
                     fp = fopen(filename,"r");
                     if(!fp){
                         perror("Error");
                         return 2;
                     }
                     parser (fp,user,i);
+                    lookupUser(user);
+                    fclose (fp);
+                    break;
+                case 2:
+                    GHashTable *hashRides = g_hash_table_new(g_str_hash, g_str_equal);
+                    filename = strdup(argv[1]);
+                    strcat (filename,"rides.csv");
+                    fp = fopen(filename,"r");
+                    if(!fp){
+                        perror("Error");
+                        return 2;
+                    }
+                    parser(fp,hashRides,i);
+                    lookupRide(hashRides);
                     fclose (fp);
                     break;
                 default:

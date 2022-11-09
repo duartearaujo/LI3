@@ -3,15 +3,19 @@
 #include <glib.h>
 #include "../include/parse.h"
 #include "../include/users.h"
+#include "../include/rides.h"
 
 void parser(FILE *fp, GHashTable* table, int h) {
-    void (*fun_criar)(GHashTable*,char*);
+    void (*fun_criar)(GHashTable*,char*) = NULL;
     char* line = NULL;
     size_t len;
     ssize_t read;;
     switch (h) {
         case 1:
             fun_criar = &criaHashUser;
+            break;
+        case 2:
+            fun_criar = &newElement;
             break;
     }
     while ((read = getline(&line, &len, fp)) != -1){
@@ -28,3 +32,4 @@ void separa(char *str, User *user){
         token = strsep(&str,";");
     }
 }
+
