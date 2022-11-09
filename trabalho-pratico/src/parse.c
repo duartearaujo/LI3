@@ -4,6 +4,7 @@
 #include "../include/parse.h"
 #include "../include/users.h"
 #include "../include/rides.h"
+#include "../include/drivers.h"
 
 void parser(FILE *fp, GHashTable* table, int h) {
     void (*fun_criar)(GHashTable*,char*) = NULL;
@@ -17,6 +18,8 @@ void parser(FILE *fp, GHashTable* table, int h) {
         case 2:
             fun_criar = &newElement;
             break;
+        case 3:
+            fun_criar = &novo;
     }
     while ((read = getline(&line, &len, fp)) != -1){
             line[read-1] = '\0';
@@ -32,4 +35,3 @@ void separa(char *str, User *user){
         token = strsep(&str,";");
     }
 }
-
