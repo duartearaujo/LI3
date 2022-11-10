@@ -5,12 +5,33 @@
 #include "../include/users.h"
 #include "../include/rides.h"
 #include "../include/drivers.h"
+#include "../include/queries.h"
+
+void parsequerie (FILE *fp) {
+    int i = 0;
+    char **querie = NULL;
+    char *line = NULL;
+    size_t len;
+    ssize_t read;;
+    while ((read = getline(&line, &len, fp)) != -1){
+        line[read-1] = '\0';
+
+        char *token = strsep(&line," ");
+        while (token) {
+            querie[i++] = strdup (token);
+            token = strsep(&line," ");
+        }
+
+        dealwithquerie (&(*querie));
+    } 
+}
 
 void parser(FILE *fp, GHashTable* table, int h) {
     void (*fun_criar)(GHashTable*,char*) = NULL;
     char* line = NULL;
     size_t len;
     ssize_t read;;
+    if ((read = getline(&line, &len, fp)) == -1) return ;    
     switch (h) {
         case 1:
             fun_criar = &criaHashUser;

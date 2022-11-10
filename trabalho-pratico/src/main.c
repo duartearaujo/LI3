@@ -65,6 +65,10 @@ int main(int argc, char **argv){
             i++;
         }
     }
+
+    //parse das queries
+    fp = fopen (argv[2], "r");
+    parsequerie (fp);
     return 0;
 }
 
