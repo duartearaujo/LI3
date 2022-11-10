@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/rides.h"
+#include "../include/parse.h"
 
 
 struct RIDES{
@@ -16,7 +17,7 @@ struct RIDES{
    char *comment;
 };
 
-void assignsData(char *token,int pos,RIDES* new_ride){
+void assignsData(RIDES* new_ride ,int pos ,char* token){
    char *str = strdup(token);
    switch(pos){
       case 1:
@@ -54,18 +55,9 @@ void assignsData(char *token,int pos,RIDES* new_ride){
 }
 
 
-void separateData(char *str,RIDES* new_ride){
-   int pos = 1;
-   char *token = strsep(&str,";");
-   while(token){
-      assignsData(token,pos++,new_ride);
-      token = strsep(&str,";");
-   }
-}
-
 void newElement(GHashTable *hashRides, char *line){
    RIDES *new_ride = malloc(sizeof(RIDES));
-   separateData(line,new_ride);
+   separa(line,new_ride,2);
    g_hash_table_insert(hashRides,new_ride->id,new_ride);
 }
 

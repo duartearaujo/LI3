@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <glib.h>
+#include "../include/parse.h"
 
 typedef struct DRIVERS{
     char* id;
@@ -13,7 +14,7 @@ typedef struct DRIVERS{
     char* ac_st;
 } DRIVERS;
 
-void atribui_drv(char *token, int pos, DRIVERS* drv2){
+void atribui_drv(DRIVERS* drv2 ,int pos,char* token){
     char *str = strdup(token);
     switch(pos){
         case 1:
@@ -47,18 +48,9 @@ void atribui_drv(char *token, int pos, DRIVERS* drv2){
     }
 }
 
-void separa_drv(char *str, DRIVERS* drv2){
-    int pos = 1;
-    char *token = strsep(&str, ";");
-    while(token){
-        atribui_drv(token, pos++, drv2);
-        token = strsep(&str, ";");
-    }
-}
-
 void novo(GHashTable *HashDrv, char *line){
     DRIVERS *drv2 = malloc(sizeof(DRIVERS));
-    separa_drv(line, drv2);
+    separa(line,drv2,3);
     g_hash_table_insert(HashDrv, drv2 -> id, drv2);
 }
 

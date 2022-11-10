@@ -6,6 +6,6 @@
 
 void parser (FILE* fp,GHashTable* table, int h );
 
-void separa (char *str, User *user);
+void separa (char *str, void *data, int s);
 
 #endif

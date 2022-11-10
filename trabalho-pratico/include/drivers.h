@@ -7,9 +7,7 @@
 
 typedef struct DRIVERS DRIVERS;
 
-void atribui_drv(char *token, int pos, DRIVERS* drv2);
-
-void separa_drv(char *str, DRIVERS* drv2);
+void atribui_drv(DRIVERS* drv2 ,int pos,char* token);
 
 void novo(GHashTable* HashDrv, char *line);
 
