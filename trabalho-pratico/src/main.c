@@ -19,7 +19,7 @@ int main(int argc, char **argv){
             switch (i){
                 case 1: {
                     GHashTable *user = g_hash_table_new(g_str_hash, g_str_equal);
-                    filename = strdup(argv[1]);
+                    strcpy(filename,argv[1]);
                     strcat (filename,"users.csv");
                     fp = fopen(filename,"r");
                     if(!fp){
@@ -33,7 +33,7 @@ int main(int argc, char **argv){
                 }
                 case 2: {
                     GHashTable *hashRides = g_hash_table_new(g_str_hash, g_str_equal);
-                    filename = strdup(argv[1]);
+                    strcpy(filename,argv[1]);
                     strcat (filename,"rides.csv");
                     fp = fopen(filename,"r");
                     if(!fp){
@@ -47,7 +47,7 @@ int main(int argc, char **argv){
                 }
                 case 3: {
                     GHashTable *HashDrv = g_hash_table_new(g_str_hash, g_str_equal);
-                    filename = strdup(argv[1]);
+                    strcpy(filename,argv[1]);
                     strcat (filename,"drivers.csv");
                     fp = fopen(filename,"r");
                     if(!fp){
