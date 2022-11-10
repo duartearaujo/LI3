@@ -28,11 +28,27 @@ void parser(FILE *fp, GHashTable* table, int h) {
     } 
 }
 
-void separa(char *str, User *user){
+void separa(char *str, void *data,int s){
     int pos= 1;
     char *token = strsep(&str,";");
     while(token){
-        atribui (user, pos++, token);
+        switch (s)
+        {
+        case 1: {
+            atribui ((User*)data, pos++, token);
+            break;
+        }
+        case 2: {
+            assignsData ((RIDES*)data, pos++, token);
+            break;
+        }
+        case 3: {
+            atribui_drv((DRIVERS*)data, pos++, token);
+            break;  
+        }
+        default:
+            break;
+        }
         token = strsep(&str,";");
     }
 }

@@ -16,7 +16,7 @@ struct user {
 
 void criaHashUser (GHashTable *user, char *line) {
     User *new = malloc (sizeof (User));
-    separa (line, new);
+    separa (line,new,1);
     g_hash_table_insert(user,new->username,new);
 }
 

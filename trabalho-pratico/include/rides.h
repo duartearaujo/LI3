@@ -7,9 +7,7 @@
 
 typedef struct RIDES RIDES;
 
-void assignsData(char *token,int pos,RIDES* new_ride);
-
-void separateData(char *str,RIDES* new_ride);
+void assignsData(RIDES* new_ride ,int pos ,char* token);
 
 void newElement(GHashTable* hashRides, char *line);
 
