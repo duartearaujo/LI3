@@ -47,7 +47,7 @@ void atribui (User *user, int pos, char *info) {
 }
 
 void lookupUser (GHashTable *user) {
-    User *n = g_hash_table_lookup (user,"LuVieira");
+    User *n = g_hash_table_lookup (user,"MiTeixeira");
     char *s = n->name;
     printf ("%s\n",s);
 }
