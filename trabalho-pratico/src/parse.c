@@ -20,6 +20,7 @@ void parser(FILE *fp, GHashTable* table, int h) {
             break;
         case 3:
             fun_criar = &novo;
+            break;
     }
     while ((read = getline(&line, &len, fp)) != -1){
             line[read-1] = '\0';

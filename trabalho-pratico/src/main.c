@@ -9,7 +9,7 @@
 
 int main(int argc, char **argv){
     FILE *fp = NULL;
-    char *filename = NULL;
+    char *filename = malloc ((strlen (argv[1]) + strlen ("drivers.csv"))*sizeof (char));
     int i = 1;
     if(argc < 2){
         fp = stdin;
@@ -20,7 +20,6 @@ int main(int argc, char **argv){
                 case 1: {
                     GHashTable *user = g_hash_table_new(g_str_hash, g_str_equal);
                     filename = strdup(argv[1]);
-                    if(!realloc (filename, (strlen (argv[1]) + strlen ("drivers.csv"))*sizeof(char))) return 3;
                     strcat (filename,"users.csv");
                     fp = fopen(filename,"r");
                     if(!fp){
