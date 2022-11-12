@@ -1,6 +1,10 @@
 #ifndef queries
 #define queries
 
-void dealwithquerie (char **argv);
+#include "../include/parse.h"
+
+void querieIdentifier(char **argv, HASH *hash);
+
+void querie1(char *str);
 
 #endif

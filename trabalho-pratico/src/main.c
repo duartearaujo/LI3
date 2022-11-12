@@ -6,9 +6,38 @@
 #include "../include/users.h"
 #include "../include/rides.h"
 #include "../include/drivers.h"
+#include "../include/main.h"
+
+struct HASH{
+    GHashTable *user;
+    GHashTable *ride;
+    GHashTable *driver;
+};
+
+GHashTable* retornaHash(int i, HASH *hash){
+    switch(i)
+    {
+    case 1: {
+        return hash -> user;
+    }     
+    break;
+    case 2: {
+        return hash -> ride;
+    }
+    break;
+    case 3: {
+        return hash -> driver;
+    }
+    break;
+    default:
+        break;
+    }
+    return NULL;
+}
 
 int main(int argc, char **argv){
     FILE *fp = NULL;
+    HASH *hash = malloc(sizeof(HASH));
     char *filename = malloc ((strlen (argv[1]) + strlen ("drivers.csv"))*sizeof (char));
     int i = 1;
     if(argc < 2){
@@ -18,7 +47,7 @@ int main(int argc, char **argv){
         while (i<=3) {
             switch (i){
                 case 1: {
-                    GHashTable *user = g_hash_table_new(g_str_hash, g_str_equal);
+                    hash -> user = g_hash_table_new(g_str_hash, g_str_equal);
                     strcpy(filename,argv[1]);
                     strcat (filename,"users.csv");
                     fp = fopen(filename,"r");
@@ -26,13 +55,13 @@ int main(int argc, char **argv){
                         perror("Error");
                         return 2;
                     }
-                    parser (fp,user,i);
-                    lookupUser(user);
+                    parser (fp, hash -> user, i);
+                    lookupUser(hash -> user);
                     fclose (fp);
                     break;
                 }
                 case 2: {
-                    GHashTable *hashRides = g_hash_table_new(g_str_hash, g_str_equal);
+                    hash -> ride = g_hash_table_new(g_str_hash, g_str_equal);
                     strcpy(filename,argv[1]);
                     strcat (filename,"rides.csv");
                     fp = fopen(filename,"r");
@@ -40,13 +69,13 @@ int main(int argc, char **argv){
                         perror("Error");
                         return 2;
                     }
-                    parser(fp,hashRides,i);
-                    lookupRide(hashRides);
+                    parser(fp, hash -> ride, i);
+                    lookupRide(hash -> ride);
                     fclose (fp);
                     break;
                 }
                 case 3: {
-                    GHashTable *HashDrv = g_hash_table_new(g_str_hash, g_str_equal);
+                    hash -> driver = g_hash_table_new(g_str_hash, g_str_equal);
                     strcpy(filename,argv[1]);
                     strcat (filename,"drivers.csv");
                     fp = fopen(filename,"r");
@@ -54,8 +83,8 @@ int main(int argc, char **argv){
                         perror("Error");
                         return 2;
                     }
-                    parser(fp,HashDrv,i);
-                    procura(HashDrv);
+                    parser(fp, hash -> driver, i);
+                    procura(hash -> driver);
                     fclose (fp);
                     break;
                 }
@@ -65,10 +94,9 @@ int main(int argc, char **argv){
             i++;
         }
     }
-
     //parse das queries
     fp = fopen (argv[2], "r");
-    parsequerie (fp);
+    parsequerie (fp, hash);
     return 0;
 }
 

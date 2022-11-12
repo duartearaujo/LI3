@@ -2,9 +2,9 @@
 #define parse
 
 #include <glib.h>
-#include "users.h"
+#include "../include/main.h"
 
-void parsequerie (FILE *fp);
+void parsequerie (FILE *fp, HASH *hash);
 
 void parser (FILE* fp,GHashTable* table, int h );
 
