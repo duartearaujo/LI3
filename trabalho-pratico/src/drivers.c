@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <glib.h>
 #include "../include/parse.h"
+#include "../include/queries.h"
 
 typedef struct DRIVERS{
     char* id;
@@ -18,32 +19,31 @@ void atribui_drv(DRIVERS* drv2 ,int pos,char* token){
     char *str = strdup(token);
     switch(pos){
         case 1:
-        drv2 -> id = str;
+            drv2 -> id = str;
         break;
         case 2:
-        drv2 -> name = str;
+            drv2 -> name = str;
         break;
         case 3:
-        drv2 -> birth = str;
+            drv2 -> birth = str;
         break;
         case 4:
-        drv2 -> gender = str;
+            drv2 -> gender = str;
         break;
         case 5:
-        break;
-        drv2-> car_class = str;
+            drv2-> car_class = str;
         break;
         case 6:
-        drv2 -> plate = str;
+            drv2 -> plate = str;
         break;
         case 7:
-        drv2 -> city = str;
+            drv2 -> city = str;
         break;
         case 8:
-        drv2 -> ac_cr = str;
+            drv2 -> ac_cr = str;
         break;
         case 9:
-        drv2 -> ac_st = str;
+            drv2 -> ac_st = str;
         break;
     }
 }
@@ -54,8 +54,10 @@ void novo(GHashTable *HashDrv, char *line){
     g_hash_table_insert(HashDrv, drv2 -> id, drv2);
 }
 
-void procura(GHashTable* HashDrv){
-    DRIVERS *d = g_hash_table_lookup(HashDrv, "000000000022");
-    char *key = d -> name;
-    printf("%s\n", key);
+char *procuraQ1(GHashTable* HashDrv, char *id, FILE *res){
+    DRIVERS *d = g_hash_table_lookup(HashDrv, id);
+    char *name = d->name;
+    char *gender = d->gender;
+    printf ("%s;%s;%d;",name, gender, calculaIdade(d->birth));
+    return d->car_class;
 }

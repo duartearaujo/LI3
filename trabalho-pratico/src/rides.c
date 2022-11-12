@@ -67,3 +67,25 @@ void lookupRide(GHashTable* hashRides){
     char *key = s->user;
     printf("%s\n",key);
 }
+
+
+void calcula_mediasQ1 (gpointer key, RIDES *value, double *user_data) {
+   if ((int)user_data[0] == atoi (value->driver)) {
+      user_data[2] += strtod(value->score_driver,NULL);
+      user_data[3]++;
+      switch ( (int)(user_data[1]) ) 
+      {
+      case 0:
+         user_data[4] += strtod (value->tip,NULL) + strtod (value->distance, NULL) * 0.62 + 3.25;
+         break;
+      case 1:
+         user_data[4] += strtod (value->tip,NULL) + strtod (value->distance, NULL) * 0.79 + 4;
+         break;
+      case 2:
+         user_data[4] += strtod (value->tip,NULL) + strtod (value->distance, NULL) * 0.94 + 5.20;
+         break;
+      default:
+         break;
+      }
+   }
+}

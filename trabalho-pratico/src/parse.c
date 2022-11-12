@@ -10,12 +10,13 @@
 
 void parsequerie (FILE *fp, HASH *hash) {
     int i = 0;
-    char **querie = malloc(50 * sizeof(char));
+    char **querie = NULL;
     char *line = NULL;
     size_t len;
     ssize_t read;;
-    while ((read = getline(&line, &len, fp)) != -1){      
+    while ((read = getline(&line, &len, fp)) != -1){   
         line[read-1] = '\0';
+        querie = malloc(strlen (line)* sizeof(char));
         char *token = strsep(&line," ");
         while (token) {
             querie[i] = strdup(token);

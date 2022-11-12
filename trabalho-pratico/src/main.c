@@ -56,7 +56,6 @@ int main(int argc, char **argv){
                         return 2;
                     }
                     parser (fp, hash -> user, i);
-                    lookupUser(hash -> user);
                     fclose (fp);
                     break;
                 }
@@ -70,7 +69,6 @@ int main(int argc, char **argv){
                         return 2;
                     }
                     parser(fp, hash -> ride, i);
-                    lookupRide(hash -> ride);
                     fclose (fp);
                     break;
                 }
@@ -84,7 +82,6 @@ int main(int argc, char **argv){
                         return 2;
                     }
                     parser(fp, hash -> driver, i);
-                    procura(hash -> driver);
                     fclose (fp);
                     break;
                 }
