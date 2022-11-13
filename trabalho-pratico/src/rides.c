@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/rides.h"
+#include "../include/drivers.h"
 #include "../include/parse.h"
+#include "../include/queries.h"
 
 
 struct RIDES{
@@ -16,6 +18,42 @@ struct RIDES{
    char *tip;
    char *comment;
 };
+
+
+struct Q1USER {
+    char **valores_medios;
+    GHashTable *driver;
+};
+
+void free_ride (RIDES *value) {
+   free (value->id);
+   free (value->date);
+   free (value->driver);
+   free (value->user);
+   free (value->city);
+   free (value->distance);
+   free (value->score_user);
+   free (value->score_driver);
+   free (value->tip);
+   free (value->comment);
+   free (value);
+}
+
+Q1USER *inicializaQ1 (HASH *hash, char *argv) {
+   Q1USER *new = malloc (sizeof (Q1USER));
+   new->driver = retornaHash (3, hash);
+   new->valores_medios = malloc (4 * sizeof(char *) );
+   new->valores_medios [0] = argv;
+   new->valores_medios [1] =strdup ("0");
+   new->valores_medios [2] =strdup ("0");
+   new->valores_medios [3] = strdup ("0");
+   return new;
+}
+
+void free_struct_Q1 (Q1USER *valores) {
+   for (int i= 1; i < 4 ;i++) free (valores->valores_medios[i]);
+   free(valores-> valores_medios);
+} 
 
 void assignsData(RIDES* new_ride ,int pos ,char* token){
    char *str = strdup(token);
@@ -33,7 +71,6 @@ void assignsData(RIDES* new_ride ,int pos ,char* token){
       new_ride->user = str;
       break;
       case 5:
-      break;
       new_ride->city = str;
       break;
       case 6:
@@ -71,9 +108,9 @@ void lookupRide(GHashTable* hashRides){
 
 void calcula_mediasQ1 (gpointer key, RIDES *value, double *user_data) {
    if ((int)user_data[0] == atoi (value->driver)) {
-      user_data[2] += strtod(value->score_driver,NULL);
-      user_data[3]++;
-      switch ( (int)(user_data[1]) ) 
+      user_data[2] += strtod(value->score_driver,NULL); // acumula o valor de score_driver
+      user_data[3]++;  //incrementa no número de viagens
+      switch ( (int)(user_data[1]) ) // calcula os valores dependendo do int q identifica o tipo de carro.
       {
       case 0:
          user_data[4] += strtod (value->tip,NULL) + strtod (value->distance, NULL) * 0.62 + 3.25;
@@ -88,4 +125,56 @@ void calcula_mediasQ1 (gpointer key, RIDES *value, double *user_data) {
          break;
       }
    }
+}
+
+void calcula_mediasQ1_2 (gpointer key, RIDES *value, Q1USER *user_data) {
+   if (!strcmp (value->user, user_data->valores_medios[0])) {
+      double acc_score = strtod (value->score_user,NULL) + strtod (user_data->valores_medios[1], NULL);
+      size_t needed = snprintf (NULL, 0, "%.3f", acc_score);
+      char* str_score = malloc(needed);
+      sprintf (str_score, "%.3f", acc_score);
+
+      char *temp = user_data->valores_medios [1] ;
+      user_data->valores_medios [1] = str_score;
+      free (temp);
+
+      int n_viagens = atoi (user_data->valores_medios[2]);
+      n_viagens++;
+      needed = snprintf (NULL, 0, "%d", n_viagens);
+      char* str_n_viagens = malloc(needed);
+      sprintf (str_n_viagens, "%d", n_viagens);
+
+      char *temp_2 = user_data->valores_medios [2] ;
+      user_data->valores_medios [2] = str_n_viagens;
+      free (temp_2);
+
+      int car_class = car_lookup (user_data->driver, value->driver);
+      double total = strtod (user_data->valores_medios[3], NULL);
+      switch (car_class) // calcula os valores dependendo do int q identifica o tipo de carro.
+      {
+         case 0:
+            total+= strtod (value->tip,NULL) + strtod (value->distance, NULL) * 0.62 + 3.25;
+            break;
+         case 1:
+            total += strtod (value->tip,NULL) + strtod (value->distance, NULL) * 0.79 + 4;
+            break;
+         case 2:
+            total += strtod (value->tip,NULL) + strtod (value->distance, NULL) * 0.94 + 5.20;
+            break;
+         default:
+            break;
+      }
+      needed = snprintf (NULL, 0, "%.3f", total);
+      char *str_total = malloc (needed);
+      sprintf (str_total, "%.3f", total);
+
+      char *temp_3 = user_data->valores_medios [3] ;
+      user_data->valores_medios [3] = str_total;
+      free (temp_3);
+   }
+}
+
+void printQ1 (Q1USER *valores, FILE *res) {
+      double avaliacao_media = strtod (valores->valores_medios [1],NULL) / strtod (valores->valores_medios[2], NULL);  // Posicao 2 = acumulador de score_driver; Posicao 3 = nº de viagens; Posicao 4 = total_auferido.
+      fprintf (res,"%.3f;%d;%s\n", avaliacao_media,atoi (valores->valores_medios[2]),valores->valores_medios[3]);
 }

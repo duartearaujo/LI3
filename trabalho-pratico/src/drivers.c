@@ -15,6 +15,19 @@ typedef struct DRIVERS{
     char* ac_st;
 } DRIVERS;
 
+void free_driver (DRIVERS *value) {
+    free (value->id);
+    free (value->name);
+    free (value->birth);
+    free (value->gender);
+    free (value->car_class);
+    free (value->plate);
+    free (value->city);
+    free (value->ac_cr);
+    free (value->ac_st);
+    free (value);
+}
+
 void atribui_drv(DRIVERS* drv2 ,int pos,char* token){
     char *str = strdup(token);
     switch(pos){
@@ -56,8 +69,16 @@ void novo(GHashTable *HashDrv, char *line){
 
 char *procuraQ1(GHashTable* HashDrv, char *id, FILE *res){
     DRIVERS *d = g_hash_table_lookup(HashDrv, id);
+    if ( !strcmp (d->ac_st, "inactive") ) return NULL;
     char *name = d->name;
     char *gender = d->gender;
-    printf ("%s;%s;%d;",name, gender, calculaIdade(d->birth));
+    fprintf (res,"%s;%s;%d;",name, gender, calculaIdade(d->birth));
     return d->car_class;
+}
+
+int car_lookup (GHashTable *drivers, char *id) {
+    DRIVERS *d = g_hash_table_lookup (drivers, id);
+    if (!strcmp(d->car_class,"basic")) return 0;     // atribiu um int consoante o tipo de carro do driver
+    else if (!strcmp(d->car_class,"green")) return 1;
+    else return 2;
 }

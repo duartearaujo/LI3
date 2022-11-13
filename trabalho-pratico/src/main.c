@@ -47,7 +47,7 @@ int main(int argc, char **argv){
         while (i<=3) {
             switch (i){
                 case 1: {
-                    hash -> user = g_hash_table_new(g_str_hash, g_str_equal);
+                    hash -> user = g_hash_table_new_full(g_str_hash, g_str_equal,NULL, (GDestroyNotify)free_user);
                     strcpy(filename,argv[1]);
                     strcat (filename,"users.csv");
                     fp = fopen(filename,"r");
@@ -60,7 +60,7 @@ int main(int argc, char **argv){
                     break;
                 }
                 case 2: {
-                    hash -> ride = g_hash_table_new(g_str_hash, g_str_equal);
+                    hash -> ride = g_hash_table_new_full(g_str_hash, g_str_equal,NULL,(GDestroyNotify) free_ride);
                     strcpy(filename,argv[1]);
                     strcat (filename,"rides.csv");
                     fp = fopen(filename,"r");
@@ -73,7 +73,7 @@ int main(int argc, char **argv){
                     break;
                 }
                 case 3: {
-                    hash -> driver = g_hash_table_new(g_str_hash, g_str_equal);
+                    hash -> driver = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, (GDestroyNotify) free_driver);
                     strcpy(filename,argv[1]);
                     strcat (filename,"drivers.csv");
                     fp = fopen(filename,"r");
@@ -94,6 +94,14 @@ int main(int argc, char **argv){
     //parse das queries
     fp = fopen (argv[2], "r");
     parsequerie (fp, hash);
+
+    //free das hashes e mais.
+    fclose (fp);
+    free(filename);
+    g_hash_table_destroy (hash->user);
+    g_hash_table_destroy (hash->ride);
+    g_hash_table_destroy (hash->driver);
+    free (hash);
     return 0;
 }
 

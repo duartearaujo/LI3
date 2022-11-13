@@ -5,7 +5,7 @@
 
 void querieIdentifier(char **argv, HASH *hash);
 
-void querie1(char *str);
+int querie1(char *str);
 
 int calculaIdade(char *str);
 

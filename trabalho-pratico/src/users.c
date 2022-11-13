@@ -3,6 +3,7 @@
 #include <glib.h>
 #include "../include/parse.h"
 #include "../include/users.h"
+#include "../include/queries.h"
 
 struct user {    
     char* username;
@@ -13,6 +14,17 @@ struct user {
     char* pay_method;
     char* account_status;
 };
+
+void free_user (User *value) {
+    free(value->username);
+    free(value->name);
+    free(value->gender);
+    free(value->data);
+    free(value->account_creation);
+    free(value->pay_method);
+    free(value->account_status);
+    free (value);
+}
 
 void criaHashUser (GHashTable *user, char *line) {
     User *new = malloc (sizeof (User));
@@ -46,8 +58,9 @@ void atribui (User *user, int pos, char *info) {
     }
 }
 
-void lookupUser (GHashTable *user) {
-    User *n = g_hash_table_lookup (user,"MiTeixeira");
-    char *s = n->name;
-    printf ("%s\n",s);
+int lookupUser (GHashTable *user, FILE *res, char *name) {
+    User *u = g_hash_table_lookup (user,name);
+    if (!strcmp (u->account_status, "inactive")) return 1;
+    fprintf (res, "%s;%s;%d;", u->name, u->gender, calculaIdade (u->data));
+    return 0;
 }

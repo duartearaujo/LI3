@@ -16,7 +16,7 @@ void parsequerie (FILE *fp, HASH *hash) {
     ssize_t read;;
     while ((read = getline(&line, &len, fp)) != -1){   
         line[read-1] = '\0';
-        querie = malloc(strlen (line)* sizeof(char));
+        querie = malloc(4 * sizeof(char *));
         char *token = strsep(&line," ");
         while (token) {
             querie[i] = strdup(token);
@@ -24,7 +24,7 @@ void parsequerie (FILE *fp, HASH *hash) {
             i++;
         }
         i = 0;
-        querieIdentifier(&(*querie), hash);
+        querieIdentifier(&(*querie), hash);    
     } 
 }
 

@@ -5,10 +5,12 @@
 
 typedef struct user User;
 
+void free_user(User *value);
+
 void criaHashUser (GHashTable *user, char *line);
 
 void atribui (User* user, int pos, char *info);
 
-void lookupUser (GHashTable *user);
+int lookupUser (GHashTable *user, FILE *res, char *name);
 
 #endif
