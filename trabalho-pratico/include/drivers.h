@@ -11,12 +11,14 @@ void free_driver (DRIVERS *value);
 
 void atribui_drv(DRIVERS* drv2 ,int pos,char* token);
 
-void novo(GHashTable* HashDrv, char *line);
+void novo(HASH* hash, char *line);
 
 char *procuraQ1(GHashTable* HashDrv, char *id, FILE *res);
 
 int car_lookup (GHashTable *drivers, char *id);
 
 char * lookupName(GHashTable* driver,char *str);
+
+void addToDriver(DRIVERS *driver,char *score_driver, char *date);
 
 #endif

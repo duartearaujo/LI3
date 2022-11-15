@@ -45,6 +45,7 @@ int main(int argc, char **argv){
     else{
         while (i<=3) {
             switch (i){
+                
                 case 1: {
                     hash -> user = g_hash_table_new_full(g_str_hash, g_str_equal,NULL, (GDestroyNotify)free_user);
                     char *filename = malloc ((strlen (argv[1]) + strlen ("users.csv") + 1)*sizeof (char));
@@ -55,27 +56,12 @@ int main(int argc, char **argv){
                         perror("Não conseguiu abrir o ficheiro");
                         return 2;
                     }
-                    parser (fp, hash -> user, i);
+                    parser (fp,hash, i);
                     free (filename);
                     fclose (fp);
                     break;
                 }
                 case 2: {
-                    hash -> ride = g_hash_table_new_full(g_str_hash, g_str_equal,NULL,(GDestroyNotify) free_ride);
-                    char *filename = malloc ((strlen (argv[1]) + strlen ("rides.csv") + 1)*sizeof (char));
-                    strcpy(filename,argv[1]);
-                    strcat (filename,"rides.csv");
-                    fp = fopen(filename,"r");
-                    if(!fp){
-                        perror("Não conseguiu abrir o ficheiro");
-                        return 2;
-                    }
-                    parser(fp, hash -> ride, i);
-                    free (filename);
-                    fclose (fp);
-                    break;
-                }
-                case 3: {
                     hash -> driver = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, (GDestroyNotify) free_driver);
                     char *filename = malloc ((strlen (argv[1]) + strlen ("drivers.csv") +1)*sizeof (char));
                     strcpy(filename,argv[1]);
@@ -85,7 +71,22 @@ int main(int argc, char **argv){
                         perror("Não conseguiu abrir o ficheiro");
                         return 2;
                     }
-                    parser(fp, hash -> driver, i);
+                    parser(fp,hash, i);
+                    free (filename);
+                    fclose (fp);
+                    break;
+                }
+                case 3: {
+                    hash -> ride = g_hash_table_new_full(g_str_hash, g_str_equal,NULL,(GDestroyNotify) free_ride);
+                    char *filename = malloc ((strlen (argv[1]) + strlen ("rides.csv") + 1)*sizeof (char));
+                    strcpy(filename,argv[1]);
+                    strcat (filename,"rides.csv");
+                    fp = fopen(filename,"r");
+                    if(!fp){
+                        perror("Não conseguiu abrir o ficheiro");
+                        return 2;
+                    }
+                    parser(fp,hash, i);
                     free (filename);
                     fclose (fp);
                     break;

@@ -23,7 +23,7 @@ void free_struct_Q1 (Q1USER *valores);
 
 void assignsData(RIDES* new_ride ,int pos ,char* token);
 
-void newElement(GHashTable* hashRides, char *line);
+void newElement(HASH *hash,char *line);
 
 void lookupRide(GHashTable* hashRides);
 

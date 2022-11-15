@@ -30,8 +30,8 @@ void parsequerie (FILE *fp, HASH *hash) {
     free (line);
 }
 
-void parser(FILE *fp, GHashTable* table, int h) {
-    void (*fun_criar)(GHashTable*,char*) = NULL;
+void parser(FILE *fp, HASH* hash, int h) {
+    void (*fun_criar)(HASH*,char*) = NULL;
     char* line = NULL;
     size_t len;
     ssize_t read;;
@@ -41,15 +41,15 @@ void parser(FILE *fp, GHashTable* table, int h) {
             fun_criar = &criaHashUser;
             break;
         case 2:
-            fun_criar = &newElement;
+            fun_criar = &novo;
             break;
         case 3:
-            fun_criar = &novo;
+            fun_criar = &newElement;
             break;
     }
     while ((read = getline(&line, &len, fp)) != -1){
             line[read-1] = '\0';
-            (*fun_criar)(table,line);
+            (*fun_criar)(hash,line);
     } 
     free (line);
 }

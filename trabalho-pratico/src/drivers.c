@@ -13,6 +13,10 @@ typedef struct DRIVERS{
     char* city;
     char* ac_cr;
     char* ac_st;
+    int count;
+    double valor_atual;
+    double avaliacao_media;
+    char *mostRecentRide;
 } DRIVERS;
 
 void free_driver (DRIVERS *value) {
@@ -61,10 +65,13 @@ void atribui_drv(DRIVERS* drv2 ,int pos,char* token){
     }
 }
 
-void novo(GHashTable *HashDrv, char *line){
+void novo(HASH* hash, char *line){
     DRIVERS *drv2 = malloc(sizeof(DRIVERS));
     separa(line,drv2,3);
-    g_hash_table_insert(HashDrv, drv2 -> id, drv2);
+    drv2->count = 0;
+    drv2->valor_atual = 0;
+    drv2->mostRecentRide = NULL;
+    g_hash_table_insert(retornaHash(3,hash), drv2 -> id, drv2);
 }
 
 char *procuraQ1(GHashTable* HashDrv, char *id, FILE *res){
@@ -87,4 +94,12 @@ char * lookupName(GHashTable* driver,char *str){
     DRIVERS* drive = g_hash_table_lookup(driver,str);
     char *nome = drive->name;
     return nome;
+}
+
+void addToDriver(DRIVERS *driver,char *score_driver, char *date){
+    char *str = strdup(date);
+    if(!driver->mostRecentRide) driver->mostRecentRide = str;
+    else if(compareDates(date,str)) driver->mostRecentRide = str;
+    driver->count += 1;
+    driver->valor_atual += strtod(score_driver,NULL);
 }

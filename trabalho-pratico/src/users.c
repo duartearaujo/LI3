@@ -26,10 +26,10 @@ void free_user (User *value) {
     free (value);
 }
 
-void criaHashUser (GHashTable *user, char *line) {
+void criaHashUser (HASH *hash, char *line) {
     User *new = malloc (sizeof (User));
     separa (line,new,1);
-    g_hash_table_insert(user,new->username,new);
+    g_hash_table_insert(retornaHash(1,hash),new->username,new);
 }
 
 void atribui (User *user, int pos, char *info) {

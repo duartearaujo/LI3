@@ -16,7 +16,6 @@ struct RIDES{
    char *score_user;
    char *score_driver;
    char *tip;
-   char *comment;
 };
 
 struct RIDES_AM{
@@ -49,7 +48,6 @@ void free_ride (RIDES *value) {
    free (value->score_user);
    free (value->score_driver);
    free (value->tip);
-   free (value->comment);
    free (value);
 }
 
@@ -99,9 +97,6 @@ void assignsData(RIDES* new_ride ,int pos ,char* token){
       case 9:
       new_ride->tip = str;
       break;
-      case 10:
-      new_ride->comment = str;
-      break;
    }
 }
 
@@ -124,10 +119,12 @@ void printfArray(FILE *res, ARRAYS_RIDES *array,GHashTable* driver,int N){
    }
 }
 
-void newElement(GHashTable *hashRides, char *line){
+void newElement(HASH *hash,char *line){
    RIDES *new_ride = malloc(sizeof(RIDES));
    separa(line,new_ride,2);
-   g_hash_table_insert(hashRides,new_ride->id,new_ride);
+   g_hash_table_insert(retornaHash(2,hash),new_ride->id,new_ride);
+   DRIVERS *driver = g_hash_table_lookup(retornaHash(3,hash),new_ride->driver);
+   addToDriver(driver, new_ride->score_driver,new_ride->date);
 }
 
 

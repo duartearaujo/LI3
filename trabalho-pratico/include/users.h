@@ -7,7 +7,7 @@ typedef struct user User;
 
 void free_user(User *value);
 
-void criaHashUser (GHashTable *user, char *line);
+void criaHashUser (HASH *hash, char *line);
 
 void atribui (User* user, int pos, char *info);
 
