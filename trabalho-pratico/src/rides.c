@@ -163,7 +163,7 @@ void calcula_mediasQ1_2 (gpointer key, RIDES *value, Q1USER *user_data) {
    if (!strcmp (value->user, user_data->valores_medios[0])) {
       double acc_score = strtod (value->score_user,NULL) + strtod (user_data->valores_medios[1], NULL);
       size_t needed = snprintf (NULL, 0, "%.3f", acc_score);
-      char* str_score = malloc(needed);
+      char* str_score = malloc(needed +1);
       sprintf (str_score, "%.3f", acc_score);
 
       char *temp = user_data->valores_medios [1] ;
@@ -173,7 +173,7 @@ void calcula_mediasQ1_2 (gpointer key, RIDES *value, Q1USER *user_data) {
       int n_viagens = atoi (user_data->valores_medios[2]);
       n_viagens++;
       needed = snprintf (NULL, 0, "%d", n_viagens);
-      char* str_n_viagens = malloc(needed);
+      char* str_n_viagens = malloc(needed + 1);
       sprintf (str_n_viagens, "%d", n_viagens);
 
       char *temp_2 = user_data->valores_medios [2] ;
@@ -197,7 +197,7 @@ void calcula_mediasQ1_2 (gpointer key, RIDES *value, Q1USER *user_data) {
             break;
       }
       needed = snprintf (NULL, 0, "%.3f", total);
-      char *str_total = malloc (needed);
+      char *str_total = malloc (needed+ 1);
       sprintf (str_total, "%.3f", total);
 
       char *temp_3 = user_data->valores_medios [3] ;

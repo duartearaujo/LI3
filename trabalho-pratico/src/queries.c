@@ -38,7 +38,7 @@ void querieIdentifier(char **argv, HASH *hash) {
     FILE *res = fopen ("../Resultados/commandoutput1.txt","a");
     switch (q)
     {
-    case 1:
+    case 1: {
         if(querie1(argv[1])) {
             char * carclass = procuraQ1(retornaHash(3, hash), argv[1], res);
             if (!carclass) break; // se estiver inativo dá break e dá origem a um ficheiro vazio;
@@ -68,13 +68,15 @@ void querieIdentifier(char **argv, HASH *hash) {
             free (valores);
         }
         break;
-    case 2:
+    }
+    case 2: {
         ARRAYS_RIDES* array = createArray(10000);
         g_hash_table_foreach(retornaHash(2, hash),(GHFunc)calcula_mediasQ2,array);
         ordenaArray(array,10000-atoi(argv[1]));
         printfArray(res,array,retornaHash(3, hash),atoi(argv[1]));
         free(array);
         break;
+    }
     default:
         break;
     }

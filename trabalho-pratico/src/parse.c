@@ -10,22 +10,24 @@
 
 void parsequerie (FILE *fp, HASH *hash) {
     int i = 0;
-    char **querie = NULL;
+    char **querie = malloc(2 * sizeof(char *));
     char *line = NULL;
     size_t len;
     ssize_t read;;
     while ((read = getline(&line, &len, fp)) != -1){   
         line[read-1] = '\0';
-        querie = malloc(4 * sizeof(char *));
         char *token = strsep(&line," ");
         while (token) {
             querie[i] = strdup(token);
             token = strsep(&line," ");
             i++;
         }
+        querieIdentifier(querie, hash);  
+        for (--i; i>= 0; i--) free (querie[i]);
         i = 0;
-        querieIdentifier(&(*querie), hash);    
     } 
+    free (querie);
+    free (line);
 }
 
 void parser(FILE *fp, GHashTable* table, int h) {
@@ -49,6 +51,7 @@ void parser(FILE *fp, GHashTable* table, int h) {
             line[read-1] = '\0';
             (*fun_criar)(table,line);
     } 
+    free (line);
 }
 
 void separa(char *str, void *data,int s){
