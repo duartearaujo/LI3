@@ -9,4 +9,6 @@ int querie1(char *str);
 
 int calculaIdade(char *str);
 
+int compareDates(char *str, char *string);
+
 #endif

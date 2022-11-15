@@ -15,6 +15,24 @@ int querie1(char *str){
     return id;
 }
 
+int compareDates(char *str, char *string){
+    char *str_ = strdup(str);
+    char *str_2 = strdup(string);
+    int r = 0;
+    int dia = atoi(strsep(&str_,"/"));
+    int mes = atoi(strsep(&str_,"/"));
+    int ano = atoi(strsep(&str_,"/"));
+    int dia2 = atoi(strsep(&str_2,"/"));
+    int mes2 = atoi(strsep(&str_2,"/"));
+    int ano2 = atoi(strsep(&str_2,"/"));
+    if(ano > ano2) r = 1;
+    else if(ano == ano2 && mes > mes2) r = 1;
+    else if(ano == ano2 && mes == mes2 && dia > dia2) r = 1;
+    free(str_);
+    free(str_2);
+    return r;
+}
+
 void querieIdentifier(char **argv, HASH *hash) {
     int q = atoi (argv[0]);
     FILE *res = fopen ("../Resultados/commandoutput1.txt","a");
@@ -50,7 +68,13 @@ void querieIdentifier(char **argv, HASH *hash) {
             free (valores);
         }
         break;
-    
+    case 2:
+        ARRAYS_RIDES* array = createArray(10000);
+        g_hash_table_foreach(retornaHash(2, hash),(GHFunc)calcula_mediasQ2,array);
+        ordenaArray(array,10000-atoi(argv[1]));
+        printfArray(res,array,retornaHash(3, hash),atoi(argv[1]));
+        free(array);
+        break;
     default:
         break;
     }

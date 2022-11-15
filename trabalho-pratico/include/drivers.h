@@ -17,4 +17,6 @@ char *procuraQ1(GHashTable* HashDrv, char *id, FILE *res);
 
 int car_lookup (GHashTable *drivers, char *id);
 
+char * lookupName(GHashTable* driver,char *str);
+
 #endif

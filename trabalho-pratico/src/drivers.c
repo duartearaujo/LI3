@@ -82,3 +82,9 @@ int car_lookup (GHashTable *drivers, char *id) {
     else if (!strcmp(d->car_class,"green")) return 1;
     else return 2;
 }
+
+char * lookupName(GHashTable* driver,char *str){
+    DRIVERS* drive = g_hash_table_lookup(driver,str);
+    char *nome = drive->name;
+    return nome;
+}
