@@ -110,9 +110,13 @@ int identifie_car_class (DRIVERS *driver) {
 }
 
 void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip){
-    char *str = strdup(date);
-    if(!driver->mostRecentRide) driver->mostRecentRide = str;
-    else if(compareDates(date,str)) driver->mostRecentRide = str;
+    int r = 0;
+    if(!driver->mostRecentRide) driver->mostRecentRide = strdup(date);
+    else if((r = compareDates(date,driver->mostRecentRide)) != 0){
+        char *temp = driver->mostRecentRide;
+        driver->mostRecentRide = strdup (date);
+        free (temp);
+    }
     driver->count += 1;
     driver->valor_atual += strtod(score_driver,NULL);
     
@@ -153,11 +157,25 @@ void swap(DRIVERS** array, int a, int b){
 }
 
 void ordenaArray(ARRAY_DRIVERS* array,int N){
-   int i, j, m;
-   for (i = 10000; i > N; i--) {
+   int i, j, m,r = 0;
+   for (i = 10000; i > 10000-N; i--) {
    m = 0;
-   for (j = 0; j < i; j++)
+   for (j = 0; j < i; j++){
+    if(strcmp(array->driver[j]->ac_st,"inactive") != 0){
    if (array->driver[j]->avaliacao_media > array->driver[m]->avaliacao_media) m = j;
-      swap(array->driver, i-1, m);
+   else if(array->driver[j]->avaliacao_media == array->driver[m]->avaliacao_media){
+    if((r = compareDates(array->driver[j]->mostRecentRide,array->driver[m]->mostRecentRide)) == 1) m = j;
+    else if((r = compareDates(array->driver[j]->mostRecentRide,array->driver[m]->mostRecentRide)) == 2){
+        if(atoi(array->driver[j]->id) > atoi(array->driver[m]->id)) m = j;
+    }
    }
+    }
+   }
+    swap(array->driver, i-1, m);
+   }
+}
+
+void freeArray(ARRAY_DRIVERS* array){
+    free(array->driver);
+    free(array);
 }

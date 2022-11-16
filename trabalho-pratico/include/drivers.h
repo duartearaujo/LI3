@@ -37,4 +37,6 @@ void ordenaArray(ARRAY_DRIVERS* array,int tamanho);
 
 void printfArray(FILE *res,ARRAY_DRIVERS * array,int N);
 
+void freeArray(ARRAY_DRIVERS* array);
+
 #endif

@@ -47,9 +47,9 @@ int main(int argc, char **argv){
             switch (i){               
                 case 1: {
                     hash -> user = g_hash_table_new_full(g_str_hash, g_str_equal,NULL, (GDestroyNotify)free_user);
-                    char *filename = malloc ((strlen (argv[1]) + strlen ("users.csv") + 1)*sizeof (char));
+                    char *filename = malloc ((strlen (argv[1]) + strlen ("/users.csv") + 1)*sizeof (char));
                     strcpy(filename,argv[1]);
-                    strcat (filename,"users.csv");
+                    strcat (filename,"/users.csv");
                     fp = fopen(filename,"r");
                     if(!fp){
                         perror("Não conseguiu abrir o ficheiro");
@@ -62,9 +62,9 @@ int main(int argc, char **argv){
                 }
                 case 2: {
                     hash -> driver = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, (GDestroyNotify) free_driver);
-                    char *filename = malloc ((strlen (argv[1]) + strlen ("drivers.csv") +1)*sizeof (char));
+                    char *filename = malloc ((strlen (argv[1]) + strlen ("/drivers.csv") +1)*sizeof (char));
                     strcpy(filename,argv[1]);
-                    strcat (filename,"drivers.csv");
+                    strcat (filename,"/drivers.csv");
                     fp = fopen(filename,"r");
                     if(!fp){
                         perror("Não conseguiu abrir o ficheiro");
@@ -77,9 +77,9 @@ int main(int argc, char **argv){
                 }
                 case 3: {
                     hash -> ride = g_hash_table_new_full(g_str_hash, g_str_equal,NULL,(GDestroyNotify) free_ride);
-                    char *filename = malloc ((strlen (argv[1]) + strlen ("rides.csv") + 1)*sizeof (char));
+                    char *filename = malloc ((strlen (argv[1]) + strlen ("/rides.csv") + 1)*sizeof (char));
                     strcpy(filename,argv[1]);
-                    strcat (filename,"rides.csv");
+                    strcat (filename,"/rides.csv");
                     fp = fopen(filename,"r");
                     if(!fp){
                         perror("Não conseguiu abrir o ficheiro");

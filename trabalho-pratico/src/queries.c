@@ -8,6 +8,9 @@
 #include "../include/drivers.h"
 #include "../include/main.h"
 
+#define DIA 9
+#define MES 10
+#define ANO 2022
 
 int querie1(char *str){
     int id = 0;
@@ -28,6 +31,7 @@ int compareDates(char *str, char *string){
     if(ano > ano2) r = 1;
     else if(ano == ano2 && mes > mes2) r = 1;
     else if(ano == ano2 && mes == mes2 && dia > dia2) r = 1;
+    else if(ano == ano2 && mes == mes2 && dia == dia2) r = 2;
     free(str_);
     free(str_2);
     return r;
@@ -56,6 +60,7 @@ void querieIdentifier(char **argv, HASH *hash, int n_querie) {
         g_hash_table_foreach(retornaHash(3,hash),(GHFunc)calcula_mediasQ2,array);
         ordenaArray(array,10000-atoi(argv[1]));
         printfArray(res,array,atoi(argv[1]));
+        freeArray(array);
         break;
     }
     default:
@@ -70,11 +75,11 @@ int calculaIdade(char *str){
     int dia = atoi(strsep(&str, "/"));
     int mes = atoi(strsep(&str, "/"));
     int ano = atoi(strsep(&str, "/"));
-    if (mes < 10) idade = 2022 - ano;
-    else if (mes == 10) {
-        if (dia <= 9) idade = 2022 - ano;
-        else idade = 2022 - ano - 1;
+    if (mes < MES) idade = ANO - ano;
+    else if (mes == MES) {
+        if (dia <= DIA) idade = ANO - ano;
+        else idade = ANO - ano - 1;
     }
-    else idade = 2022 - ano -1;
+    else idade = ANO - ano -1;
     return idade;
 }
