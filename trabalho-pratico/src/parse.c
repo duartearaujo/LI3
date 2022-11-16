@@ -16,10 +16,11 @@ void parsequerie (FILE *fp, HASH *hash) {
     ssize_t read;;
     while ((read = getline(&line, &len, fp)) != -1){   
         line[read-1] = '\0';
-        char *token = strsep(&line," ");
+        char *temp = line;
+        char *token = strsep(&temp," ");
         while (token) {
             querie[i] = strdup(token);
-            token = strsep(&line," ");
+            token = strsep(&temp," ");
             i++;
         }
         querieIdentifier(querie, hash);  

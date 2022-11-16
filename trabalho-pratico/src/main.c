@@ -44,8 +44,7 @@ int main(int argc, char **argv){
     }
     else{
         while (i<=3) {
-            switch (i){
-                
+            switch (i){               
                 case 1: {
                     hash -> user = g_hash_table_new_full(g_str_hash, g_str_equal,NULL, (GDestroyNotify)free_user);
                     char *filename = malloc ((strlen (argv[1]) + strlen ("users.csv") + 1)*sizeof (char));

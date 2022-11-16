@@ -7,18 +7,19 @@ SRCS = src/queries.c src/drivers.c src/rides.c src/parse.c src/users.c src/main.
 OBJS = $(SRCS:.c=.o) # C objects files
 
 MAIN = programa-principal # executable file
-
+Resultados:
+	@mkdir -p $@
 
 all: $(MAIN)
 
 debug: CFLAGS = `pkg-config --cflags --libs glib-2.0` -g
 debug: $(MAIN)
 
-$(MAIN): $(OBJS) 
+$(MAIN): $(OBJS) Resultados
 	$(CC)  -o $(MAIN) $(OBJS) $(CFLAGS) 
 
 .c.o:
 	$(CC)  -c $<  -o $@ $(CFLAGS)
 
 clean:
-	@rm src/*.o $(MAIN)
+	@rm -rf src/*.o $(MAIN) Resultados

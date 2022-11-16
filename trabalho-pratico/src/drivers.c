@@ -17,6 +17,7 @@ typedef struct DRIVERS{
     double valor_atual;
     double avaliacao_media;
     char *mostRecentRide;
+    double total_auferido;
 } DRIVERS;
 
 void free_driver (DRIVERS *value) {
@@ -29,6 +30,7 @@ void free_driver (DRIVERS *value) {
     free (value->city);
     free (value->ac_cr);
     free (value->ac_st);
+    free (value->mostRecentRide);
     free (value);
 }
 
@@ -71,23 +73,15 @@ void novo(HASH* hash, char *line){
     drv2->count = 0;
     drv2->valor_atual = 0;
     drv2->mostRecentRide = NULL;
+    drv2-> total_auferido = 0;
     g_hash_table_insert(retornaHash(3,hash), drv2 -> id, drv2);
 }
 
-char *procuraQ1(GHashTable* HashDrv, char *id, FILE *res){
-    DRIVERS *d = g_hash_table_lookup(HashDrv, id);
-    if ( !strcmp (d->ac_st, "inactive") ) return NULL;
-    char *name = d->name;
-    char *gender = d->gender;
-    fprintf (res,"%s;%s;%d;",name, gender, calculaIdade(d->birth));
-    return d->car_class;
-}
-
-int car_lookup (GHashTable *drivers, char *id) {
-    DRIVERS *d = g_hash_table_lookup (drivers, id);
-    if (!strcmp(d->car_class,"basic")) return 0;     // atribiu um int consoante o tipo de carro do driver
-    else if (!strcmp(d->car_class,"green")) return 1;
-    else return 2;
+void printvaloresQ1 (DRIVERS *d, FILE *res) {
+    if (!strcmp (d->ac_st, "active")) {
+    double avaliacao_media = d->valor_atual / d->count;
+    fprintf (res,"%s;%s;%d;%.3f;%d;%.3f\n",d->name, d->gender, calculaIdade(d->birth), avaliacao_media, d->count, d->total_auferido);
+    }
 }
 
 char * lookupName(GHashTable* driver,char *str){
@@ -96,10 +90,33 @@ char * lookupName(GHashTable* driver,char *str){
     return nome;
 }
 
-void addToDriver(DRIVERS *driver,char *score_driver, char *date){
+int identifie_car_class (DRIVERS *driver) {
+    if (!strcmp(driver->car_class,"basic")) return 0;     // atribiu um int consoante o tipo de carro do driver
+    else if (!strcmp(driver->car_class,"green")) return 1;
+    else return 2;
+}
+
+void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip){
     char *str = strdup(date);
     if(!driver->mostRecentRide) driver->mostRecentRide = str;
     else if(compareDates(date,str)) driver->mostRecentRide = str;
     driver->count += 1;
     driver->valor_atual += strtod(score_driver,NULL);
+    
+    int identifier_car = identifie_car_class (driver); 
+    
+    switch (identifier_car) // calcula os valores dependendo do int q identifica o tipo de carro.
+      {
+         case 0:
+            driver->total_auferido += strtod (tip,NULL) + strtod (distance, NULL) * 0.62 + 3.25;
+            break;
+         case 1:
+            driver->total_auferido += strtod (tip,NULL) + strtod (distance, NULL) * 0.79 + 4;
+            break;
+         case 2:
+            driver->total_auferido  += strtod (tip,NULL) + strtod (distance, NULL) * 0.94 + 5.20;
+            break;
+         default:
+            break;
+      }
 }

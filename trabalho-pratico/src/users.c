@@ -13,6 +13,9 @@ struct user {
     char* account_creation;
     char* pay_method;
     char* account_status;
+    int n_viagens;
+    double acc_avaliation;
+    double total_gasto;
 };
 
 void free_user (User *value) {
@@ -29,6 +32,9 @@ void free_user (User *value) {
 void criaHashUser (HASH *hash, char *line) {
     User *new = malloc (sizeof (User));
     separa (line,new,1);
+    new->total_gasto = 0;
+    new ->n_viagens = 0;
+    new ->acc_avaliation = 0;
     g_hash_table_insert(retornaHash(1,hash),new->username,new);
 }
 
@@ -58,9 +64,28 @@ void atribui (User *user, int pos, char *info) {
     }
 }
 
-int lookupUser (GHashTable *user, FILE *res, char *name) {
-    User *u = g_hash_table_lookup (user,name);
-    if (!strcmp (u->account_status, "inactive")) return 1;
-    fprintf (res, "%s;%s;%d;", u->name, u->gender, calculaIdade (u->data));
-    return 0;
+void addToUser (User *user, char *distance, char *tip, int car_class, char *avaliation) {
+    switch (car_class) // calcula os valores dependendo do int q identifica o tipo de carro.
+      {
+         case 0:
+            user->total_gasto += strtod (tip,NULL) + strtod (distance, NULL) * 0.62 + 3.25;
+            break;
+         case 1:
+            user->total_gasto += strtod (tip,NULL) + strtod (distance, NULL) * 0.79 + 4;
+            break;
+         case 2:
+            user->total_gasto  += strtod (tip,NULL) + strtod (distance, NULL) * 0.94 + 5.20;
+            break;
+         default:
+            break;
+      }
+    user->n_viagens ++;
+    user-> acc_avaliation += strtod (avaliation, NULL);
+}
+
+void printvaloresQ1_2 (User *u, FILE *res)  {
+    if (!strcmp(u->account_status,"active")) {
+        double avaliacao_media = u->acc_avaliation / u->n_viagens;
+        fprintf (res,"%s;%s;%d;%.3f;%d;%.3f\n",u->name, u->gender, calculaIdade(u->data), avaliacao_media, u->n_viagens, u->total_gasto);
+    }
 }
