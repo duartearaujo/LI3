@@ -2,6 +2,7 @@
 #include <glib.h>
 #include "../include/parse.h"
 #include "../include/queries.h"
+#include "../include/drivers.h"
 
 typedef struct DRIVERS{
     char* id;
@@ -19,6 +20,11 @@ typedef struct DRIVERS{
     char *mostRecentRide;
     double total_auferido;
 } DRIVERS;
+
+struct ARRAY_DRIVERS{
+   int pos;
+   DRIVERS **driver;
+};
 
 void free_driver (DRIVERS *value) {
     free (value->id);
@@ -65,6 +71,13 @@ void atribui_drv(DRIVERS* drv2 ,int pos,char* token){
             drv2 -> ac_st = str;
         break;
     }
+}
+
+ARRAY_DRIVERS* createArray(int N){
+    ARRAY_DRIVERS *array = malloc(sizeof(ARRAY_DRIVERS));
+    array->pos = 0;
+    array->driver = malloc(sizeof(DRIVERS) * N);
+    return array;
 }
 
 void novo(HASH* hash, char *line){
@@ -119,4 +132,32 @@ void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance,
          default:
             break;
       }
+}
+
+void printfArray(FILE *res,ARRAY_DRIVERS * array,int N){
+    for(int i = 9999; i > 9999-N ;i--){
+        fprintf(res,"%s;%s;%.3f\n",array->driver[i]->id,array->driver[i]->name,array->driver[i]->avaliacao_media);
+   }
+}
+
+void calcula_mediasQ2 (gpointer key, DRIVERS* driver, ARRAY_DRIVERS* array){
+    driver->avaliacao_media = driver->valor_atual / driver->count;
+    array->driver[array->pos] = driver;
+    array->pos++;
+}
+
+void swap(DRIVERS** array, int a, int b){
+  DRIVERS *t = array[a];
+  array[a] = array[b];
+  array[b] = t;
+}
+
+void ordenaArray(ARRAY_DRIVERS* array,int N){
+   int i, j, m;
+   for (i = 10000; i > N; i--) {
+   m = 0;
+   for (j = 0; j < i; j++)
+   if (array->driver[j]->avaliacao_media > array->driver[m]->avaliacao_media) m = j;
+      swap(array->driver, i-1, m);
+   }
 }

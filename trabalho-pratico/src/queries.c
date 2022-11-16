@@ -50,11 +50,10 @@ void querieIdentifier(char **argv, HASH *hash) {
         break;
     }
     case 2: {
-        ARRAYS_RIDES* array = createArray(10000);
-        g_hash_table_foreach(retornaHash(2, hash),(GHFunc)calcula_mediasQ2,array);
+        ARRAY_DRIVERS *array = createArray(10000);
+        g_hash_table_foreach(retornaHash(3,hash),(GHFunc)calcula_mediasQ2,array);
         ordenaArray(array,10000-atoi(argv[1]));
-        printfArray(res,array,retornaHash(3, hash),atoi(argv[1]));
-        free(array);
+        printfArray(res,array,atoi(argv[1]));
         break;
     }
     default:

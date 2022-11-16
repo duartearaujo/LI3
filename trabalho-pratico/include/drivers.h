@@ -7,6 +7,8 @@
 
 typedef struct DRIVERS DRIVERS;
 
+typedef struct ARRAY_DRIVERS ARRAY_DRIVERS;
+
 void free_driver (DRIVERS *value);
 
 void atribui_drv(DRIVERS* drv2 ,int pos,char* token);
@@ -23,6 +25,16 @@ char * lookupName(GHashTable* driver,char *str);
 
 void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip);
 
-int identifie_car_class (DRIVERS *driver) ;
+int identifie_car_class (DRIVERS *driver);
+
+void calcula_mediasQ2 (gpointer key, DRIVERS* driver, ARRAY_DRIVERS* array);
+
+ARRAY_DRIVERS* createArray(int N);
+
+void swap(DRIVERS** array, int a, int b);
+
+void ordenaArray(ARRAY_DRIVERS* array,int tamanho);
+
+void printfArray(FILE *res,ARRAY_DRIVERS * array,int N);
 
 #endif
