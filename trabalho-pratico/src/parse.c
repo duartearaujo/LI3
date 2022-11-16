@@ -10,10 +10,11 @@
 
 void parsequerie (FILE *fp, HASH *hash) {
     int i = 0;
+    int n_querie = 1;
     char **querie = malloc(2 * sizeof(char *));
     char *line = NULL;
     size_t len;
-    ssize_t read;;
+    ssize_t read;
     while ((read = getline(&line, &len, fp)) != -1){   
         line[read-1] = '\0';
         char *temp = line;
@@ -23,7 +24,7 @@ void parsequerie (FILE *fp, HASH *hash) {
             token = strsep(&temp," ");
             i++;
         }
-        querieIdentifier(querie, hash);  
+        querieIdentifier(querie, hash, n_querie++);  
         for (--i; i>= 0; i--) free (querie[i]);
         i = 0;
     } 
@@ -35,7 +36,7 @@ void parser(FILE *fp, HASH* hash, int h) {
     void (*fun_criar)(HASH*,char*) = NULL;
     char* line = NULL;
     size_t len;
-    ssize_t read;;
+    ssize_t read;
     if ((read = getline(&line, &len, fp)) == -1) return ;    
     switch (h) {
         case 1:

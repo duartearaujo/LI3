@@ -33,9 +33,11 @@ int compareDates(char *str, char *string){
     return r;
 }
 
-void querieIdentifier(char **argv, HASH *hash) {
+void querieIdentifier(char **argv, HASH *hash, int n_querie) {
     int q = atoi (argv[0]);
-    FILE *res = fopen ("Resultados/commandoutput1.txt","a");
+    char filename [28 + n_querie];
+    sprintf(filename, "Resultados/command%d_output.txt", n_querie);
+    FILE *res = fopen(filename, "a");
     switch (q)
     {
     case 1: {
