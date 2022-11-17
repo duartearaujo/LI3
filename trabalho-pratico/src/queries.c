@@ -63,6 +63,12 @@ void querieIdentifier(char **argv, HASH *hash, int n_querie) {
         freeArray(array);
         break;
     }
+    case 3: {
+        ARRAY_USERS *array = createArrayUser(100000);
+        g_hash_table_foreach(retornaHash(1,hash),(GHFunc)guardaUser, array);
+        QuickSort(array, 100000);
+        Q2Print(res, array, atoi(argv[1]));
+    }
     default:
         break;
     }
