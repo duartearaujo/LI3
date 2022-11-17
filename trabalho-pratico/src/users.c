@@ -5,6 +5,7 @@
 #include "../include/users.h"
 #include "../include/queries.h"
 
+/*Struct para guardar os valores referentes a cada user */
 struct user {    
     char* username;
     char* name;
@@ -25,6 +26,7 @@ struct ARRAY_USERS{
     User **user;
 };
 
+/*Função que faz free de todos os campos do user e da sua própria estrutura*/
 void free_user (User *value) {
     free(value->username);
     free(value->name);
@@ -36,6 +38,7 @@ void free_user (User *value) {
     free (value);
 }
 
+/*Aloca uma nova estrura User para adicionar à hash dos Users*/
 void criaHashUser (HASH *hash, char *line) {
     User *new = malloc (sizeof (User));
     separa (line,new,1);
@@ -46,6 +49,7 @@ void criaHashUser (HASH *hash, char *line) {
     g_hash_table_insert(retornaHash(1,hash),new->username,new);
 }
 
+/*Atribui a informação recebida do ficheio users.csv ao campo correspondente da struct User*/
 void atribui (User *user, int pos, char *info) {
     switch (pos){
         case 1:
@@ -73,7 +77,7 @@ void atribui (User *user, int pos, char *info) {
 }
 
 void addToUser (User *user, char *distance, char *tip, int car_class, char *avaliation, char *date) {
-    switch (car_class) // calcula os valores dependendo do int q identifica o tipo de carro.
+    switch (car_class) /*calcula os valores dependendo do int q identifica o tipo de carro.*/ 
       {
          case 0:
             user->total_gasto += strtod (tip,NULL) + strtod (distance, NULL) * 0.62 + 3.25;
@@ -88,14 +92,15 @@ void addToUser (User *user, char *distance, char *tip, int car_class, char *aval
             break;
       }
     user->n_viagens ++;
-    user-> acc_avaliation += strtod (avaliation, NULL);
-    //acumula a distância viajada e guarda a data da última viagem
+    user-> acc_avaliation += strtod (avaliation, NULL); /*acumula o valor da avaliação dada ao user*/
+    /*acumula a distância viajada e guarda a data da última viagem*/
     char *str = strdup(date);
     if(!user->last_ride) user->last_ride = str;
     else if(compareDates(date,str)) user->last_ride = str;
     user->distance += strtod(distance, NULL);
 }
 
+/* Função para fazer print dos valores do user pedido na query 1 no ficheiro */
 void printvaloresQ1_2 (User *u, FILE *res)  {
     if (!strcmp(u->account_status,"active")) {
         double avaliacao_media = u->acc_avaliation / u->n_viagens;

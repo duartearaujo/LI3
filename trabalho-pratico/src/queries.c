@@ -12,15 +12,19 @@
 #define MES 10
 #define ANO 2022
 
-int querie1(char *str){  /*verifica se na querie 1, apos o "1" que representa a querie que se pretende responder, se encontra um id ou um username*/
+/*Função para identificar se o input recebido da query 1 é um id(driver) ou um username (user)*/
+int querie1(char *str){  
     int id = 0;
     if(str[1] >= 48 && str[1] <= 57) id = 1;
     return id;
 }
 
-int compareDates(char *str, char *string){  /*compara duas datas || return value == 1 se a primeira é mais recente que a segunda*/
-    char *str_ = strdup(str);                                    /* return value == 0 se a primeira é mais antiga que a segunda*/
-    char *str_2 = strdup(string);                                /* reutrn value == 2 se as datas são iguais*/
+/*compara duas datas || return value == 1 se a primeira é mais recente que a segunda
+return value == 0 se a primeira é mais antiga que a segunda
+return value == 2 se as datas são iguais */
+int compareDates(char *str, char *string){  
+    char *str_ = strdup(str);                                    
+    char *str_2 = strdup(string);                            
     int r = 0;
     int dia = atoi(strsep(&str_,"/"));
     int mes = atoi(strsep(&str_,"/"));
@@ -37,7 +41,8 @@ int compareDates(char *str, char *string){  /*compara duas datas || return value
     return r;
 }
 
-void querieIdentifier(char **argv, HASH *hash, int n_querie) {  /*função usada para responder às queries, ou chamar as funções que resolvem as queries */
+/*função usada para responder às queries, ou chamar as funções que resolvem as queries */
+void querieIdentifier(char **argv, HASH *hash, int n_querie) {  
     int q = atoi (argv[0]);
     char filename [28 + n_querie];
     sprintf(filename, "Resultados/command%d_output.txt", n_querie);
@@ -46,12 +51,12 @@ void querieIdentifier(char **argv, HASH *hash, int n_querie) {  /*função usada
     {
     case 1: {
         if(querie1(argv[1])) {
-            DRIVERS *d = g_hash_table_lookup (retornaHash (3,hash), argv[1]);
-            printvaloresQ1 (d, res);
+            DRIVERS *d = g_hash_table_lookup (retornaHash (3,hash), argv[1]); /*faz lookup na hash dos drivers do Driver pedido*/
+            printvaloresQ1 (d, res); /*Função que faz print aos valores pretendidos dos drivers*/
         }
         else {
-            User *u = g_hash_table_lookup (retornaHash (1,hash), argv[1]);
-            printvaloresQ1_2 (u, res);
+            User *u = g_hash_table_lookup (retornaHash (1,hash), argv[1]); /*faz lookup na hash dos users do User pedido*/
+            printvaloresQ1_2 (u, res); /*Função que faz print aos valores pretendidos dos users*/
         }
         break;
     }
@@ -76,7 +81,8 @@ void querieIdentifier(char **argv, HASH *hash, int n_querie) {  /*função usada
     return;
 }
 
-int calculaIdade(char *str){  /*verifica que idade tem o user/driver(usando a data dada no enunciado "09/10/2022")*/
+/*verifica que idade tem o user/driver(usando a data dada no enunciado "09/10/2022")*/
+int calculaIdade(char *str){  
     int idade = 0;
     int dia = atoi(strsep(&str, "/"));
     int mes = atoi(strsep(&str, "/"));

@@ -8,7 +8,8 @@
 #include "../include/queries.h"
 #include "../include/main.h"
 
-void parsequerie (FILE *fp, HASH *hash) {  /*faz parse das queries*/
+/*faz parse das queries*/
+void parsequerie (FILE *fp, HASH *hash) {  
     int i = 0;
     int n_querie = 1;
     char **querie = malloc(2 * sizeof(char *));
@@ -32,7 +33,8 @@ void parsequerie (FILE *fp, HASH *hash) {  /*faz parse das queries*/
     free (line);
 }
 
-void parser(FILE *fp, HASH* hash, int h) {  /*responsável por fazer parse dos 3 ficheiros (users.csv,drivers.csv e rides.csv)*/
+/*responsável por fazer parse dos 3 ficheiros (users.csv,drivers.csv e rides.csv)*/
+void parser(FILE *fp, HASH* hash, int h) {  
     void (*fun_criar)(HASH*,char*) = NULL;  /*function pointer*/
     char* line = NULL;
     size_t len;
@@ -56,7 +58,8 @@ void parser(FILE *fp, HASH* hash, int h) {  /*responsável por fazer parse dos 3
     free (line);
 }
 
-void separa(char *str, void *data,int s){  /*chama as funções responsáveis por atribuir os tokens recebidos a cada campo do user/driver/ride*/
+/*chama as funções responsáveis por atribuir os tokens recebidos a cada campo do user/driver/ride*/
+void separa(char *str, void *data,int s){  
     int pos= 1;
     char *token = strsep(&str,";");
     while(token){

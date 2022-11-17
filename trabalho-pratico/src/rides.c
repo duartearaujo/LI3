@@ -6,8 +6,8 @@
 #include "../include/parse.h"
 #include "../include/queries.h"
 
-
-struct RIDES{ /*struct onde vão ser armazenados os dados do ficheiro rides.csv*/
+/*struct onde vão ser armazenados os dados do ficheiro rides.csv*/
+struct RIDES{ 
    char *id;
    char *date;
    char *driver;

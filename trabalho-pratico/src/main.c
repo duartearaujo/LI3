@@ -8,13 +8,15 @@
 #include "../include/drivers.h"
 #include "../include/main.h"
 
-struct HASH{  /*struct que tem dentro todas as hashtables*/
+/*struct que tem dentro todas as hashtables*/
+struct HASH{  
     GHashTable *user;
     GHashTable *ride;
     GHashTable *driver;
 };
 
-GHashTable* retornaHash(int i, HASH *hash){  /*retorna a hashTable de acordo com o valor de i recebido*/
+/*retorna a hashTable de acordo com o valor de i recebido*/
+GHashTable* retornaHash(int i, HASH *hash){  
     switch(i)
     {
     case 1: {
@@ -35,7 +37,8 @@ GHashTable* retornaHash(int i, HASH *hash){  /*retorna a hashTable de acordo com
     return NULL;
 }
 
-int main(int argc, char **argv){  /*função main do projeto*/
+/*função main do projeto*/
+int main(int argc, char **argv){  
     FILE *fp = NULL;
     HASH *hash = malloc(sizeof(HASH));
     int i = 1;
@@ -47,8 +50,8 @@ int main(int argc, char **argv){  /*função main do projeto*/
             switch (i){  /*cria a hashtable consoante o valor do i*/
                 case 1: {
                     hash -> user = g_hash_table_new_full(g_str_hash, g_str_equal,NULL, (GDestroyNotify)free_user);  /*cria a hashtable dos users*/
-                    char *filename = malloc ((strlen (argv[1]) + strlen ("/users.csv") + 1)*sizeof (char));  /*alloca espaço para o input(path dos ficheiros)*/
-                    strcpy(filename,argv[1]);                                                                /* + o nome do ficheiro que se pretende ler*/
+                    char *filename = malloc ((strlen (argv[1]) + strlen ("/users.csv") + 1)*sizeof (char));  /*alloca espaço para o input(path dos ficheiros) + o nome do ficheiro que se pretende ler*/
+                    strcpy(filename,argv[1]);
                     strcat (filename,"/users.csv");  /*concat do path dos ficheiros mais o nome do ficheiro que se vai ler neste case*/
                     fp = fopen(filename,"r");  /*abre o ficheiro*/
                     if(!fp){
