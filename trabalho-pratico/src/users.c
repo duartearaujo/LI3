@@ -16,9 +16,9 @@ struct user {
     char* account_status;
     char* last_ride;
     int n_viagens;
+    int distance;
     double acc_avaliation;
     double total_gasto;
-    double distance;
 };
 
 struct ARRAY_USERS{
@@ -46,6 +46,7 @@ void criaHashUser (HASH *hash, char *line) {
     new ->n_viagens = 0;
     new ->acc_avaliation = 0;
     new ->distance = 0;
+    new ->last_ride = NULL;
     g_hash_table_insert(retornaHash(1,hash),new->username,new);
 }
 
@@ -94,9 +95,8 @@ void addToUser (User *user, char *distance, char *tip, int car_class, char *aval
     user->n_viagens ++;
     user-> acc_avaliation += strtod (avaliation, NULL); /*acumula o valor da avaliação dada ao user*/
     /*acumula a distância viajada e guarda a data da última viagem*/
-    char *str = strdup(date);
-    if(!user->last_ride) user->last_ride = str;
-    else if(compareDates(date,str)) user->last_ride = str;
+    if(!user->last_ride) user->last_ride = strdup(date);
+    else if(compareDates(date,user->last_ride)) user->last_ride = strdup(date);
     user->distance += strtod(distance, NULL);
 }
 
@@ -143,7 +143,7 @@ int partition(ARRAY_USERS *array, int i, int j){
     for(int t = i; t < j; t++){
         if(array->user[t]->distance == pivot->distance){
             if(compareDates(array->user[t]->last_ride, pivot->last_ride) == 2){
-                if(strcmp(array->user[t]->username, pivot->username) > 0){
+                if(strcmp(array->user[t]->username, pivot->username) > 0){        // ver a ordem do username
                     swap1(array, i, t);
                     i++;
                 }
@@ -167,7 +167,7 @@ void Q2Print(FILE *res, ARRAY_USERS *array, int N){
     int j = 0;
     while(j < N){
         if(!strcmp(array->user[i]->account_status, "active")){
-            fprintf(res, "%s;%s;%.3f\n", array->user[i]->username, array->user[i]->name, array->user[i]->distance);
+            fprintf(res, "%s;%s;%d\n", array->user[i]->username, array->user[i]->name, array->user[i]->distance);
             j++;
         }
         i--;
