@@ -12,15 +12,15 @@
 #define MES 10
 #define ANO 2022
 
-int querie1(char *str){
+int querie1(char *str){  /*verifica se na querie 1, apos o "1" que representa a querie que se pretende responder, se encontra um id ou um username*/
     int id = 0;
     if(str[1] >= 48 && str[1] <= 57) id = 1;
     return id;
 }
 
-int compareDates(char *str, char *string){
-    char *str_ = strdup(str);
-    char *str_2 = strdup(string);
+int compareDates(char *str, char *string){  /*compara duas datas || return value == 1 se a primeira é mais recente que a segunda*/
+    char *str_ = strdup(str);                                    /* return value == 0 se a primeira é mais antiga que a segunda*/
+    char *str_2 = strdup(string);                                /* reutrn value == 2 se as datas são iguais*/
     int r = 0;
     int dia = atoi(strsep(&str_,"/"));
     int mes = atoi(strsep(&str_,"/"));
@@ -37,12 +37,12 @@ int compareDates(char *str, char *string){
     return r;
 }
 
-void querieIdentifier(char **argv, HASH *hash, int n_querie) {
+void querieIdentifier(char **argv, HASH *hash, int n_querie) {  /*função usada para responder às queries, ou chamar as funções que resolvem as queries */
     int q = atoi (argv[0]);
     char filename [28 + n_querie];
     sprintf(filename, "Resultados/command%d_output.txt", n_querie);
     FILE *res = fopen(filename, "a");
-    switch (q)
+    switch (q)  /*q == nº da query que queremos responder*/
     {
     case 1: {
         if(querie1(argv[1])) {
@@ -76,7 +76,7 @@ void querieIdentifier(char **argv, HASH *hash, int n_querie) {
     return;
 }
 
-int calculaIdade(char *str){
+int calculaIdade(char *str){  /*verifica que idade tem o user/driver(usando a data dada no enunciado "09/10/2022")*/
     int idade = 0;
     int dia = atoi(strsep(&str, "/"));
     int mes = atoi(strsep(&str, "/"));

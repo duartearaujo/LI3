@@ -7,7 +7,7 @@
 #include "../include/queries.h"
 
 
-struct RIDES{
+struct RIDES{ /*struct onde vão ser armazenados os dados do ficheiro rides.csv*/
    char *id;
    char *date;
    char *driver;
@@ -74,7 +74,7 @@ void newElement(HASH *hash,char *line){
    
    User *user = g_hash_table_lookup (retornaHash (1,hash),new_ride->user);
    int car_class = identifie_car_class (driver);
-   addToUser (user,new_ride->distance, new_ride->tip, car_class, new_ride->score_user);
+   addToUser (user,new_ride->distance, new_ride->tip, car_class, new_ride->score_user,new_ride->date);
 }
 
 

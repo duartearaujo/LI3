@@ -1,6 +1,6 @@
 CC = gcc #C compiler to use
 
-CFLAGS = `pkg-config --cflags --libs glib-2.0` -O2 -Wall -Wextra -pedantic-errors# compile-time flags
+CFLAGS = -Iinclude `pkg-config --cflags --libs glib-2.0` -O2 -Wall # compile-time flags
 
 SRCS = src/queries.c src/drivers.c src/rides.c src/parse.c src/users.c src/main.c # C source files
 
