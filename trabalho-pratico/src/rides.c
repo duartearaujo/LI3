@@ -33,34 +33,33 @@ void free_ride (RIDES *value) {
 }
 
 void assignsData(RIDES* new_ride ,int pos ,char* token){
-   char *str = strdup(token);
    switch(pos){
       case 1:
-      new_ride->id = str;
+      new_ride->id = strdup(token);
       break;
       case 2:
-      new_ride->date = str;
+      new_ride->date = strdup(token);
       break;
       case 3:
-      new_ride->driver = str;
+      new_ride->driver = strdup(token);
       break;
       case 4:
-      new_ride->user = str;
+      new_ride->user = strdup(token);
       break;
       case 5:
-      new_ride->city = str;
+      new_ride->city = strdup(token);
       break;
       case 6:
-      new_ride->distance = str;
+      new_ride->distance = strdup(token);
       break;
       case 7:
-      new_ride->score_user = str;
+      new_ride->score_user = strdup(token);
       break;
       case 8:
-      new_ride->score_driver = str;
+      new_ride->score_driver = strdup(token);
       break;
       case 9:
-      new_ride->tip = str;
+      new_ride->tip = strdup(token);
       break;
    }
 }
@@ -75,11 +74,4 @@ void newElement(HASH *hash,char *line){
    User *user = g_hash_table_lookup (retornaHash (1,hash),new_ride->user);
    int car_class = identifie_car_class (driver);
    addToUser (user,new_ride->distance, new_ride->tip, car_class, new_ride->score_user,new_ride->date);
-}
-
-
-void lookupRide(GHashTable* hashRides){
-    RIDES *s = g_hash_table_lookup(hashRides,"000000000001");
-    char *key = s->user;
-    printf("%s\n",key);
 }

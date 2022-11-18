@@ -81,7 +81,7 @@ void atribui_drv(DRIVERS* drv2 ,int pos,char* token){
 ARRAY_DRIVERS* createArray(int N){   
     ARRAY_DRIVERS *array = malloc(sizeof(ARRAY_DRIVERS));
     array->pos = 0;
-    array->driver = malloc(sizeof(DRIVERS) * N);
+    array->driver = malloc(sizeof(DRIVERS *) * N);
     return array;
 }
 

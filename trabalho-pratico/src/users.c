@@ -21,9 +21,10 @@ struct user {
     double total_gasto;
 };
 
+/*struct auxiliar usada para realizar a query 3*/
 struct ARRAY_USERS{
-    int pos;
-    User **user;
+    int pos; /*posição na qual queremos inserir a próxima struct user*/
+    User **user; /*array de users*/
 };
 
 /*Função que faz free de todos os campos do user e da sua própria estrutura*/
@@ -35,6 +36,7 @@ void free_user (User *value) {
     free(value->account_creation);
     free(value->pay_method);
     free(value->account_status);
+    free(value->last_ride);
     free (value);
 }
 
@@ -96,8 +98,12 @@ void addToUser (User *user, char *distance, char *tip, int car_class, char *aval
     user-> acc_avaliation += strtod (avaliation, NULL); /*acumula o valor da avaliação dada ao user*/
     /*acumula a distância viajada e guarda a data da última viagem*/
     if(!user->last_ride) user->last_ride = strdup(date);
-    else if(compareDates(date,user->last_ride)) user->last_ride = strdup(date);
-    user->distance += strtod(distance, NULL);
+    else if(compareDates(date,user->last_ride)){
+        char *temp = user->last_ride;
+        user->last_ride = strdup(date);
+        free(temp);
+    } 
+    user->distance += atoi(distance);
 }
 
 /* Função para fazer print dos valores do user pedido na query 1 no ficheiro */
@@ -108,24 +114,28 @@ void printvaloresQ1_2 (User *u, FILE *res)  {
     }
 }
 
+/*Função que inicializa o ARRAY_USERS*/
 ARRAY_USERS* createArrayUser(int N){
     ARRAY_USERS *array = malloc(sizeof(ARRAY_USERS));
     array->pos = 0;
-    array->user = malloc(sizeof(User) * N);
+    array->user = malloc(sizeof(User *) * N);
     return array;
 }
 
+/*Função que guarda os users no ARRAY_USERS e incrementa o campo pos*/
 void guardaUser(gpointer key, User *user, ARRAY_USERS *array){
     array->user[array->pos] = user;
     array->pos++;
 }
 
+/*Swap usado no sort do array*/
 void swap1(ARRAY_USERS *array, int i, int t){
     User *u = array->user[i];
     array->user[i] = array->user[t];
     array->user[t] = u;
 }
 
+/*Chamada recursiva do QuickSort*/
 void QSRecursion(ARRAY_USERS *array, int i, int j){
     if(i < j){
         int pivot_i = partition(array, i, j);
@@ -134,42 +144,51 @@ void QSRecursion(ARRAY_USERS *array, int i, int j){
     }
 }
 
+/*Método de ordenação do array*/
 void QuickSort(ARRAY_USERS *array, int N){
     QSRecursion(array, 0, N-1);
 }
 
+/*Função que faz a partição do sort, colocando os elementos menores que o pivot à sua esquerda e os maiores à direita. Devolve o índice final do pivot*/
 int partition(ARRAY_USERS *array, int i, int j){
     User *pivot = array->user[j];
     for(int t = i; t < j; t++){
-        if(array->user[t]->distance == pivot->distance){
-            if(compareDates(array->user[t]->last_ride, pivot->last_ride) == 2){
-                if(strcmp(array->user[t]->username, pivot->username) > 0){        // ver a ordem do username
+        if(array->user[t]->distance == pivot->distance){ /*Caso a distância seja igual entramos no desempate*/
+            if(compareDates(array->user[t]->last_ride, pivot->last_ride) == 2){ /*Se compareDates == 2, então as datas são iguais e será necessário novo desempate*/
+                if(strcmp(array->user[t]->username, pivot->username) > 0){ /*Se strcmp > 0 então o primeiro username terá prioridade e será apresentado primeiro*/      
                     swap1(array, i, t);
                     i++;
                 }
             }
-            else if(compareDates(array->user[t]->last_ride, pivot->last_ride) == 0){
+            else if(compareDates(array->user[t]->last_ride, pivot->last_ride) == 0){ /*compareDates == 0 se a primeira data for mais antiga, logo o swap é realizado*/
                 swap1(array, i, t);
                 i++;
             }
         }
-        if(array->user[t]->distance < pivot->distance){
+        if(array->user[t]->distance < pivot->distance){ /*Se a distância for menor que a do elemento pivot então é feito o swap*/
             swap1(array, i, t);
             i++;
         }
     }
-    swap1(array, i, j);
+    swap1(array, i, j); /*swap do pivot*/
     return i;
 }
 
-void Q2Print(FILE *res, ARRAY_USERS *array, int N){
+/*Função que faz print dos resultados da querie 3*/
+void Q3Print(FILE *res, ARRAY_USERS *array, int N){
     int i = 99999;
     int j = 0;
-    while(j < N){
-        if(!strcmp(array->user[i]->account_status, "active")){
+    while(j < N){ /*Ciclo que limita o print dos elementos com base no input da querie*/
+        if(!strcmp(array->user[i]->account_status, "active")){ /*Se o status for inativo então o user é ignorado e o print não é executado*/
             fprintf(res, "%s;%s;%d\n", array->user[i]->username, array->user[i]->name, array->user[i]->distance);
             j++;
         }
-        i--;
+        i--; /*O print é feito do maior elemento para o menor*/
     }
+}
+
+/*Função que faz free do ARRAY_USERS*/
+void freeArrayU(ARRAY_USERS *user){
+    free(user->user);
+    free(user);
 }

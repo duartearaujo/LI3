@@ -24,7 +24,9 @@ return value == 0 se a primeira é mais antiga que a segunda
 return value == 2 se as datas são iguais */
 int compareDates(char *str, char *string){  
     char *str_ = strdup(str);                                    
-    char *str_2 = strdup(string);                            
+    char *str_2 = strdup(string);  
+    char *temp = str_;
+    char *temp2 = str_2;                         
     int r = 0;
     int dia = atoi(strsep(&str_,"/"));
     int mes = atoi(strsep(&str_,"/"));
@@ -36,15 +38,15 @@ int compareDates(char *str, char *string){
     else if(ano == ano2 && mes > mes2) r = 1;
     else if(ano == ano2 && mes == mes2 && dia > dia2) r = 1;
     else if(ano == ano2 && mes == mes2 && dia == dia2) r = 2;
-    free(str_);
-    free(str_2);
+    free(temp);
+    free(temp2);
     return r;
 }
 
 /*função usada para responder às queries, ou chamar as funções que resolvem as queries */
 void querieIdentifier(char **argv, HASH *hash, int n_querie) {  
     int q = atoi (argv[0]);
-    char filename [28 + n_querie];
+    char filename [29 + n_querie];
     sprintf(filename, "Resultados/command%d_output.txt", n_querie);
     FILE *res = fopen(filename, "a");
     switch (q)  /*q == nº da query que queremos responder*/
@@ -72,7 +74,8 @@ void querieIdentifier(char **argv, HASH *hash, int n_querie) {
         ARRAY_USERS *array = createArrayUser(100000);
         g_hash_table_foreach(retornaHash(1,hash),(GHFunc)guardaUser, array);
         QuickSort(array, 100000);
-        Q2Print(res, array, atoi(argv[1]));
+        Q3Print(res, array, atoi(argv[1]));
+        freeArrayU(array);
     }
     default:
         break;

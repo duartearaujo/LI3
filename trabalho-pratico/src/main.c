@@ -106,8 +106,8 @@ int main(int argc, char **argv){
     /*free das hashes e mais*/
     fclose (fp);
     g_hash_table_destroy (hash->user);
-    g_hash_table_destroy (hash->ride);
     g_hash_table_destroy (hash->driver);
+    g_hash_table_destroy (hash->ride);
     free (hash);
     return 0;
 }

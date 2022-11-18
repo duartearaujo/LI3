@@ -17,8 +17,6 @@ void novo(HASH* hash, char *line);
 
 void printvaloresQ1 (DRIVERS *d, FILE *res) ;
 
-char *procuraQ1(GHashTable* HashDrv, char *id, FILE *res);
-
 int car_lookup (GHashTable *drivers, char *id);
 
 void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip);
@@ -28,8 +26,6 @@ int identifie_car_class (DRIVERS *driver);
 void calcula_mediasQ2 (gpointer key, DRIVERS* driver, ARRAY_DRIVERS* array);
 
 ARRAY_DRIVERS* createArray(int N);
-
-void swap(DRIVERS** array, int a, int b);
 
 void ordenaArray(ARRAY_DRIVERS* array,int tamanho);
 
