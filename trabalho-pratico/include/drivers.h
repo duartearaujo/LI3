@@ -33,4 +33,5 @@ void printfArray(FILE *res,ARRAY_DRIVERS * array,int N);
 
 void freeArray(ARRAY_DRIVERS* array);
 
+DRIVERS * GetcontentD(DRIVERS *d); 
 #endif

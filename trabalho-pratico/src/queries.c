@@ -53,12 +53,14 @@ void querieIdentifier(char **argv, HASH *hash, int n_querie) {
     {
     case 1: {
         if(querie1(argv[1])) {
-            DRIVERS *d = g_hash_table_lookup (retornaHash (3,hash), argv[1]); /*faz lookup na hash dos drivers do Driver pedido*/
+            DRIVERS *d =GetcontentD (g_hash_table_lookup (retornaHash (3,hash), argv[1])); /*faz lookup na hash dos drivers do Driver pedido*/
             printvaloresQ1 (d, res); /*Função que faz print aos valores pretendidos dos drivers*/
+            free_driver (d);
         }
         else {
-            User *u = g_hash_table_lookup (retornaHash (1,hash), argv[1]); /*faz lookup na hash dos users do User pedido*/
+            User *u = GetcontentU( g_hash_table_lookup (retornaHash (1,hash), argv[1]) ); /*faz lookup na hash dos users do User pedido*/
             printvaloresQ1_2 (u, res); /*Função que faz print aos valores pretendidos dos users*/
+            free_user (u);
         }
         break;
     }

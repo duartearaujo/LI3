@@ -35,4 +35,6 @@ void swap1(ARRAY_USERS *array, int i, int t);
 
 void freeArrayU(ARRAY_USERS *user);
 
+User* GetcontentU(User *u);
+
 #endif

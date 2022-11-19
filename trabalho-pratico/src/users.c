@@ -192,3 +192,41 @@ void freeArrayU(ARRAY_USERS *user){
     free(user->user);
     free(user);
 }
+
+User* GetcontentU(User *u) {
+    User *copy = malloc (sizeof (User));  
+    for (int pos = 1; pos <= 8; pos++) {
+        switch (pos) {
+            case 1:
+                copy-> username = strdup (u->username);
+                break;
+            case 2:
+                copy-> name = strdup (u->name);
+                break;
+            case 3:
+                copy-> data= strdup (u->data);
+                break;
+            case 4:
+                copy->gender= strdup (u->gender);
+                break;
+            case 5:
+                copy-> account_creation = strdup (u->account_creation);
+                break;
+            case 6:
+                copy->pay_method= strdup (u->pay_method);
+                break;
+            case 7:
+                copy->account_status = strdup (u->account_status);
+                break;
+            case 8:
+                copy-> last_ride = strdup (u->last_ride);
+                break;
+        }
+    }
+
+    copy->distance = u->distance;
+    copy->n_viagens = u->n_viagens;
+    copy->total_gasto = u->total_gasto;
+    copy->acc_avaliation = u->acc_avaliation;
+    return copy;
+}
