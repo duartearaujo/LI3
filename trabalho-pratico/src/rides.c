@@ -17,6 +17,7 @@ struct RIDES{
    char *score_user;
    char *score_driver;
    char *tip;
+   char *type_car;
 };
 
 void free_ride (RIDES *value) {
@@ -29,6 +30,7 @@ void free_ride (RIDES *value) {
    free (value->score_user);
    free (value->score_driver);
    free (value->tip);
+   if (value->type_car) free (value->type_car);
    free (value);
 }
 
@@ -66,7 +68,7 @@ void assignsData(RIDES* new_ride ,int pos ,char* token){
 
 RIDES* GetcontentR(RIDES *ride){
    RIDES *copy = malloc(sizeof(RIDES));
-   for(int pos = 1; pos <= 9;pos++){
+   for(int pos = 1; pos <= 10;pos++){
       switch(pos){
          case 1:
          copy->id = strdup(ride->id);
@@ -95,6 +97,9 @@ RIDES* GetcontentR(RIDES *ride){
          case 9:
          copy->tip = strdup(ride->tip);
          break;
+         case 10:
+         copy->type_car = (!ride->type_car) ? NULL : strdup (ride->type_car);
+         break;
       }
    }
    return copy;
@@ -103,13 +108,28 @@ RIDES* GetcontentR(RIDES *ride){
 void newElement(HASH *hash,char *line){
    RIDES *new_ride = malloc(sizeof(RIDES));
    separa(line,new_ride,2);
+   new_ride ->type_car = NULL;
    g_hash_table_insert(retornaHash(2,hash),new_ride->id,new_ride);
    RIDES *copy = GetcontentR(new_ride);
    DRIVERS *driver = g_hash_table_lookup(retornaHash(3,hash),copy->driver);
    addToDriver(driver, copy->score_driver,copy->date,copy->distance, copy->tip);
    
+   new_ride->type_car = getcarD (driver);
+   
    User *user = g_hash_table_lookup (retornaHash (1,hash),copy->user);
    int car_class = identifie_car_class (driver);
    addToUser (user,copy->distance, copy->tip, car_class, copy->score_user,copy->date);
    free_ride(copy);
+}
+
+char *getcityR (RIDES *ride) {
+   return strdup(ride->city);
+}
+
+char *getcarR (RIDES *ride) {
+   return strdup (ride->type_car);
+}
+
+char *getdistanceR (RIDES *ride) {
+   return strdup (ride->distance);
 }

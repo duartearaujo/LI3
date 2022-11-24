@@ -17,4 +17,10 @@ void assignsData(RIDES* new_ride ,int pos ,char* token);
 
 void newElement(HASH *hash,char *line);
 
+char *getcarR (RIDES *ride);
+
+char *getdistanceR (RIDES *ride);
+
+char *getcityR (RIDES *ride);
+
 #endif

@@ -111,6 +111,12 @@ int identifie_car_class (DRIVERS *driver) {
     else return 2;
 }
 
+int identifie_car_class_char (char *car_class) {
+    if (!strcmp(car_class,"basic")) return 0;
+    else if (!strcmp(car_class,"green")) return 1;
+    else return 2;
+}
+
 /*adiciona a cada driver da hashtable(dos drivers) os valores dos rides que interessam para resolver a query 1 e 2*/
 void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip){   
     int r = 0;
@@ -230,4 +236,8 @@ DRIVERS* GetcontentD(DRIVERS *d) {
     copy->valor_atual = d->valor_atual;
     copy->total_auferido = d->total_auferido;
     return copy;
+}
+
+char *getcarD (DRIVERS *d) {
+    return strdup (d->car_class);
 }

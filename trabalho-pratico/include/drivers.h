@@ -23,6 +23,8 @@ void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance,
 
 int identifie_car_class (DRIVERS *driver);
 
+int identifie_car_class_char (char *car_class);
+
 void calcula_mediasQ2 (gpointer key, DRIVERS* driver, ARRAY_DRIVERS* array);
 
 ARRAY_DRIVERS* createArray(int N);
@@ -34,4 +36,7 @@ void printfArray(FILE *res,ARRAY_DRIVERS * array,int N);
 void freeArray(ARRAY_DRIVERS* array);
 
 DRIVERS * GetcontentD(DRIVERS *d); 
+
+char *getcarD (DRIVERS *d);
+
 #endif

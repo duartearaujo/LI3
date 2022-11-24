@@ -7,6 +7,7 @@
 #include "../include/queries.h"
 #include "../include/drivers.h"
 #include "../include/main.h"
+#include "../include/query4.h"
 
 #define DIA 9
 #define MES 10
@@ -78,6 +79,12 @@ void querieIdentifier(char **argv, HASH *hash, int n_querie) {
         QuickSort(array, 100000);
         Q3Print(res, array, atoi(argv[1]));
         freeArrayU(array);
+    }
+    case 4: {
+        Q4* value = inicializaQ4 (strdup (argv[1]));
+        g_hash_table_foreach(retornaHash (2,hash),(GHFunc)preco_medio, value);
+        printQ4 (value, res);
+        freeQ4 (value);
     }
     default:
         break;
