@@ -7,13 +7,11 @@
 
 typedef struct DRIVERS DRIVERS;
 
-typedef struct ARRAY_DRIVERS ARRAY_DRIVERS;
-
 void free_driver (DRIVERS *value);
 
-void atribui_drv(DRIVERS* drv2 ,int pos,char* token);
-
 void novo(HASH* hash, char *line);
+
+void atribui_drv(DRIVERS* drv2 ,int pos,char* token);
 
 void printvaloresQ1 (DRIVERS *d, FILE *res) ;
 
@@ -25,18 +23,24 @@ int identifie_car_class (DRIVERS *driver);
 
 int identifie_car_class_char (char *car_class);
 
-void calcula_mediasQ2 (gpointer key, DRIVERS* driver, ARRAY_DRIVERS* array);
-
-ARRAY_DRIVERS* createArray(int N);
-
-void ordenaArray(ARRAY_DRIVERS* array,int tamanho);
-
-void printfArray(FILE *res,ARRAY_DRIVERS * array,int N);
-
-void freeArray(ARRAY_DRIVERS* array);
-
 DRIVERS * GetcontentD(DRIVERS *d); 
 
 char *getcarD (DRIVERS *d);
+
+char *getIdD(DRIVERS *d);
+
+char *getNameD(DRIVERS *d);
+
+double getAvaliacaoMediaD(DRIVERS *d);
+
+double getValorAtualD(DRIVERS *d);
+
+int getCountD(DRIVERS *d);
+
+char *getAccountStatusD(DRIVERS *d);
+
+char *getMostRecentRideD(DRIVERS *d);
+
+void calculaAvaliacaoMedia(DRIVERS *d,double avaliacao_media);
 
 #endif

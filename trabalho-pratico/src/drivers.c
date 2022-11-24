@@ -22,12 +22,6 @@ typedef struct DRIVERS{
     double total_auferido;
 } DRIVERS;
 
-/*struct auxiliar usada para realizar a query 2*/
-struct ARRAY_DRIVERS{   
-   int pos;   /*posição na qual queremos inserir o próximo driver*/
-   DRIVERS **driver;   /*array de drivers*/
-};
-
 /*função responsável por dar free dos drivers, é usada para dar free da hashtable(dos drivers)*/
 void free_driver (DRIVERS *value) {   
     free (value->id);
@@ -75,14 +69,6 @@ void atribui_drv(DRIVERS* drv2 ,int pos,char* token){
             drv2 -> ac_st = str;
         break;
     }
-}
-
-/*função que inicializa a struct ARRAY_DRIVERS*/
-ARRAY_DRIVERS* createArray(int N){   
-    ARRAY_DRIVERS *array = malloc(sizeof(ARRAY_DRIVERS));
-    array->pos = 0;
-    array->driver = malloc(sizeof(DRIVERS *) * N);
-    return array;
 }
 
 /*função que inicializa cada driver*/
@@ -147,52 +133,6 @@ void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance,
       }
 }
 
-/*faz print dos valores da query 2*/
-void printfArray(FILE *res,ARRAY_DRIVERS * array,int N){  
-    for(int i = 9999; i > 9999-N ;i--){
-        fprintf(res,"%s;%s;%.3f\n",array->driver[i]->id,array->driver[i]->name,array->driver[i]->avaliacao_media);
-   }
-}
-
-/*função que vai ser aplicada a cada membro da hashtable (dos drivers)*/
-void calcula_mediasQ2 (gpointer key, DRIVERS* driver, ARRAY_DRIVERS* array){   
-    driver->avaliacao_media = driver->valor_atual / driver->count;   /*calcula a avaliação média de cada driver*/
-    array->driver[array->pos] = driver;
-    array->pos++;
-}
-
-/*função swap utilizada na ordenação do array presente na struct ARRAY_DRIVERS*/
-void swap(DRIVERS** array, int a, int b){   
-  DRIVERS *t = array[a];
-  array[a] = array[b];
-  array[b] = t;
-}
-
-/*função que ordena o array da struct ARRAY_DRIVERS e faz o desempate dos drivers caso a avaliação média seja a mesma*/
-void ordenaArray(ARRAY_DRIVERS* array,int N){   
-   int i, j, m,r = 0;
-   for (i = 10000; i > 10000-N; i--) {
-   m = 0;
-   for (j = 0; j < i; j++){
-    if(strcmp(array->driver[j]->ac_st,"inactive") != 0){   /*se o driver estiver inactivo então não será ordenado(vai ser ignorado)*/
-   if (array->driver[j]->avaliacao_media > array->driver[m]->avaliacao_media) m = j;
-   else if(array->driver[j]->avaliacao_media == array->driver[m]->avaliacao_media){   /*desempate dos drivers(avaliação média =)->verificar as datas*/
-    if((r = compareDates(array->driver[j]->mostRecentRide,array->driver[m]->mostRecentRide)) == 1) m = j;   /*compareDates = 1 -> primeira data é mais recente*/
-    else if((r = compareDates(array->driver[j]->mostRecentRide,array->driver[m]->mostRecentRide)) == 2){    /*compareDates = 2 -> as duas datas são iguais*/
-        if(atoi(array->driver[j]->id) > atoi(array->driver[m]->id)) m = j;  /*se as datas forem iguais então compara-se os id*/
-    }
-   }
-    }
-   }
-    swap(array->driver, i-1, m);
-   }
-}
-
-/*função que faz free da struct ARRAY_DRIVERS*/
-void freeArray(ARRAY_DRIVERS* array){
-    free(array->driver);
-    free(array);
-}
 
 DRIVERS* GetcontentD(DRIVERS *d) {
     DRIVERS *copy = malloc (sizeof (DRIVERS));  
@@ -240,4 +180,36 @@ DRIVERS* GetcontentD(DRIVERS *d) {
 
 char *getcarD (DRIVERS *d) {
     return strdup (d->car_class);
+}
+
+char *getIdD(DRIVERS *d){
+    return strdup (d->id);
+}
+
+char *getNameD(DRIVERS *d){
+    return strdup (d->name);
+}
+
+double getAvaliacaoMediaD(DRIVERS *d){
+    return d->avaliacao_media;
+}
+
+double getValorAtualD(DRIVERS *d){
+    return d->valor_atual;
+}
+
+int getCountD(DRIVERS *d){
+    return d->count;
+}
+
+char *getAccountStatusD(DRIVERS *d){
+    return strdup (d->ac_st);
+}
+
+char *getMostRecentRideD(DRIVERS *d){
+    return strdup (d->mostRecentRide);
+}
+
+void calculaAvaliacaoMedia(DRIVERS *d,double avaliacao_media){
+    d->avaliacao_media = avaliacao_media;
 }
