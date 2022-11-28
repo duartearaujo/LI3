@@ -9,6 +9,7 @@
 #include "../include/main.h"
 #include "../include/query2.h"
 #include "../include/query4.h"
+#include "../include/query1.h"
 
 #define DIA 9
 #define MES 10

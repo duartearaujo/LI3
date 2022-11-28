@@ -106,14 +106,6 @@ void addToUser (User *user, char *distance, char *tip, int car_class, char *aval
     user->distance += atoi(distance);
 }
 
-/* Função para fazer print dos valores do user pedido na query 1 no ficheiro */
-void printvaloresQ1_2 (User *u, FILE *res)  {
-    if (!strcmp(u->account_status,"active")) {
-        double avaliacao_media = u->acc_avaliation / u->n_viagens;
-        fprintf (res,"%s;%s;%d;%.3f;%d;%.3f\n",u->name, u->gender, calculaIdade(u->data), avaliacao_media, u->n_viagens, u->total_gasto);
-    }
-}
-
 /*Função que inicializa o ARRAY_USERS*/
 ARRAY_USERS* createArrayUser(int N){
     ARRAY_USERS *array = malloc(sizeof(ARRAY_USERS));
@@ -229,4 +221,33 @@ User* GetcontentU(User *u) {
     copy->total_gasto = u->total_gasto;
     copy->acc_avaliation = u->acc_avaliation;
     return copy;
+}
+
+char *getNameU (User *u) {
+    return strdup (u->name);
+}
+
+char *getGenderU (User *u) {
+    return strdup (u->gender);
+}
+
+
+char *getAccStatusU (User *u) {
+    return strdup (u->account_status);
+}
+
+char *getDataU (User *u) {
+    return strdup (u->data);
+}
+
+int getNViagensU (User *u) {
+    return u->n_viagens;
+}
+
+double getTotalGastoU (User *u) {
+    return u->total_gasto;
+}
+
+double getAccAvaliationU (User *u) {
+    return u->acc_avaliation;
 }

@@ -13,8 +13,6 @@ void novo(HASH* hash, char *line);
 
 void atribui_drv(DRIVERS* drv2 ,int pos,char* token);
 
-void printvaloresQ1 (DRIVERS *d, FILE *res) ;
-
 int car_lookup (GHashTable *drivers, char *id);
 
 void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip);
@@ -42,5 +40,11 @@ char *getAccountStatusD(DRIVERS *d);
 char *getMostRecentRideD(DRIVERS *d);
 
 void calculaAvaliacaoMedia(DRIVERS *d,double avaliacao_media);
+
+char *getGenderD(DRIVERS *d);
+
+char *getBirthD(DRIVERS *d);
+
+double getTotalAuferido (DRIVERS *d);
 
 #endif

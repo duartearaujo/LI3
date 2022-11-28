@@ -82,14 +82,6 @@ void novo(HASH* hash, char *line){
     g_hash_table_insert(retornaHash(3,hash), drv2 -> id, drv2);  /*depois de todos os campos da struct estarem preenchidos insere o driver na hashtable*/
 }
 
-/* Função para fazer print dos valores do driver pedido na query 1 no ficheiro */
-void printvaloresQ1 (DRIVERS *d, FILE *res) {  
-    if (!strcmp (d->ac_st, "active")) {
-    double avaliacao_media = d->valor_atual / d->count;   /*é calculada a avaliação média de cada driver*/
-    fprintf (res,"%s;%s;%d;%.3f;%d;%.3f\n",d->name, d->gender, calculaIdade(d->birth), avaliacao_media, d->count, d->total_auferido);
-    }
-}
-
 /*atribiu um int consoante o tipo de carro do driver*/
 int identifie_car_class (DRIVERS *driver) {
     if (!strcmp(driver->car_class,"basic")) return 0;
@@ -212,4 +204,16 @@ char *getMostRecentRideD(DRIVERS *d){
 
 void calculaAvaliacaoMedia(DRIVERS *d,double avaliacao_media){
     d->avaliacao_media = avaliacao_media;
+}
+
+char *getGenderD(DRIVERS *d){
+    return strdup (d->gender);
+}
+
+char *getBirthD(DRIVERS *d){
+    return strdup (d->birth);
+}
+
+double getTotalAuferido (DRIVERS *d) {
+    return d->total_auferido;
 }
