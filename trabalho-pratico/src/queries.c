@@ -8,6 +8,7 @@
 #include "../include/drivers.h"
 #include "../include/main.h"
 #include "../include/query2.h"
+#include "../include/query3.h"
 #include "../include/query4.h"
 #include "../include/query1.h"
 
