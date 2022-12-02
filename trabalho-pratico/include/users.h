@@ -1,13 +1,17 @@
-#ifndef users
-#define users
+#ifndef users_
+#define users_
 
 #include <glib.h>
+
+GHashTable *users;
 
 typedef struct user User;
 
 void free_user(User *value);
 
-void criaHashUser (HASH *hash, char *line);
+void iniciaHashUsers (char *path);
+
+void adicionaHashUsers (char *line);
 
 void atribui (User* user, int pos, char *info);
 

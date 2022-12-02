@@ -34,8 +34,24 @@ void free_user (User *value) {
     free (value);
 }
 
+void iniciaHashUsers (char *path) {
+    FILE *fp = NULL;
+    users = g_hash_table_new_full(g_str_hash, g_str_equal,NULL, (GDestroyNotify)free_user);  /*cria a hashtable dos users*/
+    char *filename = malloc ((strlen (path) + strlen ("/users.csv") + 1)*sizeof (char));  /*alloca espaço para o input(path dos ficheiros) + o nome do ficheiro que se pretende ler*/
+    strcpy(filename,path);
+    strcat (filename,"/users.csv");  /*concat do path dos ficheiros mais o nome do ficheiro que se vai ler neste case*/
+    fp = fopen(filename,"r");  /*abre o ficheiro*/
+    if(!fp){
+        perror("Não conseguiu abrir o ficheiro");
+        return;
+    }
+    parser (fp,1);  /*faz o parse do ficheiro*/
+    free (filename);  /*free do path*/
+    fclose (fp);  /*fecha o ficheiro*/
+}
+
 /*Aloca uma nova estrura User para adicionar à hash dos Users*/
-void criaHashUser (HASH *hash, char *line) {
+void adicionaHashUsers (char *line) {
     User *new = malloc (sizeof (User));
     separa (line,new,1);
     new->total_gasto = 0;
@@ -43,7 +59,7 @@ void criaHashUser (HASH *hash, char *line) {
     new ->acc_avaliation = 0;
     new ->distance = 0;
     new ->last_ride = NULL;
-    g_hash_table_insert(retornaHash(1,hash),new->username,new);
+    g_hash_table_insert(users,new->username,new);
 }
 
 /*Atribui a informação recebida do ficheio users.csv ao campo correspondente da struct User*/

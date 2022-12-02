@@ -6,7 +6,6 @@
 #include "../include/users.h"
 #include "../include/rides.h"
 #include "../include/drivers.h"
-#include "../include/main.h"
 #include "../include/queries.h"
 #include "../include/query3.h"
 

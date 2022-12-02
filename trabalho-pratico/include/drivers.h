@@ -1,15 +1,19 @@
-#ifndef drivers
-#define drivers
+#ifndef drivers_
+#define drivers_
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>
 
+GHashTable* drivers;
+
 typedef struct DRIVERS DRIVERS;
 
 void free_driver (DRIVERS *value);
 
-void novo(HASH* hash, char *line);
+void iniciaHashDrivers (char *path);
+
+void adicionaHashDrivers(char *line);
 
 void atribui_drv(DRIVERS* drv2 ,int pos,char* token);
 

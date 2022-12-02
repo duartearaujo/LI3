@@ -6,10 +6,9 @@
 #include "../include/rides.h"
 #include "../include/drivers.h"
 #include "../include/queries.h"
-#include "../include/main.h"
 
 /*faz parse das queries*/
-void parsequerie (FILE *fp, HASH *hash) {  
+void parsequerie (FILE *fp) {  
     int i = 0;
     int n_querie = 1;
     char **querie = malloc(2 * sizeof(char *));
@@ -25,7 +24,7 @@ void parsequerie (FILE *fp, HASH *hash) {
             token = strsep(&temp," ");
             i++;
         }
-        querieIdentifier(querie, hash, n_querie++); /*chama a função que vai realizar cada querie consoante os valores presentes no array "querie"*/
+        querieIdentifier(querie, n_querie++); /*chama a função que vai realizar cada querie consoante os valores presentes no array "querie"*/
         for (--i; i>= 0; i--) free (querie[i]);  /*free do array*/
         i = 0;
     } 
@@ -34,26 +33,26 @@ void parsequerie (FILE *fp, HASH *hash) {
 }
 
 /*responsável por fazer parse dos 3 ficheiros (users.csv,drivers.csv e rides.csv)*/
-void parser(FILE *fp, HASH* hash, int h) {  
-    void (*fun_criar)(HASH*,char*) = NULL;  /*function pointer*/
+void parser(FILE *fp, int h) {  
+    void (*fun_criar)(char*) = NULL;  /*function pointer*/
     char* line = NULL;
     size_t len;
     ssize_t read;
     if ((read = getline(&line, &len, fp)) == -1) return ;    
     switch (h) {  //consoante o valor do h, o function pointer vai apontar para a função responsável por criar os membros da hashtable*/
         case 1:
-            fun_criar = &criaHashUser;  /*criar membros da hashtable dos users*/
+            fun_criar = &adicionaHashUsers;  /*criar membros da hashtable dos users*/
             break;
         case 2:
-            fun_criar = &novo;  /*criar membros da hashtable dos drivers*/
+            fun_criar = &adicionaHashDrivers;  /*criar membros da hashtable dos drivers*/
             break;
         case 3:
-            fun_criar = &newElement;  /*criar membros da hashtable dos rides*/
+            fun_criar = &adicionaHashRides;  /*criar membros da hashtable dos rides*/
             break;
     }
     while ((read = getline(&line, &len, fp)) != -1){
             line[read-1] = '\0';
-            (*fun_criar)(hash,line);
+            (*fun_criar)(line);
     } 
     free (line);
 }

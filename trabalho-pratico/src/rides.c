@@ -34,6 +34,22 @@ void free_ride (RIDES *value) {
    free (value);
 }
 
+void iniciaHashRides (char *path) {
+   FILE *fp = NULL;
+   rides = g_hash_table_new_full(g_str_hash, g_str_equal,NULL,(GDestroyNotify) free_ride);
+   char *filename = malloc ((strlen (path) + strlen ("/rides.csv") + 1)*sizeof (char));
+   strcpy(filename,path);
+   strcat (filename,"/rides.csv");
+   fp = fopen(filename,"r");
+   if(!fp){
+      perror("Não conseguiu abrir o ficheiro");
+      return;
+   }
+   parser(fp, 3);
+   free (filename);
+   fclose (fp);
+}
+
 void assignsData(RIDES* new_ride ,int pos ,char* token){
    switch(pos){
       case 1:
@@ -105,18 +121,18 @@ RIDES* GetcontentR(RIDES *ride){
    return copy;
 }
 
-void newElement(HASH *hash,char *line){
+void adicionaHashRides(char *line){
    RIDES *new_ride = malloc(sizeof(RIDES));
    separa(line,new_ride,2);
    new_ride ->type_car = NULL;
-   g_hash_table_insert(retornaHash(2,hash),new_ride->id,new_ride);
+   g_hash_table_insert(rides,new_ride->id,new_ride);
    RIDES *copy = GetcontentR(new_ride);
-   DRIVERS *driver = g_hash_table_lookup(retornaHash(3,hash),copy->driver);
+   DRIVERS *driver = g_hash_table_lookup(drivers,copy->driver);
    addToDriver(driver, copy->score_driver,copy->date,copy->distance, copy->tip);
    
    new_ride->type_car = getcarD (driver);
    
-   User *user = g_hash_table_lookup (retornaHash (1,hash),copy->user);
+   User *user = g_hash_table_lookup (users,copy->user);
    int car_class = identifie_car_class (driver);
    addToUser (user,copy->distance, copy->tip, car_class, copy->score_user,copy->date);
    free_ride(copy);

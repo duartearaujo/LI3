@@ -37,6 +37,22 @@ void free_driver (DRIVERS *value) {
     free (value);
 }
 
+void iniciaHashDrivers (char *path) {
+    FILE *fp = NULL;
+    drivers = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, (GDestroyNotify) free_driver);
+    char *filename = malloc ((strlen (path) + strlen ("/drivers.csv") +1)*sizeof (char));
+    strcpy(filename,path);
+    strcat (filename,"/drivers.csv");
+    fp = fopen(filename,"r");
+    if(!fp){
+        perror("Não conseguiu abrir o ficheiro");
+        return;
+    }
+    parser(fp,2);
+    free (filename);
+    fclose (fp);
+}
+
 /*atribui cada token extraído ao respetivo campo da struct DRIVERS*/
 void atribui_drv(DRIVERS* drv2 ,int pos,char* token){   
     char *str = strdup(token);
@@ -72,14 +88,14 @@ void atribui_drv(DRIVERS* drv2 ,int pos,char* token){
 }
 
 /*função que inicializa cada driver*/
-void novo(HASH* hash, char *line){   
+void adicionaHashDrivers(char *line){   
     DRIVERS *drv2 = malloc(sizeof(DRIVERS));
     separa(line,drv2,3);
     drv2->count = 0;
     drv2->valor_atual = 0;
     drv2->mostRecentRide = NULL;
     drv2-> total_auferido = 0;
-    g_hash_table_insert(retornaHash(3,hash), drv2 -> id, drv2);  /*depois de todos os campos da struct estarem preenchidos insere o driver na hashtable*/
+    g_hash_table_insert(drivers, drv2 -> id, drv2);  /*depois de todos os campos da struct estarem preenchidos insere o driver na hashtable*/
 }
 
 /*atribiu um int consoante o tipo de carro do driver*/
