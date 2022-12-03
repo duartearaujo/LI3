@@ -5,6 +5,8 @@
 #include "../include/users.h"
 #include "../include/queries.h"
 
+static GHashTable *users;
+
 /*Struct para guardar os valores referentes a cada user */
 struct user {    
     char* username;
@@ -196,4 +198,16 @@ int getDistance(User* user){
 
 char *getAccSt(User* user){
     return strdup(user -> account_status);
+}
+
+User* lookup_users (char* key) {
+    return (g_hash_table_lookup (users, key));
+}
+
+void foreach_users_Q3 (ARRAY_USERS *array) {
+   g_hash_table_foreach (users,(GHFunc)guardaUser, array);
+}
+
+void hash_table_destroy_users () {
+    g_hash_table_destroy (users);
 }

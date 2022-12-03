@@ -24,8 +24,8 @@ int main(int argc, char **argv){
 
     /*free das hashes e mais*/
     fclose (fp);
-    g_hash_table_destroy (users);
-    g_hash_table_destroy (drivers);
-    g_hash_table_destroy (rides);
+    hash_table_destroy_users ();
+    hash_table_destroy_drivers ();
+    hash_table_destroy_rides ();
     return 0;
 }

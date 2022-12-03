@@ -1,6 +1,8 @@
 #ifndef query3
 #define query3
 
+#include "users.h"
+
 typedef struct ARRAY_USERS ARRAY_USERS;
 
 ARRAY_USERS* createArrayUser(int N);

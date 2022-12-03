@@ -5,9 +5,9 @@
 #include <stdlib.h>
 #include <glib.h>
 
-GHashTable* drivers;
-
 typedef struct DRIVERS DRIVERS;
+
+#include "query2.h"
 
 void free_driver (DRIVERS *value);
 
@@ -50,5 +50,11 @@ char *getGenderD(DRIVERS *d);
 char *getBirthD(DRIVERS *d);
 
 double getTotalAuferido (DRIVERS *d);
+
+DRIVERS* lookup_drivers (char* key);
+
+void foreach_drivers_Q2 (ARRAY_DRIVERS *array);
+
+void hash_table_destroy_drivers ();
 
 #endif

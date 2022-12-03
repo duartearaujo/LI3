@@ -6,6 +6,8 @@
 #include "../include/parse.h"
 #include "../include/queries.h"
 
+static GHashTable* rides;
+
 /*struct onde vão ser armazenados os dados do ficheiro rides.csv*/
 struct RIDES{ 
    char *id;
@@ -127,12 +129,12 @@ void adicionaHashRides(char *line){
    new_ride ->type_car = NULL;
    g_hash_table_insert(rides,new_ride->id,new_ride);
    RIDES *copy = GetcontentR(new_ride);
-   DRIVERS *driver = g_hash_table_lookup(drivers,copy->driver);
+   DRIVERS *driver = lookup_drivers(copy->driver);
    addToDriver(driver, copy->score_driver,copy->date,copy->distance, copy->tip);
    
    new_ride->type_car = getcarD (driver);
    
-   User *user = g_hash_table_lookup (users,copy->user);
+   User *user = lookup_users (copy->user);
    int car_class = identifie_car_class (driver);
    addToUser (user,copy->distance, copy->tip, car_class, copy->score_user,copy->date);
    free_ride(copy);
@@ -148,4 +150,16 @@ char *getcarR (RIDES *ride) {
 
 char *getdistanceR (RIDES *ride) {
    return strdup (ride->distance);
+}
+
+RIDES* lookup_rides (char* key) {
+    return (g_hash_table_lookup (rides, key));
+}
+
+void foreach_rides_Q4 (Q4 *preco) {
+   g_hash_table_foreach (rides,(GHFunc)preco_medio, preco);
+}
+
+void hash_table_destroy_rides () {
+   g_hash_table_destroy (rides);
 }

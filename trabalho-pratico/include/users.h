@@ -3,9 +3,9 @@
 
 #include <glib.h>
 
-GHashTable *users;
-
 typedef struct user User;
+
+#include "query3.h"
 
 void free_user(User *value);
 
@@ -42,6 +42,12 @@ char *getLastRide(User* user);
 int getDistance(User* user);
 
 char *getAccSt(User* user);
+
+User* lookup_users (char* key);
+
+void foreach_users_Q3 (ARRAY_USERS *array);
+
+void hash_table_destroy_users ();
 
 
 

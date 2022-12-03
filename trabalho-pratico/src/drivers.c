@@ -4,6 +4,8 @@
 #include "../include/queries.h"
 #include "../include/drivers.h"
 
+static GHashTable* drivers;
+
 /*struct onde vão ser armazenados os dados do ficheiro drivers.csv*/
 typedef struct DRIVERS{   
     char* id;
@@ -232,4 +234,16 @@ char *getBirthD(DRIVERS *d){
 
 double getTotalAuferido (DRIVERS *d) {
     return d->total_auferido;
+}
+
+DRIVERS* lookup_drivers (char* key) {
+   return (g_hash_table_lookup (drivers, key));
+}
+
+void foreach_drivers_Q2 (ARRAY_DRIVERS *array) {
+   g_hash_table_foreach (drivers,(GHFunc)calcula_mediasQ2, array);
+}
+ 
+void hash_table_destroy_drivers () {
+    g_hash_table_destroy (drivers);
 }

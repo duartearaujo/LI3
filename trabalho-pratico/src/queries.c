@@ -56,12 +56,12 @@ void querieIdentifier(char **argv, int n_querie) {
     {
     case 1: {
         if(querie1(argv[1])) {
-            DRIVERS *d =GetcontentD (g_hash_table_lookup (drivers, argv[1])); /*faz lookup na hash dos drivers do Driver pedido*/
+            DRIVERS *d =GetcontentD (lookup_drivers (argv[1])); /*faz lookup na hash dos drivers do Driver pedido*/
             printvaloresQ1 (d, res); /*Função que faz print aos valores pretendidos dos drivers*/
             free_driver (d);
         }
         else {
-            User *u = GetcontentU( g_hash_table_lookup (users, argv[1]) ); /*faz lookup na hash dos users do User pedido*/
+            User *u = GetcontentU( lookup_users (argv[1]) ); /*faz lookup na hash dos users do User pedido*/
             printvaloresQ1_2 (u, res); /*Função que faz print aos valores pretendidos dos users*/
             free_user (u);
         }
@@ -69,7 +69,7 @@ void querieIdentifier(char **argv, int n_querie) {
     }
     case 2: {
         ARRAY_DRIVERS *array = createArray(10000);
-        g_hash_table_foreach(drivers,(GHFunc)calcula_mediasQ2,array);
+        foreach_drivers_Q2 (array);
         ordenaArray(array,10000-atoi(argv[1]));
         printfArray(res,array,atoi(argv[1]));
         freeArray(array);
@@ -77,7 +77,7 @@ void querieIdentifier(char **argv, int n_querie) {
     }
     case 3: {
         ARRAY_USERS *array = createArrayUser(100000);
-        g_hash_table_foreach(users,(GHFunc)guardaUser, array);
+        foreach_users_Q3(array);
         QuickSort(array, 100000);
         Q3Print(res, array, atoi(argv[1]));
         freeArrayU(array);
@@ -85,7 +85,7 @@ void querieIdentifier(char **argv, int n_querie) {
     }
     case 4: {
         Q4* value = inicializaQ4 (strdup (argv[1]));
-        g_hash_table_foreach(rides,(GHFunc)preco_medio, value);
+        foreach_rides_Q4(value);
         printQ4 (value, res);
         freeQ4 (value);
         break;
