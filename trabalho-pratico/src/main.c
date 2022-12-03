@@ -6,6 +6,7 @@
 #include "../include/users.h"
 #include "../include/rides.h"
 #include "../include/drivers.h"
+#include "../include/query2.h"
 
 /*função main do projeto*/
 int main(int argc, char **argv){  
@@ -27,5 +28,6 @@ int main(int argc, char **argv){
     hash_table_destroy_users ();
     hash_table_destroy_drivers ();
     hash_table_destroy_rides ();
+    freeArray();
     return 0;
 }

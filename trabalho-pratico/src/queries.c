@@ -68,11 +68,12 @@ void querieIdentifier(char **argv, int n_querie) {
         break;
     }
     case 2: {
-        ARRAY_DRIVERS *array = createArray(10000);
-        foreach_drivers_Q2 (array);
-        ordenaArray(array,10000-atoi(argv[1]));
-        printfArray(res,array,atoi(argv[1]));
-        freeArray(array);
+        if(!arrayOrdenado()){
+            createArray();
+            foreach_drivers_Q2 ();
+            ordenaArray();
+        }
+        printfArray(res,atoi(argv[1]));
         break;
     }
     case 3: {

@@ -53,7 +53,7 @@ double getTotalAuferido (DRIVERS *d);
 
 DRIVERS* lookup_drivers (char* key);
 
-void foreach_drivers_Q2 (ARRAY_DRIVERS *array);
+void foreach_drivers_Q2 ();
 
 void hash_table_destroy_drivers ();
 

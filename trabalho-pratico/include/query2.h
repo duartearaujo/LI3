@@ -3,14 +3,16 @@
 
 typedef struct ARRAY_DRIVERS ARRAY_DRIVERS;
 
-ARRAY_DRIVERS* createArray(int N);
+void createArray();
 
-void printfArray(FILE *res,ARRAY_DRIVERS * array,int N);
+void printfArray(FILE *res,int N);
 
-void calcula_mediasQ2 (gpointer key, DRIVERS* driver, ARRAY_DRIVERS* array);
+void calcula_mediasQ2 (gpointer key, DRIVERS* driver, void* a);
 
-void ordenaArray(ARRAY_DRIVERS* array,int tamanho);
+void ordenaArray();
 
-void freeArray(ARRAY_DRIVERS* array);
+int arrayOrdenado();
+
+void freeArray();
 
 #endif

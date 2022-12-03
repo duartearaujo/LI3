@@ -146,41 +146,16 @@ void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance,
 
 DRIVERS* GetcontentD(DRIVERS *d) {
     DRIVERS *copy = malloc (sizeof (DRIVERS));  
-    for (int pos = 1; pos <= 10; pos++) {
-        switch (pos) {
-            case 1:
-                copy-> id = strdup (d->id);
-                break;
-            case 2:
-                copy-> name = strdup (d->name);
-                break;
-            case 3:
-                copy-> birth = strdup (d->birth);
-                break;
-            case 4:
-                copy-> car_class= strdup (d->car_class);
-                break;
-            case 5:
-                copy-> plate = strdup (d->plate);
-                break;
-            case 6:
-                copy->city= strdup (d->city);
-                break;
-            case 7:
-                copy-> ac_cr = strdup (d->ac_cr);
-                break;
-            case 8:
-                copy-> ac_st = strdup (d->ac_st);
-                break;
-            case 9:
-                copy->gender= strdup (d->gender);
-                break;
-            case 10:
-                copy->mostRecentRide= strdup (d->mostRecentRide);
-                break;
-        }
-    }
-
+    copy-> id = strdup (d->id);
+    copy-> name = strdup (d->name);
+    copy-> birth = strdup (d->birth);
+    copy-> car_class= strdup (d->car_class);
+    copy-> plate = strdup (d->plate);
+    copy->city= strdup (d->city);
+    copy-> ac_cr = strdup (d->ac_cr);
+    copy-> ac_st = strdup (d->ac_st);
+    copy->gender= strdup (d->gender);
+    copy->mostRecentRide= strdup (d->mostRecentRide);
     copy->avaliacao_media = d->avaliacao_media;
     copy->count = d->count;
     copy->valor_atual = d->valor_atual;
@@ -240,8 +215,8 @@ DRIVERS* lookup_drivers (char* key) {
    return (g_hash_table_lookup (drivers, key));
 }
 
-void foreach_drivers_Q2 (ARRAY_DRIVERS *array) {
-   g_hash_table_foreach (drivers,(GHFunc)calcula_mediasQ2, array);
+void foreach_drivers_Q2 () {
+   g_hash_table_foreach (drivers,(GHFunc)calcula_mediasQ2, NULL);
 }
  
 void hash_table_destroy_drivers () {
