@@ -45,7 +45,7 @@ char *getAccSt(User* user);
 
 User* lookup_users (char* key);
 
-void foreach_users_Q3 (ARRAY_USERS *array);
+void foreach_users_Q3 ();
 
 void hash_table_destroy_users ();
 

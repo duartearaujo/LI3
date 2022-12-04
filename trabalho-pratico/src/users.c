@@ -120,35 +120,15 @@ void addToUser (User *user, char *distance, char *tip, int car_class, char *aval
 
 User* GetcontentU(User *u) {
     User *copy = malloc (sizeof (User));  
-    for (int pos = 1; pos <= 8; pos++) {
-        switch (pos) {
-            case 1:
-                copy-> username = strdup (u->username);
-                break;
-            case 2:
-                copy-> name = strdup (u->name);
-                break;
-            case 3:
-                copy-> data= strdup (u->data);
-                break;
-            case 4:
-                copy->gender= strdup (u->gender);
-                break;
-            case 5:
-                copy-> account_creation = strdup (u->account_creation);
-                break;
-            case 6:
-                copy->pay_method= strdup (u->pay_method);
-                break;
-            case 7:
-                copy->account_status = strdup (u->account_status);
-                break;
-            case 8:
-                copy-> last_ride = strdup (u->last_ride);
-                break;
-        }
-    }
-
+    copy-> username = strdup (u->username);
+    copy-> name = strdup (u->name);
+    copy-> data = strdup (u->data);
+    copy->gender = strdup (u->gender);
+    copy-> account_creation = strdup (u->account_creation);
+    copy->pay_method = strdup (u->pay_method);
+    copy->account_status = strdup (u->account_status);
+    if(u-> last_ride) copy->last_ride = strdup (u->last_ride);
+    else copy->last_ride = NULL;
     copy->distance = u->distance;
     copy->n_viagens = u->n_viagens;
     copy->total_gasto = u->total_gasto;
@@ -204,8 +184,8 @@ User* lookup_users (char* key) {
     return (g_hash_table_lookup (users, key));
 }
 
-void foreach_users_Q3 (ARRAY_USERS *array) {
-   g_hash_table_foreach (users,(GHFunc)guardaUser, array);
+void foreach_users_Q3 () {
+   g_hash_table_foreach (users,(GHFunc)guardaUser, NULL);
 }
 
 void hash_table_destroy_users () {

@@ -77,11 +77,12 @@ void querieIdentifier(char **argv, int n_querie) {
         break;
     }
     case 3: {
-        ARRAY_USERS *array = createArrayUser(100000);
-        foreach_users_Q3(array);
-        QuickSort(array, 100000);
-        Q3Print(res, array, atoi(argv[1]));
-        freeArrayU(array);
+        if(!arrayOrdenadoU()){
+            createArrayUser();
+            foreach_users_Q3();
+            QuickSort();
+        }
+        Q3Print(res, atoi(argv[1]));
         break;
     }
     case 4: {

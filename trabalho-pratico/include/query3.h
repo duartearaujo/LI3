@@ -5,20 +5,22 @@
 
 typedef struct ARRAY_USERS ARRAY_USERS;
 
-ARRAY_USERS* createArrayUser(int N);
+void createArrayUser();
 
-void guardaUser(gpointer key, User *user, ARRAY_USERS *array);
+int arrayOrdenadoU();
 
-void Q3Print(FILE *res, ARRAY_USERS *array, int N);
+void guardaUser(gpointer key, User *user, void *a);
 
-int partition(ARRAY_USERS *array, int i, int j);
+void Q3Print(FILE *res, int N);
 
-void QuickSort(ARRAY_USERS *array, int N);
+int partition(int i, int j);
 
-void QSRecursion(ARRAY_USERS *array, int i, int j);
+void QuickSort();
 
-void swap1(ARRAY_USERS *array, int i, int t);
+void QSRecursion(int i, int j);
 
-void freeArrayU(ARRAY_USERS *user);
+void swap1(int i, int t);
+
+void freeArrayU();
 
 #endif
