@@ -168,6 +168,10 @@ void foreach_rides_Q5 (Q5 *query5) {
    g_hash_table_foreach (rides,(GHFunc)preco_medio_Q5,query5);
 }
 
+void foreach_rides_Q6 (Q6 *q) {
+   g_hash_table_foreach (rides, (GHFunc)distancia_media, q);
+}
+
 void hash_table_destroy_rides () {
    g_hash_table_destroy (rides);
 }

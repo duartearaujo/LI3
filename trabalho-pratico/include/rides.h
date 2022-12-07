@@ -10,6 +10,7 @@ typedef struct RIDES RIDES;
 
 #include "query4.h"
 #include "query5.h"
+#include "query6.h"
 
 void iniciaHashRides (char *path);
 
@@ -32,6 +33,8 @@ RIDES* lookup_rides (char* key);
 void foreach_rides_Q4 (Q4 *preco);
 
 void foreach_rides_Q5 (Q5 *preco);
+
+void foreach_rides_Q6 (Q6 *q);
 
 void hash_table_destroy_rides ();
 
