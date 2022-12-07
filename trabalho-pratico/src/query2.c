@@ -104,9 +104,11 @@ int arrayOrdenado(){
 
 /*função que faz free da struct ARRAY_DRIVERS*/
 void freeArray(){
-    for(int i = 0; i < array->pos; i++){
-        free_driver(array->driver[i]);
+    if(array){
+        for(int i = 0; i < array->pos; i++){
+            free_driver(array->driver[i]);
+        }
+        free(array->driver);
+        free(array);
     }
-    free(array->driver);
-    free(array);
 }

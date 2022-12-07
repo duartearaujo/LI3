@@ -10,6 +10,7 @@
 #include "../include/query3.h"
 #include "../include/query4.h"
 #include "../include/query1.h"
+#include "../include/query5.h"
 
 #define DIA 9
 #define MES 10
@@ -90,6 +91,13 @@ void querieIdentifier(char **argv, int n_querie) {
         foreach_rides_Q4(value);
         printQ4 (value, res);
         freeQ4 (value);
+        break;
+    }
+    case 5: {
+        Q5* query5 = inicializaQ5 (strdup(argv[1]),strdup(argv[2]));
+        foreach_rides_Q5(query5);
+        printQ5(query5, res);
+        freeQ5(query5);
         break;
     }
     default:

@@ -9,6 +9,7 @@
 typedef struct RIDES RIDES;
 
 #include "query4.h"
+#include "query5.h"
 
 void iniciaHashRides (char *path);
 
@@ -22,11 +23,15 @@ char *getcarR (RIDES *ride);
 
 char *getdistanceR (RIDES *ride);
 
+char *getDateR (RIDES *ride);
+
 char *getcityR (RIDES *ride);
 
 RIDES* lookup_rides (char* key);
 
 void foreach_rides_Q4 (Q4 *preco);
+
+void foreach_rides_Q5 (Q5 *preco);
 
 void hash_table_destroy_rides ();
 

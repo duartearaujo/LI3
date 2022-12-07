@@ -152,12 +152,20 @@ char *getdistanceR (RIDES *ride) {
    return strdup (ride->distance);
 }
 
+char *getDateR (RIDES *ride) {
+   return strdup (ride->date);
+}
+
 RIDES* lookup_rides (char* key) {
     return (g_hash_table_lookup (rides, key));
 }
 
 void foreach_rides_Q4 (Q4 *preco) {
    g_hash_table_foreach (rides,(GHFunc)preco_medio, preco);
+}
+
+void foreach_rides_Q5 (Q5 *query5) {
+   g_hash_table_foreach (rides,(GHFunc)preco_medio_Q5,query5);
 }
 
 void hash_table_destroy_rides () {

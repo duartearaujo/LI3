@@ -11,7 +11,7 @@
 void parsequerie (FILE *fp) {  
     int i = 0;
     int n_querie = 1;
-    char **querie = malloc(2 * sizeof(char *));
+    char **querie = NULL;
     char *line = NULL;
     size_t len;
     ssize_t read;
@@ -19,6 +19,10 @@ void parsequerie (FILE *fp) {
         line[read-1] = '\0';
         char *temp = line;
         char *token = strsep(&temp," ");
+        int Nquery = atoi (token);
+        if (Nquery == 6) querie = malloc(4 * sizeof(char *));
+        else if (Nquery > 4) querie = malloc(3 * sizeof(char *));
+        else querie = malloc(2 * sizeof(char *));
         while (token) {
             querie[i] = strdup(token);  /*adiciona cada token ao array criado anteriormente*/
             token = strsep(&temp," ");
@@ -27,8 +31,8 @@ void parsequerie (FILE *fp) {
         querieIdentifier(querie, n_querie++); /*chama a função que vai realizar cada querie consoante os valores presentes no array "querie"*/
         for (--i; i>= 0; i--) free (querie[i]);  /*free do array*/
         i = 0;
+        free (querie);
     } 
-    free (querie);
     free (line);
 }
 

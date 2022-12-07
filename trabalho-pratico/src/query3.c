@@ -118,9 +118,11 @@ int arrayOrdenadoU(){
 
 /*Função que faz free do ARRAY_USERS*/
 void freeArrayU(){
-    for(int i = 0; i < array->pos; i++){
-        free_user(array->user[i]);
+    if(array){
+        for(int i = 0; i < array->pos; i++){
+            free_user(array->user[i]);
+        }
+        free(array->user);
+        free(array);
     }
-    free(array->user);
-    free(array);
 }
