@@ -12,6 +12,7 @@
 #include "../include/query1.h"
 #include "../include/query5.h"
 #include "../include/query6.h"
+#include "../include/query7.h"
 
 #define DIA 9
 #define MES 10
@@ -107,6 +108,13 @@ void querieIdentifier(char **argv, int n_querie) {
         printQ6(q, res);
         freeQ6(q);
         break;
+    }
+    case 7:{
+        inicializaQ7();
+        foreach_drivers_Q7(argv[2]);
+        ordenaQ7();
+        printQ7(res,atoi (argv[1]));
+        free_Q7();
     }
     default:
         break;

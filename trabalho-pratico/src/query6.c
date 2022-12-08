@@ -1,11 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>
-#include "../include/parse.h"
-#include "../include/users.h"
 #include "../include/rides.h"
 #include "../include/queries.h"
-#include "../include/drivers.h"
 #include "../include/query6.h"
 
 struct Q6{
@@ -36,6 +33,7 @@ void distancia_media(gpointer key, RIDES *ride, Q6 *q){
     }
     free(city);
     free(data);
+    free(distance);
 }
 
 void printQ6(Q6 *q, FILE *res){

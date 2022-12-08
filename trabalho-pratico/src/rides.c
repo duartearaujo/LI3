@@ -86,40 +86,16 @@ void assignsData(RIDES* new_ride ,int pos ,char* token){
 
 RIDES* GetcontentR(RIDES *ride){
    RIDES *copy = malloc(sizeof(RIDES));
-   for(int pos = 1; pos <= 10;pos++){
-      switch(pos){
-         case 1:
-         copy->id = strdup(ride->id);
-         break;
-         case 2:
-         copy->date = strdup(ride->date);
-         break;
-         case 3:
-         copy->driver = strdup(ride->driver);
-         break;
-         case 4:
-         copy->user = strdup(ride->user);
-         break;
-         case 5:
-         copy->city = strdup(ride->city);
-         break;
-         case 6:
-         copy->distance = strdup(ride->distance);
-         break;
-         case 7:
-         copy->score_user = strdup(ride->score_user);
-         break;
-         case 8:
-         copy->score_driver = strdup(ride->score_driver);
-         break;
-         case 9:
-         copy->tip = strdup(ride->tip);
-         break;
-         case 10:
-         copy->type_car = (!ride->type_car) ? NULL : strdup (ride->type_car);
-         break;
-      }
-   }
+   copy->id = strdup(ride->id);
+   copy->date = strdup(ride->date);
+   copy->driver = strdup(ride->driver);
+   copy->user = strdup(ride->user);
+   copy->city = strdup(ride->city);
+   copy->distance = strdup(ride->distance);
+   copy->score_user = strdup(ride->score_user);
+   copy->score_driver = strdup(ride->score_driver);
+   copy->tip = strdup(ride->tip);
+   copy->type_car = (!ride->type_car) ? NULL : strdup (ride->type_car);
    return copy;
 }
 
@@ -130,7 +106,7 @@ void adicionaHashRides(char *line){
    g_hash_table_insert(rides,new_ride->id,new_ride);
    RIDES *copy = GetcontentR(new_ride);
    DRIVERS *driver = lookup_drivers(copy->driver);
-   addToDriver(driver, copy->score_driver,copy->date,copy->distance, copy->tip);
+   addToDriver(driver, copy->score_driver,copy->date,copy->distance, copy->tip, copy->city);
    
    new_ride->type_car = getcarD (driver);
    

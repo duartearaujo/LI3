@@ -3,11 +3,19 @@
 #include "../include/parse.h"
 #include "../include/queries.h"
 #include "../include/drivers.h"
+#include "../include/query7.h"
 
 static GHashTable* drivers;
 
+struct avaliacao_por_cidade {
+    char *name, *id, *city;
+    int n_viagens;
+    double avaliacao_total;
+    double avaliacao_media;
+};
+
 /*struct onde vão ser armazenados os dados do ficheiro drivers.csv*/
-typedef struct DRIVERS{   
+struct DRIVERS{   
     char* id;
     char* name;
     char* birth;
@@ -22,7 +30,8 @@ typedef struct DRIVERS{
     double avaliacao_media;
     char *mostRecentRide;
     double total_auferido;
-} DRIVERS;
+    GHashTable *avaliacao_cidades;
+};
 
 /*função responsável por dar free dos drivers, é usada para dar free da hashtable(dos drivers)*/
 void free_driver (DRIVERS *value) {   
@@ -36,6 +45,14 @@ void free_driver (DRIVERS *value) {
     free (value->ac_cr);
     free (value->ac_st);
     free (value->mostRecentRide);
+    if (value->avaliacao_cidades) g_hash_table_destroy (value->avaliacao_cidades);
+    free (value);
+}
+
+void free_avaliacao_por_cidade (AvC *value) {
+    free (value->id);
+    free (value->name);
+    free (value->city);
     free (value);
 }
 
@@ -53,6 +70,17 @@ void iniciaHashDrivers (char *path) {
     parser(fp,2);
     free (filename);
     fclose (fp);
+}
+
+AvC *iniciaHashAvC (char *name, char *id, char *city, double avaliacao) {
+    AvC *new = malloc (sizeof (AvC));
+    new->id = id;
+    new->name = name;
+    new->city = city;
+    new-> n_viagens = 1;
+    new->avaliacao_total = avaliacao;
+    new-> avaliacao_media = 0;
+    return new;
 }
 
 /*atribui cada token extraído ao respetivo campo da struct DRIVERS*/
@@ -97,6 +125,7 @@ void adicionaHashDrivers(char *line){
     drv2->valor_atual = 0;
     drv2->mostRecentRide = NULL;
     drv2-> total_auferido = 0;
+    drv2 -> avaliacao_cidades = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify)free_avaliacao_por_cidade); 
     g_hash_table_insert(drivers, drv2 -> id, drv2);  /*depois de todos os campos da struct estarem preenchidos insere o driver na hashtable*/
 }
 
@@ -113,8 +142,8 @@ int identifie_car_class_char (char *car_class) {
     else return 2;
 }
 
-/*adiciona a cada driver da hashtable(dos drivers) os valores dos rides que interessam para resolver a query 1 e 2*/
-void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip){   
+/*adiciona a cada driver da hashtable(dos drivers) os valores dos rides que interessam para resolver a query 1, 2 e 7*/
+void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip, char *city){   
     int r = 0;
     if(!driver->mostRecentRide) driver->mostRecentRide = strdup(date);   /*compara as duas datas*/
     else if((r = compareDates(date,driver->mostRecentRide)) != 0){   /*se a primeira data for igual ou mais recente que a segunda*/
@@ -141,6 +170,17 @@ void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance,
          default:
             break;
       }
+
+    if (g_hash_table_contains (driver->avaliacao_cidades, city)) {
+        AvC *cidade = g_hash_table_lookup (driver->avaliacao_cidades, city);
+        cidade->n_viagens ++;
+        cidade->avaliacao_total += strtod (score_driver, NULL);
+    }
+    else {
+        char *key = strdup (city);
+        AvC *new = iniciaHashAvC (strdup (driver->name), strdup(driver->id), key ,strtod (score_driver, NULL));
+        g_hash_table_insert (driver->avaliacao_cidades, key,new );
+    }
 }
 
 
@@ -160,7 +200,23 @@ DRIVERS* GetcontentD(DRIVERS *d) {
     copy->count = d->count;
     copy->valor_atual = d->valor_atual;
     copy->total_auferido = d->total_auferido;
+    copy->avaliacao_cidades = NULL;
     return copy;
+}
+
+AvC* getcontentAvC (AvC *a) {
+    AvC* copy = malloc (sizeof (AvC));
+    copy->id = strdup (a->id); 
+    copy->name = strdup (a->name);
+    copy->city = strdup (a->city);
+    copy->n_viagens = a->n_viagens;
+    copy->avaliacao_total = a->avaliacao_total;
+    copy->avaliacao_media = a->avaliacao_media;
+    return copy;
+}
+
+void calcula_avaliacao_media_AvC (AvC *avaliacao) {
+    avaliacao->avaliacao_media = avaliacao->avaliacao_total / avaliacao->n_viagens;
 }
 
 char *getcarD (DRIVERS *d) {
@@ -211,14 +267,35 @@ double getTotalAuferido (DRIVERS *d) {
     return d->total_auferido;
 }
 
+double getAvaliacaoMediaAvC (AvC *a) {
+    return a->avaliacao_media;
+}
+
+char *getIdAvC(AvC* a){
+    return strdup (a->id);
+}
+
+char* getNameAvC (AvC *a) {
+    return strdup (a->name);
+}
+
 DRIVERS* lookup_drivers (char* key) {
    return (g_hash_table_lookup (drivers, key));
+}
+
+AvC* lookup_AvC (DRIVERS *driver, char *city) {
+    return (g_hash_table_lookup (driver->avaliacao_cidades, city));
+
 }
 
 void foreach_drivers_Q2 () {
    g_hash_table_foreach (drivers,(GHFunc)calcula_mediasQ2, NULL);
 }
- 
+
+void foreach_drivers_Q7 (char *city) {
+   g_hash_table_foreach (drivers, (GHFunc)avaliacao_media_city, city);
+}
+
 void hash_table_destroy_drivers () {
     g_hash_table_destroy (drivers);
 }

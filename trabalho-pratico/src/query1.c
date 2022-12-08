@@ -2,9 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
-#include "../include/parse.h"
 #include "../include/users.h"
-#include "../include/rides.h"
 #include "../include/drivers.h"
 #include "../include/queries.h"
 

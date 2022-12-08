@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <glib.h>
 
+typedef struct avaliacao_por_cidade AvC;
+
 typedef struct DRIVERS DRIVERS;
 
 #include "query2.h"
@@ -19,13 +21,17 @@ void atribui_drv(DRIVERS* drv2 ,int pos,char* token);
 
 int car_lookup (GHashTable *drivers, char *id);
 
-void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip);
+void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip, char *city);
 
 int identifie_car_class (DRIVERS *driver);
 
 int identifie_car_class_char (char *car_class);
 
 DRIVERS * GetcontentD(DRIVERS *d); 
+
+AvC* getcontentAvC (AvC *a);
+
+void calcula_avaliacao_media_AvC (AvC *avaliacao);
 
 char *getcarD (DRIVERS *d);
 
@@ -51,10 +57,22 @@ char *getBirthD(DRIVERS *d);
 
 double getTotalAuferido (DRIVERS *d);
 
+double getAvaliacaoMediaAvC (AvC *a);
+
+char* getIdAvC (AvC *a);
+
+char* getNameAvC (AvC *a);
+
 DRIVERS* lookup_drivers (char* key);
+
+AvC* lookup_AvC (DRIVERS *driver, char *city);
 
 void foreach_drivers_Q2 ();
 
+void foreach_drivers_Q7 ();
+
 void hash_table_destroy_drivers ();
+
+void free_avaliacao_por_cidade (AvC *value);
 
 #endif

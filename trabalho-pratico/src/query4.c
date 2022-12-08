@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>
-#include "../include/parse.h"
-#include "../include/users.h"
 #include "../include/rides.h"
 #include "../include/queries.h"
 #include "../include/drivers.h"
