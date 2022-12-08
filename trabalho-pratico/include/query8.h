@@ -1,0 +1,26 @@
+#ifndef query8
+#define query8
+
+typedef struct dados_Q8 dados_Q8;
+
+typedef struct array_Q8 array_Q8;
+
+dados_Q8* inicializa_dados_Q8();
+
+void inicializa_array_Q8(int idade_enunciado,char *gender_enunciado);
+
+void passa_Para_Struct(char *nome_driver,char *nome_user,char *id,char *id_viagem,char *username,int idade_conta_driver,int idade_conta_user,int pos);
+
+void verifica_dados_Q8 (gpointer key, RIDES* ride, void *a);
+
+void swap_Q8(dados_Q8** array, int a, int b);
+
+void ordena_Array_Q8();
+
+void printArray_Q8(FILE *res);
+
+void freeDados_Q8(dados_Q8* data);
+
+void freeArray_Q8();
+
+#endif

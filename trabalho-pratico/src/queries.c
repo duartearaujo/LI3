@@ -6,13 +6,14 @@
 #include "../include/rides.h"
 #include "../include/queries.h"
 #include "../include/drivers.h"
+#include "../include/query1.h"
 #include "../include/query2.h"
 #include "../include/query3.h"
 #include "../include/query4.h"
-#include "../include/query1.h"
 #include "../include/query5.h"
 #include "../include/query6.h"
 #include "../include/query7.h"
+#include "../include/query8.h"
 
 #define DIA 9
 #define MES 10
@@ -116,6 +117,14 @@ void querieIdentifier(char **argv, int n_querie) {
         printQ7(res,atoi (argv[1]));
         free_Q7();
     }
+    case 8: {
+        inicializa_array_Q8(atoi(argv[2]),argv[1]);
+        foreach_rides_Q8();
+        ordena_Array_Q8();
+        printArray_Q8(res);
+        freeArray_Q8();
+        break;
+    }
     default:
         break;
     }
@@ -123,7 +132,18 @@ void querieIdentifier(char **argv, int n_querie) {
     return;
 }
 
+int tempo_De_Vida(char *str){
+    int dia = atoi(strsep(&str, "/"));
+    int mes = atoi(strsep(&str, "/"));
+    int ano = atoi(strsep(&str, "/"));
+    int tempo_ate_conta = 365 * ano + 30 * mes + dia;
+    int tempo_ate_data = 365 * ANO + 30 * MES + DIA;
+    int tempo_de_vida = tempo_ate_data - tempo_ate_conta;
+    return tempo_de_vida;
+}
+
 /*verifica que idade tem o user/driver(usando a data dada no enunciado "09/10/2022")*/
+
 int calculaIdade(char *str){  
     int idade = 0;
     int dia = atoi(strsep(&str, "/"));
@@ -134,6 +154,6 @@ int calculaIdade(char *str){
         if (dia <= DIA) idade = ANO - ano;
         else idade = ANO - ano - 1;
     }
-    else idade = ANO - ano -1;
+    else if (mes > MES) idade = ANO - ano -1;
     return idade;
 }

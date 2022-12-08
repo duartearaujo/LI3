@@ -21,6 +21,7 @@ struct user {
     int distance;
     double acc_avaliation;
     double total_gasto;
+    int idade_conta;
 };
 
 /*Função que faz free de todos os campos do user e da sua própria estrutura*/
@@ -60,6 +61,7 @@ void adicionaHashUsers (char *line) {
     new ->n_viagens = 0;
     new ->acc_avaliation = 0;
     new ->distance = 0;
+    new->idade_conta = tempo_De_Vida(new->account_creation);
     new ->last_ride = NULL;
     g_hash_table_insert(users,new->username,new);
 }
@@ -174,6 +176,10 @@ char *getLastRide(User* user){
 
 int getDistance(User* user){
     return user -> distance;
+}
+
+int get_Idade_Conta_U(User* user){
+    return user->idade_conta;
 }
 
 char *getAccSt(User* user){

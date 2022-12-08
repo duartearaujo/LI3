@@ -31,6 +31,7 @@ struct DRIVERS{
     char *mostRecentRide;
     double total_auferido;
     GHashTable *avaliacao_cidades;
+    int idade_conta;
 };
 
 /*função responsável por dar free dos drivers, é usada para dar free da hashtable(dos drivers)*/
@@ -123,6 +124,7 @@ void adicionaHashDrivers(char *line){
     separa(line,drv2,3);
     drv2->count = 0;
     drv2->valor_atual = 0;
+    drv2->idade_conta = tempo_De_Vida(drv2->ac_cr);
     drv2->mostRecentRide = NULL;
     drv2-> total_auferido = 0;
     drv2 -> avaliacao_cidades = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify)free_avaliacao_por_cidade); 
@@ -241,6 +243,10 @@ double getValorAtualD(DRIVERS *d){
 
 int getCountD(DRIVERS *d){
     return d->count;
+}
+
+int get_Idade_Conta_D(DRIVERS *d){
+    return d->idade_conta;
 }
 
 char *getAccountStatusD(DRIVERS *d){

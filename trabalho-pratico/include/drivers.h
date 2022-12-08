@@ -45,6 +45,8 @@ double getValorAtualD(DRIVERS *d);
 
 int getCountD(DRIVERS *d);
 
+int get_Idade_Conta_D(DRIVERS *d);
+
 char *getAccountStatusD(DRIVERS *d);
 
 char *getMostRecentRideD(DRIVERS *d);

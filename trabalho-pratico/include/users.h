@@ -25,6 +25,8 @@ char *getNameU (User *u);
 
 char *getGenderU (User *u);
 
+int get_Idade_Conta_U(User* user);
+
 char *getAccStatusU (User *u);
 
 char *getDataU (User *u);
