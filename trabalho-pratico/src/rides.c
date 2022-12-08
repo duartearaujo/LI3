@@ -144,6 +144,10 @@ char *getDateR (RIDES *ride) {
    return strdup (ride->date);
 }
 
+char *getTip (RIDES *ride) {
+   return strdup(ride->tip);
+}
+
 RIDES* lookup_rides (char* key) {
     return (g_hash_table_lookup (rides, key));
 }
@@ -162,6 +166,10 @@ void foreach_rides_Q6 (Q6 *q) {
 
 void foreach_rides_Q8 () {
    g_hash_table_foreach (rides,(GHFunc)verifica_dados_Q8, NULL);
+}
+
+void foreach_rides_Q9 (){
+   g_hash_table_foreach (rides, (GHFunc)guardaQ9, NULL);
 }
 
 void hash_table_destroy_rides () {

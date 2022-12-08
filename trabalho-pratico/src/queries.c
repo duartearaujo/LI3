@@ -14,6 +14,7 @@
 #include "../include/query6.h"
 #include "../include/query7.h"
 #include "../include/query8.h"
+#include "../include/query9.h"
 
 #define DIA 9
 #define MES 10
@@ -123,6 +124,13 @@ void querieIdentifier(char **argv, int n_querie) {
         ordena_Array_Q8();
         printArray_Q8(res);
         freeArray_Q8();
+        break;
+    }
+    case 9: {
+        createArrayQ9(strdup(argv[1]), strdup(argv[2]));
+        foreach_rides_Q9(q);
+        QuickSort_Q9();
+        Q9Print(res);
         break;
     }
     default:
