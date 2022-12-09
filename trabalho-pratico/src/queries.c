@@ -36,16 +36,21 @@ int compareDates(char *str, char *string){
     char *temp = str_;
     char *temp2 = str_2;                         
     int r = 0;
-    int dia = atoi(strsep(&str_,"/"));
-    int mes = atoi(strsep(&str_,"/"));
-    int ano = atoi(strsep(&str_,"/"));
-    int dia2 = atoi(strsep(&str_2,"/"));
-    int mes2 = atoi(strsep(&str_2,"/"));
-    int ano2 = atoi(strsep(&str_2,"/"));
-    if(ano > ano2) r = 1;
-    else if(ano == ano2 && mes > mes2) r = 1;
-    else if(ano == ano2 && mes == mes2 && dia > dia2) r = 1;
-    else if(ano == ano2 && mes == mes2 && dia == dia2) r = 2;
+    if(!str && string) r = 1;
+    else if(!string && str) r = 0;
+    else if(!string && !str) r = 2;
+    else{
+        int dia = atoi(strsep(&str_,"/"));
+        int mes = atoi(strsep(&str_,"/"));
+        int ano = atoi(strsep(&str_,"/"));
+        int dia2 = atoi(strsep(&str_2,"/"));
+        int mes2 = atoi(strsep(&str_2,"/"));
+        int ano2 = atoi(strsep(&str_2,"/"));
+        if(ano > ano2) r = 1;
+        else if(ano == ano2 && mes > mes2) r = 1;
+        else if(ano == ano2 && mes == mes2 && dia > dia2) r = 1;
+        else if(ano == ano2 && mes == mes2 && dia == dia2) r = 2;
+    }
     free(temp);
     free(temp2);
     return r;
@@ -141,12 +146,14 @@ void querieIdentifier(char **argv, int n_querie) {
 }
 
 int tempo_De_Vida(char *str){
+    char *temp = str;
     int dia = atoi(strsep(&str, "/"));
     int mes = atoi(strsep(&str, "/"));
     int ano = atoi(strsep(&str, "/"));
-    int tempo_ate_conta = 365 * ano + 30 * mes + dia;
-    int tempo_ate_data = 365 * ANO + 30 * MES + DIA;
+    int tempo_ate_conta = 365 * ano + 31 * mes-1 + dia;
+    int tempo_ate_data = 365 * ANO + 31 * MES-1 + DIA;
     int tempo_de_vida = tempo_ate_data - tempo_ate_conta;
+    free(temp);
     return tempo_de_vida;
 }
 

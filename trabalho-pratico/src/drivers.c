@@ -124,7 +124,7 @@ void adicionaHashDrivers(char *line){
     separa(line,drv2,3);
     drv2->count = 0;
     drv2->valor_atual = 0;
-    drv2->idade_conta = tempo_De_Vida(drv2->ac_cr);
+    drv2->idade_conta = tempo_De_Vida(strdup(drv2->ac_cr));
     drv2->mostRecentRide = NULL;
     drv2-> total_auferido = 0;
     drv2 -> avaliacao_cidades = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify)free_avaliacao_por_cidade); 

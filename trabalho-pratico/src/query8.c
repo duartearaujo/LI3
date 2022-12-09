@@ -105,7 +105,7 @@ void ordena_Array_Q8(){
         else if(array->lista[j]->idade_conta_driver == array->lista[m]->idade_conta_driver){   /*desempate dos drivers(avaliação média =)->verificar as datas*/
             if(array->lista[j]->idade_conta_user > array->lista[m]->idade_conta_user) m = j;   /*compareDates = 1 -> primeira data é mais recente*/
             else if(array->lista[j]->idade_conta_user == array->lista[m]->idade_conta_user){    /*compareDates = 2 -> as duas datas são iguais*/
-                if(atoi(array->lista[j]->id_viagem) > atoi(array->lista[m]->id_viagem)) m = j;  /*se as datas forem iguais então compara-se os id*/
+                if(atoi(array->lista[j]->id_viagem) < atoi(array->lista[m]->id_viagem)) m = j;  /*se as datas forem iguais então compara-se os id*/
             }
         }
    }
@@ -119,7 +119,7 @@ void printArray_Q8(FILE *res){
         char *account_status_driver = getAccountStatusD(lookup_drivers(array->lista[i]->id_driver));
         char *account_status_user = getAccStatusU(lookup_users(array->lista[i]->username_user));
         if(strcmp(account_status_driver,"inactive") && strcmp(account_status_user,"inactive"))
-            fprintf(res,"%s;%s;%s;%s\n",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);  
+            fprintf(res,"%s;%s;%s;%s;%d;%d;%s\n",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user,array->lista[i]->idade_conta_driver,array->lista[i]->idade_conta_user,array->lista[i]->id_viagem);  
         free(account_status_driver);
         free(account_status_user);
     }

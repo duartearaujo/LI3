@@ -61,7 +61,7 @@ void adicionaHashUsers (char *line) {
     new ->n_viagens = 0;
     new ->acc_avaliation = 0;
     new ->distance = 0;
-    new->idade_conta = tempo_De_Vida(new->account_creation);
+    new->idade_conta = tempo_De_Vida(strdup(new->account_creation));
     new ->last_ride = NULL;
     g_hash_table_insert(users,new->username,new);
 }
