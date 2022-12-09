@@ -119,7 +119,7 @@ void printArray_Q8(FILE *res){
         char *account_status_driver = getAccountStatusD(lookup_drivers(array->lista[i]->id_driver));
         char *account_status_user = getAccStatusU(lookup_users(array->lista[i]->username_user));
         if(strcmp(account_status_driver,"inactive") && strcmp(account_status_user,"inactive"))
-            fprintf(res,"%s;%s;%s;%s;%d;%d;%s\n",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user,array->lista[i]->idade_conta_driver,array->lista[i]->idade_conta_user,array->lista[i]->id_viagem);  
+            fprintf(res,"%s;%s;%s;%s\n",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);  
         free(account_status_driver);
         free(account_status_user);
     }
