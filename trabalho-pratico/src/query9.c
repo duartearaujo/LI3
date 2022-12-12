@@ -57,17 +57,22 @@ void createArrayQ9(char *data1, char *data2){
 void guardaQ9(gpointer key, RIDES *ride, void *a){
     Q9 *q = inicializaQ9();
     char *data = getDateR(ride);
-    if(getTip(ride) && ((compareDates(data, array->data1) == 1 && compareDates(data, array->data2) == 0) || !strcmp(data, array->data1) || !strcmp(data, array->data2))){
+    char *tip = getTip (ride);
+    if(tip && ((compareDates(data, array->data1) == 1 && compareDates(data, array->data2) == 0) || !strcmp(data, array->data1) || !strcmp(data, array->data2))){
         array->pos++;
         array->q = (Q9**) realloc(array->q,array->pos * sizeof(Q9*));
         q->id = getIdR(ride);
         q->date = data;
         q->city = getcityR(ride);
         q->distance = getdistanceR(ride);
-        q->tip = getTip(ride);
+        q->tip = tip;
         array->q[(array->pos - 1)] = q;
     }
-
+    else {
+        free (data);
+        free_Q9 (q);
+        free (tip);
+    }
 }
 
 void swap_Q9(int i, int t){
@@ -150,9 +155,3 @@ void freeArrayQ9(){
         free(array);
     }
 }
-
-
-
-
-
-

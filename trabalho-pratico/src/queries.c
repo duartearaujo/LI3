@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "../include/parse.h"
 #include "../include/users.h"
 #include "../include/rides.h"
@@ -65,6 +66,7 @@ void querieIdentifier(char **argv, int n_querie) {
     switch (q)  /*q == nº da query que queremos responder*/
     {
     case 1: {
+        clock_t t = clock();
         if(querie1(argv[1])) {
             DRIVERS *d =GetcontentD (lookup_drivers (argv[1])); /*faz lookup na hash dos drivers do Driver pedido*/
             printvaloresQ1 (d, res); /*Função que faz print aos valores pretendidos dos drivers*/
@@ -75,67 +77,101 @@ void querieIdentifier(char **argv, int n_querie) {
             printvaloresQ1_2 (u, res); /*Função que faz print aos valores pretendidos dos users*/
             free_user (u);
         }
+        t = clock () -t;
+        printf ("Query1: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 2: {
+        clock_t t = clock();
         if(!arrayOrdenado()){
             createArray();
             foreach_drivers_Q2 ();
             ordenaArray();
         }
         printfArray(res,atoi(argv[1]));
+        t = clock () -t;
+        printf ("Query2: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 3: {
+        clock_t t = clock();
+
         if(!arrayOrdenadoU()){
             createArrayUser();
             foreach_users_Q3();
             QuickSort();
         }
         Q3Print(res, atoi(argv[1]));
+        t = clock () -t;
+        printf ("Query3: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 4: {
+        clock_t t = clock();
+
         Q4* value = inicializaQ4 (strdup (argv[1]));
         foreach_rides_Q4(value);
         printQ4 (value, res);
         freeQ4 (value);
+        t = clock () -t;
+        printf ("Query4: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 5: {
+        clock_t t = clock();
+
         Q5* query5 = inicializaQ5 (strdup(argv[1]),strdup(argv[2]));
         foreach_rides_Q5(query5);
         printQ5(query5, res);
         freeQ5(query5);
+        t = clock () -t;
+        printf ("Query5: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 6: {
+        clock_t t = clock();
+
         Q6* q = inicializaQ6(strdup(argv[1]), strdup(argv[2]), strdup(argv[3]));
         foreach_rides_Q6(q);
         printQ6(q, res);
         freeQ6(q);
+        t = clock () -t;
+        printf ("Query6: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 7:{
+        clock_t t = clock();
+
         inicializaQ7();
         foreach_drivers_Q7(argv[2]);
         ordenaQ7();
         printQ7(res,atoi (argv[1]));
         free_Q7();
+        t = clock () -t;
+        printf ("Query7: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        break;
     }
     case 8: {
+        clock_t t = clock();
+
         inicializa_array_Q8(atoi(argv[2]),argv[1]);
         foreach_rides_Q8();
         ordena_Array_Q8();
         printArray_Q8(res);
         freeArray_Q8();
+        t = clock () -t;
+        printf ("Query8: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 9: {
+        clock_t t = clock();
+
         createArrayQ9(strdup(argv[1]), strdup(argv[2]));
         foreach_rides_Q9(q);
         QuickSort_Q9();
         Q9Print(res);
+        t = clock () -t;
+        printf ("Query9: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     default:
