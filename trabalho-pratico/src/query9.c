@@ -36,7 +36,6 @@ Q9* inicializaQ9 (){
 }
 
 struct ARRAY_Q9{
-    int ordenado;
     int pos;
     char *data1;
     char *data2; 
@@ -48,7 +47,6 @@ static ARRAY_Q9 *array = NULL;
 void createArrayQ9(char *data1, char *data2){
     array = malloc(sizeof(ARRAY_Q9));
     array->pos = 0;
-    array->ordenado = 0;
     array->data1 = data1;
     array->data2 = data2;
     array->q = NULL;
@@ -93,7 +91,6 @@ void QSRecursion_Q9(int i, int j){
 void QuickSort_Q9(){
     int N = array->pos;
     QSRecursion_Q9(0, N-1);
-    array->ordenado = 1;
 }
 
 int partition_Q9(int i, int j){
@@ -137,11 +134,6 @@ void Q9Print(FILE *res){
         fprintf(res, "%s;%s;%s;%s;%.3f\n", id, date, distance, city, tip);
         i--; 
     }
-}
-
-int arrayOrdenadoQ9(){
-    if(!array) return 0;
-    return array->ordenado;
 }
 
 void freeArrayQ9(){

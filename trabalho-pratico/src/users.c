@@ -14,7 +14,6 @@ struct user {
     char* gender;
     char* data;
     char* account_creation;
-    char* pay_method;
     char* account_status;
     char* last_ride;
     int n_viagens;
@@ -31,7 +30,6 @@ void free_user (User *value) {
     free(value->gender);
     free(value->data);
     free(value->account_creation);
-    free(value->pay_method);
     free(value->account_status);
     free(value->last_ride);
     free (value);
@@ -84,13 +82,12 @@ void atribui (User *user, int pos, char *info) {
         case 5:
             user->account_creation = strdup (info); 
             break;
-        case 6:
-            user->pay_method = strdup (info); 
-            break;
         case 7:
             user->account_status = strdup (info); 
             break;
-    }
+        default:
+            break;
+        }
 }
 
 void addToUser (User *user, char *distance, char *tip, int car_class, char *avaliation, char *date) {
@@ -127,7 +124,6 @@ User* GetcontentU(User *u) {
     copy-> data = strdup (u->data);
     copy->gender = strdup (u->gender);
     copy-> account_creation = strdup (u->account_creation);
-    copy->pay_method = strdup (u->pay_method);
     copy->account_status = strdup (u->account_status);
     if(u-> last_ride) copy->last_ride = strdup (u->last_ride);
     else copy->last_ride = NULL;

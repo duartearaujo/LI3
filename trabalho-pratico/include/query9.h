@@ -25,6 +25,4 @@ void free_Q9 (Q9 *q);
 
 void freeArrayQ9();
 
-int arrayOrdenadoQ9();
-
 #endif

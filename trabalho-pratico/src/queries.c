@@ -170,6 +170,7 @@ void querieIdentifier(char **argv, int n_querie) {
         foreach_rides_Q9(q);
         QuickSort_Q9();
         Q9Print(res);
+        freeArrayQ9();
         t = clock () -t;
         printf ("Query9: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;

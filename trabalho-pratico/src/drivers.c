@@ -21,7 +21,6 @@ struct DRIVERS{
     char* birth;
     char* gender;
     char* car_class;
-    char* plate;
     char* city;
     char* ac_cr;
     char* ac_st;
@@ -41,7 +40,6 @@ void free_driver (DRIVERS *value) {
     free (value->birth);
     free (value->gender);
     free (value->car_class);
-    free (value->plate);
     free (value->city);
     free (value->ac_cr);
     free (value->ac_st);
@@ -86,36 +84,34 @@ AvC *iniciaHashAvC (char *name, char *id, char *city, double avaliacao) {
 
 /*atribui cada token extraído ao respetivo campo da struct DRIVERS*/
 void atribui_drv(DRIVERS* drv2 ,int pos,char* token){   
-    char *str = strdup(token);
     switch(pos){
         case 1:
-            drv2 -> id = str;
+            drv2 -> id = strdup(token);
         break;
         case 2:
-            drv2 -> name = str;
+            drv2 -> name = strdup(token);
         break;
         case 3:
-            drv2 -> birth = str;
+            drv2 -> birth = strdup(token);
         break;
         case 4:
-            drv2 -> gender = str;
+            drv2 -> gender = strdup(token);
         break;
         case 5:
-            drv2-> car_class = str;
-        break;
-        case 6:
-            drv2 -> plate = str;
+            drv2-> car_class = strdup(token);
         break;
         case 7:
-            drv2 -> city = str;
+            drv2 -> city = strdup(token);
         break;
         case 8:
-            drv2 -> ac_cr = str;
+            drv2 -> ac_cr = strdup(token);
         break;
         case 9:
-            drv2 -> ac_st = str;
+            drv2 -> ac_st = strdup(token);
         break;
-    }
+        default:
+            break;
+        }
 }
 
 /*função que inicializa cada driver*/
@@ -192,7 +188,6 @@ DRIVERS* GetcontentD(DRIVERS *d) {
     copy-> name = strdup (d->name);
     copy-> birth = strdup (d->birth);
     copy-> car_class= strdup (d->car_class);
-    copy-> plate = strdup (d->plate);
     copy->city= strdup (d->city);
     copy-> ac_cr = strdup (d->ac_cr);
     copy-> ac_st = strdup (d->ac_st);
