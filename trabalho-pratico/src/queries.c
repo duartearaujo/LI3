@@ -83,12 +83,11 @@ void querieIdentifier(char **argv, int n_querie) {
     }
     case 2: {
         clock_t t = clock();
-        if(!arrayOrdenado()){
-            createArray();
+        if(!listOrdenado()){
+            createList();
             foreach_drivers_Q2 ();
-            ordenaArray();
         }
-        printfArray(res,atoi(argv[1]));
+        printfList(res,atoi(argv[1]));
         t = clock () -t;
         printf ("Query2: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;

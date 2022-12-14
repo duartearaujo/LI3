@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <glib.h>
+#include <time.h>
 #include "../include/parse.h"
 #include "../include/queries.h"
 #include "../include/drivers.h"
@@ -32,6 +33,14 @@ struct DRIVERS{
     GHashTable *avaliacao_cidades;
     int idade_conta;
 };
+
+/*struct auxiliar usada para realizar a query 2*/
+struct LISTA_DRIVERS{
+    int ordenado;
+    GList *lista;   /*lista ligada de drivers*/
+};
+
+static LISTA_DRIVERS *lista_drivers = NULL;
 
 /*função responsável por dar free dos drivers, é usada para dar free da hashtable(dos drivers)*/
 void free_driver (DRIVERS *value) {   
@@ -289,14 +298,72 @@ AvC* lookup_AvC (DRIVERS *driver, char *city) {
 
 }
 
-void foreach_drivers_Q2 () {
-   g_hash_table_foreach (drivers,(GHFunc)calcula_mediasQ2, NULL);
-}
-
 void foreach_drivers_Q7 (char *city) {
    g_hash_table_foreach (drivers, (GHFunc)avaliacao_media_city, city);
 }
 
 void hash_table_destroy_drivers () {
     g_hash_table_destroy (drivers);
+}
+
+/*função que inicializa a struct LISTA_DRIVERS*/
+void createList(){   
+    lista_drivers = malloc(sizeof(LISTA_DRIVERS));
+    lista_drivers->ordenado = 0;
+    lista_drivers->lista = NULL;
+}
+
+int desempate_Q2(DRIVERS *p1,DRIVERS *p2){
+    int result = 1;
+    double avaliacao_media = p1->avaliacao_media;
+    double avaliacao_media2 = p2->avaliacao_media;
+    char *mostRecentRide = strdup(p1->mostRecentRide);
+    char *mostRecentRide2 = strdup(p2->mostRecentRide);
+    char *id = strdup(p1->id);
+    char *id2 = strdup(p2->id);
+    if (avaliacao_media > avaliacao_media2) result = -1;
+    else if(avaliacao_media == avaliacao_media2){   /*desempate dos drivers(avaliação média =)->verificar as datas*/
+        if(compareDates(mostRecentRide,mostRecentRide2) == 1) result = -1;   /*compareDates = 1 -> primeira data é mais recente*/
+        else if(compareDates(mostRecentRide,mostRecentRide2) == 2){    /*compareDates = 2 -> as duas datas são iguais*/
+            if(atoi(id) > atoi(id2)) result = -1;  /*se as datas forem iguais então compara-se os id*/
+        }
+    }
+    free(mostRecentRide);
+    free(mostRecentRide2);
+    free(id);
+    free(id2);
+    return result;
+}
+
+
+/*função que vai ser aplicada a cada membro da hashtable (dos drivers)*/
+void calcula_mediasQ2 (gpointer key, DRIVERS* driver, void *a){
+    int count = driver->count;
+    double valor_atual = driver->valor_atual;
+    double avaliacao_media = driver->avaliacao_media;
+    avaliacao_media = valor_atual / count;  /*calcula a avaliação média de cada driver*/
+    calculaAvaliacaoMedia(driver,avaliacao_media);
+    if(!lista_drivers->lista) lista_drivers->lista =  g_list_append(lista_drivers->lista,driver);
+    else lista_drivers->lista = g_list_insert_sorted(lista_drivers->lista,driver,(GCompareFunc)desempate_Q2);
+}
+
+
+void foreach_drivers_Q2 () {
+   g_hash_table_foreach (drivers,(GHFunc)calcula_mediasQ2, NULL);
+}
+
+
+int listOrdenado(){
+    if(!lista_drivers) return 0;
+    return lista_drivers->ordenado;
+}
+
+
+DRIVERS* getElement_Q2(int index){
+    return GetcontentD(g_list_nth_data(lista_drivers->lista,index));
+}
+
+void freeList(){
+    g_list_free(lista_drivers->lista);
+    free(lista_drivers);
 }
