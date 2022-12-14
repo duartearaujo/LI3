@@ -35,15 +35,17 @@ void swapAvC (AvC **array, int min_idx, int i) {
     array[i] = temp;
 }
 
-int comparaAvC (AvC *item1, AvC *item2) {
-    int r = 0;
+int comparaAvC (const void *p1, const void* p2) {
+    int r = 1;
+    AvC *item1 = *((AvC**) p1);
+    AvC *item2 = *((AvC**) p2);
     double avaliacao1 = getAvaliacaoMediaAvC (item1);
     double avaliacao2 = getAvaliacaoMediaAvC (item2);
-    if (avaliacao2 > avaliacao1) r =  1;
+    if (avaliacao2 > avaliacao1) r = -1;
     else if (avaliacao1 == avaliacao2) {
         char *id1 = getIdAvC (item1);
         char *id2 = getIdAvC (item2);
-        if (strcmp (id1, id2) < 0) r = 1;
+        r = strcmp(id1, id2);
         free (id1);
         free (id2);
     }
@@ -51,16 +53,7 @@ int comparaAvC (AvC *item1, AvC *item2) {
 }
 
 void ordenaQ7 () {
-    int i, j, min_idx;
-    for (i = 0; i < array->pos-1; i++) {
-        min_idx = i;
-        for (j = i+1; j < array->pos; j++)
-            if (comparaAvC (array->array_avaliacoes[j], array->array_avaliacoes[min_idx]))
-                min_idx = j;
- 
-        if(min_idx!=i)
-            swapAvC(array->array_avaliacoes, min_idx,i);
-    }
+    qsort (array->array_avaliacoes,(size_t)array->pos, getsizeAvC(), comparaAvC);
 }
 
 void printQ7 (FILE *fp,int N) {

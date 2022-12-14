@@ -71,6 +71,8 @@ DRIVERS* lookup_drivers (char* key);
 
 AvC* lookup_AvC (DRIVERS *driver, char *city);
 
+size_t getsizeAvC ();
+
 void foreach_drivers_Q7 ();
 
 void hash_table_destroy_drivers ();

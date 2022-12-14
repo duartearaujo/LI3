@@ -295,7 +295,10 @@ DRIVERS* lookup_drivers (char* key) {
 
 AvC* lookup_AvC (DRIVERS *driver, char *city) {
     return (g_hash_table_lookup (driver->avaliacao_cidades, city));
+}
 
+size_t getsizeAvC () {
+    return sizeof (AvC*);
 }
 
 void foreach_drivers_Q7 (char *city) {
