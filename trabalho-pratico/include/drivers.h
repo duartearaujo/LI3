@@ -91,4 +91,16 @@ DRIVERS* getElement_Q2(int index);
 
 void freeList();
 
+void adicionaArrayQ7(AvC *avaliacao_cidade);
+
+void ordenaQ7 ();
+
+void free_Q7 ();
+
+int getPosQ7 ();
+
+AvC *getarrayQ7pos (int i);
+
+int isactive (AvC *driver); 
+
 #endif

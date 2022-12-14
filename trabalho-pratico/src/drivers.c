@@ -42,6 +42,19 @@ struct LISTA_DRIVERS{
 
 static LISTA_DRIVERS *lista_drivers = NULL;
 
+struct Q7 { 
+    AvC **array_avaliacoes;
+    int pos;
+};
+
+static Q7 *arrayQ7;
+
+void inicializaQ7 () {
+    arrayQ7 = malloc (sizeof (Q7));
+    arrayQ7->array_avaliacoes = NULL;
+    arrayQ7->pos = 0;
+}
+
 /*função responsável por dar free dos drivers, é usada para dar free da hashtable(dos drivers)*/
 void free_driver (DRIVERS *value) {   
     free (value->id);
@@ -367,6 +380,36 @@ DRIVERS* getElement_Q2(int index){
 }
 
 void freeList(){
+    if (lista_drivers) {
     g_list_free(lista_drivers->lista);
     free(lista_drivers);
+    }
+}
+
+void adicionaArrayQ7 (AvC *avaliacao_cidade) {
+    arrayQ7->pos++;
+    arrayQ7->array_avaliacoes = (AvC**) realloc (arrayQ7->array_avaliacoes, arrayQ7->pos * sizeof (AvC *));
+    arrayQ7->array_avaliacoes[arrayQ7->pos-1] = getcontentAvC (avaliacao_cidade);
+}
+
+void ordenaQ7 () {
+    qsort (arrayQ7->array_avaliacoes,(size_t)arrayQ7->pos, getsizeAvC(), comparaAvC);
+}
+
+void free_Q7 () {
+    for (int i = 0; i < arrayQ7->pos; i++) free_avaliacao_por_cidade (arrayQ7->array_avaliacoes[i]);
+    free (arrayQ7->array_avaliacoes);
+    free (arrayQ7);
+}
+
+int getPosQ7 () {
+    return (arrayQ7->pos);
+}
+
+AvC *getarrayQ7pos (int i) {
+    return (getcontentAvC( arrayQ7->array_avaliacoes[i]));
+}
+
+int isactive (AvC *driver) {
+    return (strcmp ("inactive", ((DRIVERS*) g_hash_table_lookup (drivers, driver->id))->ac_st));
 }
