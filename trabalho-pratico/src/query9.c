@@ -56,7 +56,7 @@ void guardaQ9(gpointer key, RIDES *ride, void *a){
     Q9 *q = inicializaQ9();
     char *data = getDateR(ride);
     char *tip = getTip (ride);
-    if(tip && ((compareDates(data, array->data1) == 1 && compareDates(data, array->data2) == 0) || !strcmp(data, array->data1) || !strcmp(data, array->data2))){
+    if(tip && ((compareDates(data, array->data1) && (compareDates(data, array->data2) == 2 || !compareDates(data, array->data2))) || !strcmp(data, array->data1) || !strcmp(data, array->data2))){
         array->pos++;
         array->q = (Q9**) realloc(array->q,array->pos * sizeof(Q9*));
         q->id = getIdR(ride);
