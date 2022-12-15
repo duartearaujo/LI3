@@ -85,19 +85,23 @@ void assignsData(RIDES* new_ride ,int pos ,char* token){
 }
 
 RIDES* GetcontentR(RIDES *ride){
-   RIDES *copy = malloc(sizeof(RIDES));
-   copy->id = strdup(ride->id);
-   copy->date = strdup(ride->date);
-   copy->driver = strdup(ride->driver);
-   copy->user = strdup(ride->user);
-   copy->city = strdup(ride->city);
-   copy->distance = strdup(ride->distance);
-   copy->score_user = strdup(ride->score_user);
-   copy->score_driver = strdup(ride->score_driver);
-   copy->tip = strdup(ride->tip);
-   copy->type_car = (!ride->type_car) ? NULL : strdup (ride->type_car);
-   return copy;
+   if (ride) {
+      RIDES *copy = malloc(sizeof(RIDES));
+      copy->id = strdup(ride->id);
+      copy->date = strdup(ride->date);
+      copy->driver = strdup(ride->driver);
+      copy->user = strdup(ride->user);
+      copy->city = strdup(ride->city);
+      copy->distance = strdup(ride->distance);
+      copy->score_user = strdup(ride->score_user);
+      copy->score_driver = strdup(ride->score_driver);
+      copy->tip = strdup(ride->tip);
+      copy->type_car = (!ride->type_car) ? NULL : strdup (ride->type_car);
+      return copy;
+   }
+   return NULL;
 }
+
 
 void adicionaHashRides(char *line){
    RIDES *new_ride = malloc(sizeof(RIDES));

@@ -118,20 +118,23 @@ void addToUser (User *user, char *distance, char *tip, int car_class, char *aval
 }
 
 User* GetcontentU(User *u) {
-    User *copy = malloc (sizeof (User));  
-    copy-> username = strdup (u->username);
-    copy-> name = strdup (u->name);
-    copy-> data = strdup (u->data);
-    copy->gender = strdup (u->gender);
-    copy-> account_creation = strdup (u->account_creation);
-    copy->account_status = strdup (u->account_status);
-    if(u-> last_ride) copy->last_ride = strdup (u->last_ride);
-    else copy->last_ride = NULL;
-    copy->distance = u->distance;
-    copy->n_viagens = u->n_viagens;
-    copy->total_gasto = u->total_gasto;
-    copy->acc_avaliation = u->acc_avaliation;
-    return copy;
+    if (u) {
+        User *copy = malloc (sizeof (User));  
+        copy-> username = strdup (u->username);
+        copy-> name = strdup (u->name);
+        copy-> data = strdup (u->data);
+        copy->gender = strdup (u->gender);
+        copy-> account_creation = strdup (u->account_creation);
+        copy->account_status = strdup (u->account_status);
+        if(u-> last_ride) copy->last_ride = strdup (u->last_ride);
+        else copy->last_ride = NULL;
+        copy->distance = u->distance;
+        copy->n_viagens = u->n_viagens;
+        copy->total_gasto = u->total_gasto;
+        copy->acc_avaliation = u->acc_avaliation;
+        return copy;
+    }
+    return NULL;
 }
 
 char *getNameU (User *u) {

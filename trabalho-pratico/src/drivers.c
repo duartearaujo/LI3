@@ -192,22 +192,25 @@ void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance,
 
 
 DRIVERS* GetcontentD(DRIVERS *d) {
-    DRIVERS *copy = malloc (sizeof (DRIVERS));  
-    copy-> id = strdup (d->id);
-    copy-> name = strdup (d->name);
-    copy-> birth = strdup (d->birth);
-    copy-> car_class= strdup (d->car_class);
-    copy->city= strdup (d->city);
-    copy-> ac_cr = strdup (d->ac_cr);
-    copy-> ac_st = strdup (d->ac_st);
-    copy->gender= strdup (d->gender);
-    copy->mostRecentRide= strdup (d->mostRecentRide);
-    copy->avaliacao_media = d->avaliacao_media;
-    copy->count = d->count;
-    copy->valor_atual = d->valor_atual;
-    copy->total_auferido = d->total_auferido;
-    copy->avaliacao_cidades = NULL;
-    return copy;
+    if (d) {
+        DRIVERS *copy = malloc (sizeof (DRIVERS));  
+        copy-> id = strdup (d->id);
+        copy-> name = strdup (d->name);
+        copy-> birth = strdup (d->birth);
+        copy-> car_class= strdup (d->car_class);
+        copy->city= strdup (d->city);
+        copy-> ac_cr = strdup (d->ac_cr);
+        copy-> ac_st = strdup (d->ac_st);
+        copy->gender= strdup (d->gender);
+        copy->mostRecentRide= strdup (d->mostRecentRide);
+        copy->avaliacao_media = d->avaliacao_media;
+        copy->count = d->count;
+        copy->valor_atual = d->valor_atual;
+        copy->total_auferido = d->total_auferido;
+        copy->avaliacao_cidades = NULL;
+        return copy;
+    }
+    return NULL;
 }
 
 AvC* getcontentAvC (AvC *a) {
@@ -320,8 +323,8 @@ int desempate_Q2(DRIVERS *p1,DRIVERS *p2){
     int result = 1;
     double avaliacao_media = p1->avaliacao_media;
     double avaliacao_media2 = p2->avaliacao_media;
-    char *mostRecentRide = strdup(p1->mostRecentRide);
-    char *mostRecentRide2 = strdup(p2->mostRecentRide);
+    char *mostRecentRide = p1->mostRecentRide ? strdup (p1->mostRecentRide) : NULL;
+    char *mostRecentRide2 = p2->mostRecentRide ? strdup(p2->mostRecentRide) : NULL;
     char *id = strdup(p1->id);
     char *id2 = strdup(p2->id);
     if (avaliacao_media > avaliacao_media2) result = -1;

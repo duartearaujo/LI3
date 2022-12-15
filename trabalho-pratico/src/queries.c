@@ -32,15 +32,15 @@ int querie1(char *str){
 return value == 0 se a primeira é mais antiga que a segunda
 return value == 2 se as datas são iguais */
 int compareDates(char *str, char *string){  
-    char *str_ = strdup(str);                                    
-    char *str_2 = strdup(string);  
-    char *temp = str_;
-    char *temp2 = str_2;                         
     int r = 0;
     if(!str && string) r = 1;
     else if(!string && str) r = 0;
     else if(!string && !str) r = 2;
     else{
+        char *str_ = strdup(str);                                    
+        char *str_2 = strdup(string);  
+        char *temp = str_;
+        char *temp2 = str_2;                         
         int dia = atoi(strsep(&str_,"/"));
         int mes = atoi(strsep(&str_,"/"));
         int ano = atoi(strsep(&str_,"/"));
@@ -51,9 +51,9 @@ int compareDates(char *str, char *string){
         else if(ano == ano2 && mes > mes2) r = 1;
         else if(ano == ano2 && mes == mes2 && dia > dia2) r = 1;
         else if(ano == ano2 && mes == mes2 && dia == dia2) r = 2;
+        free(temp);
+        free(temp2);
     }
-    free(temp);
-    free(temp2);
     return r;
 }
 
@@ -69,13 +69,17 @@ void querieIdentifier(char **argv, int n_querie) {
         clock_t t = clock();
         if(querie1(argv[1])) {
             DRIVERS *d =GetcontentD (lookup_drivers (argv[1])); /*faz lookup na hash dos drivers do Driver pedido*/
-            printvaloresQ1 (d, res); /*Função que faz print aos valores pretendidos dos drivers*/
-            free_driver (d);
+            if (d) { 
+                printvaloresQ1 (d, res); /*Função que faz print aos valores pretendidos dos drivers*/
+                free_driver (d);
+            }
         }
         else {
             User *u = GetcontentU( lookup_users (argv[1]) ); /*faz lookup na hash dos users do User pedido*/
-            printvaloresQ1_2 (u, res); /*Função que faz print aos valores pretendidos dos users*/
-            free_user (u);
+            if (u) { 
+                printvaloresQ1_2 (u, res); /*Função que faz print aos valores pretendidos dos users*/
+                free_user (u);
+            }
         }
         t = clock () -t;
         printf ("Query1: %f\n", ((float)t)/CLOCKS_PER_SEC);
