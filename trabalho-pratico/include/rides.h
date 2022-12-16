@@ -22,9 +22,9 @@ void assignsData(RIDES* new_ride ,int pos ,char* token);
 
 void adicionaHashRides(char *line);
 
-char *getcarR (RIDES *ride);
+char getcarR (RIDES *ride);
 
-char *getdistanceR (RIDES *ride);
+int getdistanceR (RIDES *ride);
 
 char *getUsernameR (RIDES *ride);
 

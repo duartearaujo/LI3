@@ -26,14 +26,13 @@ Q6* inicializaQ6 (char *city, char *data1, char *data2){
 void distancia_media(gpointer key, RIDES *ride, Q6 *q){
     char *city = getcityR(ride);
     char *data = getDateR(ride);
-    char *distance = getdistanceR(ride);
+    int distance = getdistanceR(ride);
     if(!strcmp(q->city, city) && ((compareDates(data, q->data1) == 1 && compareDates(data, q->data2) == 0) || !strcmp(data, q->data1) || !strcmp(data, q->data2))){
         q->n_rides++;
-        q->total_distance += strtod(distance, NULL);
+        q->total_distance += distance;
     }
     free(city);
     free(data);
-    free(distance);
 }
 
 void printQ6(Q6 *q, FILE *res){

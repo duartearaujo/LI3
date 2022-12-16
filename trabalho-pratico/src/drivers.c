@@ -20,18 +20,18 @@ struct DRIVERS{
     char* id;
     char* name;
     char* birth;
-    char* gender;
-    char* car_class;
     char* city;
     char* ac_cr;
-    char* ac_st;
-    int count;
+    char *mostRecentRide;
+    GHashTable *avaliacao_cidades;
     double valor_atual;
     double avaliacao_media;
-    char *mostRecentRide;
     double total_auferido;
-    GHashTable *avaliacao_cidades;
+    char ac_st;
+    char gender;
+    char car_class;
     int idade_conta;
+    int count;
 };
 
 /*struct auxiliar usada para realizar a query 2*/
@@ -43,17 +43,26 @@ struct ARRAY_DRIVERS{
 
 static ARRAY_DRIVERS *array = NULL;
 
+struct Q7 { 
+    AvC **array_avaliacoes;
+    int pos;
+};
+
+static Q7 *arrayQ7;
+
+void inicializaQ7 () {
+    arrayQ7 = malloc (sizeof (Q7));
+    arrayQ7->array_avaliacoes = NULL;
+    arrayQ7->pos = 0;
+}
 
 /*função responsável por dar free dos drivers, é usada para dar free da hashtable(dos drivers)*/
 void free_driver (DRIVERS *value) {   
     free (value->id);
     free (value->name);
     free (value->birth);
-    free (value->gender);
-    free (value->car_class);
     free (value->city);
     free (value->ac_cr);
-    free (value->ac_st);
     free (value->mostRecentRide);
     if (value->avaliacao_cidades) g_hash_table_destroy (value->avaliacao_cidades);
     free (value);
@@ -106,10 +115,10 @@ void atribui_drv(DRIVERS* drv2 ,int pos,char* token){
             drv2 -> birth = strdup(token);
         break;
         case 4:
-            drv2 -> gender = strdup(token);
+            drv2 -> gender = token[0];
         break;
         case 5:
-            drv2-> car_class = strdup(token);
+            drv2-> car_class = token[0];
         break;
         case 7:
             drv2 -> city = strdup(token);
@@ -118,7 +127,7 @@ void atribui_drv(DRIVERS* drv2 ,int pos,char* token){
             drv2 -> ac_cr = strdup(token);
         break;
         case 9:
-            drv2 -> ac_st = strdup(token);
+            drv2 -> ac_st = token[0];
         break;
         default:
             break;
@@ -140,19 +149,19 @@ void adicionaHashDrivers(char *line){
 
 /*atribiu um int consoante o tipo de carro do driver*/
 int identifie_car_class (DRIVERS *driver) {
-    if (!strcmp(driver->car_class,"basic")) return 0;
-    else if (!strcmp(driver->car_class,"green")) return 1;
+    if (driver->car_class == 'b') return 0;
+    else if (driver->car_class == 'g') return 1;
     else return 2;
 }
 
-int identifie_car_class_char (char *car_class) {
-    if (!strcmp(car_class,"basic")) return 0;
-    else if (!strcmp(car_class,"green")) return 1;
+int identifie_car_class_char (char car_class) {
+    if (car_class == 'b') return 0;
+    else if (car_class == 'g') return 1;
     else return 2;
 }
 
 /*adiciona a cada driver da hashtable(dos drivers) os valores dos rides que interessam para resolver a query 1, 2 e 7*/
-void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip, char *city){   
+void addToDriver(DRIVERS *driver,char *score_driver, char *date, int distance, char *tip, char *city){   
     int r = 0;
     if(!driver->mostRecentRide) driver->mostRecentRide = strdup(date);   /*compara as duas datas*/
     else if((r = compareDates(date,driver->mostRecentRide)) != 0){   /*se a primeira data for igual ou mais recente que a segunda*/
@@ -168,13 +177,13 @@ void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance,
     switch (identifier_car) /*calcula os valores dependendo do int q identifica o tipo de carro*/
       {
          case 0:
-            driver->total_auferido += strtod (tip,NULL) + strtod (distance, NULL) * 0.62 + 3.25;
+            driver->total_auferido += strtod (tip,NULL) + distance * 0.62 + 3.25;
             break;
          case 1:
-            driver->total_auferido += strtod (tip,NULL) + strtod (distance, NULL) * 0.79 + 4;
+            driver->total_auferido += strtod (tip,NULL) + distance * 0.79 + 4;
             break;
          case 2:
-            driver->total_auferido  += strtod (tip,NULL) + strtod (distance, NULL) * 0.94 + 5.20;
+            driver->total_auferido  += strtod (tip,NULL) + distance * 0.94 + 5.20;
             break;
          default:
             break;
@@ -199,12 +208,12 @@ DRIVERS* GetcontentD(DRIVERS *d) {
         copy-> id = strdup (d->id);
         copy-> name = strdup (d->name);
         copy-> birth = strdup (d->birth);
-        copy-> car_class= strdup (d->car_class);
+        copy-> car_class = d->car_class;
         copy->city= strdup (d->city);
         copy-> ac_cr = strdup (d->ac_cr);
-        copy-> ac_st = strdup (d->ac_st);
-        copy->gender= strdup (d->gender);
-        copy->mostRecentRide= d->mostRecentRide ? strdup (d->mostRecentRide) : NULL;
+        copy-> ac_st = d->ac_st;
+        copy->gender = d->gender;
+        copy->mostRecentRide = d->mostRecentRide ? strdup (d->mostRecentRide) : NULL;
         copy->avaliacao_media = d->avaliacao_media;
         copy->count = d->count;
         copy->valor_atual = d->valor_atual;
@@ -230,8 +239,8 @@ void calcula_avaliacao_media_AvC (AvC *avaliacao) {
     avaliacao->avaliacao_media = avaliacao->avaliacao_total / avaliacao->n_viagens;
 }
 
-char *getcarD (DRIVERS *d) {
-    return strdup (d->car_class);
+char getcarD (DRIVERS *d) {
+    return d->car_class;
 }
 
 char *getIdD(DRIVERS *d){
@@ -258,8 +267,8 @@ int get_Idade_Conta_D(DRIVERS *d){
     return d->idade_conta;
 }
 
-char *getAccountStatusD(DRIVERS *d){
-    return strdup (d->ac_st);
+char getAccountStatusD(DRIVERS *d){
+    return d->ac_st;
 }
 
 char *getMostRecentRideD(DRIVERS *d){
@@ -270,8 +279,8 @@ void calculaAvaliacaoMedia(DRIVERS *d,double avaliacao_media){
     d->avaliacao_media = avaliacao_media;
 }
 
-char *getGenderD(DRIVERS *d){
-    return strdup (d->gender);
+char getGenderD(DRIVERS *d){
+    return d->gender;
 }
 
 char *getBirthD(DRIVERS *d){
@@ -387,4 +396,32 @@ void freeArray(){
         free(array->driver);
         free(array);
     }
+}
+
+void adicionaArrayQ7 (AvC *avaliacao_cidade) {
+    arrayQ7->pos++;
+    arrayQ7->array_avaliacoes = (AvC**) realloc (arrayQ7->array_avaliacoes, arrayQ7->pos * sizeof (AvC *));
+    arrayQ7->array_avaliacoes[arrayQ7->pos-1] = getcontentAvC (avaliacao_cidade);
+}
+
+void ordenaQ7 () {
+    qsort (arrayQ7->array_avaliacoes,(size_t)arrayQ7->pos, getsizeAvC(), comparaAvC);
+}
+
+void free_Q7 () {
+    for (int i = 0; i < arrayQ7->pos; i++) free_avaliacao_por_cidade (arrayQ7->array_avaliacoes[i]);
+    free (arrayQ7->array_avaliacoes);
+    free (arrayQ7);
+}
+
+int getPosQ7 () {
+    return (arrayQ7->pos);
+}
+
+AvC *getarrayQ7pos (int i) {
+    return (getcontentAvC( arrayQ7->array_avaliacoes[i]));
+}
+
+int isactive (AvC *driver) {
+    return ('a' ==((DRIVERS*) (g_hash_table_lookup (drivers, driver->id)))->ac_st);
 }

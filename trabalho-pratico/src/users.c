@@ -11,26 +11,24 @@ static GHashTable *users;
 struct user {    
     char* username;
     char* name;
-    char* gender;
     char* data;
     char* account_creation;
-    char* account_status;
     char* last_ride;
-    int n_viagens;
-    int distance;
     double acc_avaliation;
     double total_gasto;
     int idade_conta;
+    int n_viagens;
+    int distance;
+    char account_status;
+    char gender;
 };
 
 /*Função que faz free de todos os campos do user e da sua própria estrutura*/
 void free_user (User *value) {
     free(value->username);
     free(value->name);
-    free(value->gender);
     free(value->data);
     free(value->account_creation);
-    free(value->account_status);
     free(value->last_ride);
     free (value);
 }
@@ -74,7 +72,7 @@ void atribui (User *user, int pos, char *info) {
             user->name = strdup (info); 
             break;
         case 3:
-            user->gender = strdup (info); 
+            user->gender = info[0]; 
             break;
         case 4:
             user->data = strdup (info); 
@@ -83,24 +81,24 @@ void atribui (User *user, int pos, char *info) {
             user->account_creation = strdup (info); 
             break;
         case 7:
-            user->account_status = strdup (info); 
+            user->account_status = info[0]; 
             break;
         default:
             break;
         }
 }
 
-void addToUser (User *user, char *distance, char *tip, int car_class, char *avaliation, char *date) {
+void addToUser (User *user, int distance, char *tip, int car_class, char *avaliation, char *date) {
     switch (car_class) /*calcula os valores dependendo do int q identifica o tipo de carro.*/ 
       {
          case 0:
-            user->total_gasto += strtod (tip,NULL) + strtod (distance, NULL) * 0.62 + 3.25;
+            user->total_gasto += strtod (tip,NULL) + distance * 0.62 + 3.25;
             break;
          case 1:
-            user->total_gasto += strtod (tip,NULL) + strtod (distance, NULL) * 0.79 + 4;
+            user->total_gasto += strtod (tip,NULL) + distance * 0.79 + 4;
             break;
          case 2:
-            user->total_gasto  += strtod (tip,NULL) + strtod (distance, NULL) * 0.94 + 5.20;
+            user->total_gasto  += strtod (tip,NULL) + distance * 0.94 + 5.20;
             break;
          default:
             break;
@@ -114,7 +112,7 @@ void addToUser (User *user, char *distance, char *tip, int car_class, char *aval
         user->last_ride = strdup(date);
         free(temp);
     } 
-    user->distance += atoi(distance);
+    user->distance += distance;
 }
 
 User* GetcontentU(User *u) {
@@ -123,11 +121,10 @@ User* GetcontentU(User *u) {
         copy-> username = strdup (u->username);
         copy-> name = strdup (u->name);
         copy-> data = strdup (u->data);
-        copy->gender = strdup (u->gender);
+        copy->gender = u->gender;
         copy-> account_creation = strdup (u->account_creation);
-        copy->account_status = strdup (u->account_status);
-        if(u-> last_ride) copy->last_ride = strdup (u->last_ride);
-        else copy->last_ride = NULL;
+        copy->account_status = u->account_status;
+        copy->last_ride = u->last_ride ? strdup (u->last_ride) : NULL;
         copy->distance = u->distance;
         copy->n_viagens = u->n_viagens;
         copy->total_gasto = u->total_gasto;
@@ -141,12 +138,12 @@ char *getNameU (User *u) {
     return strdup (u->name);
 }
 
-char *getGenderU (User *u) {
-    return strdup (u->gender);
+char getGenderU (User *u) {
+    return u->gender;
 }
 
-char *getAccStatusU (User *u) {
-    return strdup (u->account_status);
+char getAccStatusU (User *u) {
+    return u->account_status;
 }
 
 char *getDataU (User *u) {
@@ -179,10 +176,6 @@ int getDistance(User* user){
 
 int get_Idade_Conta_U(User* user){
     return user->idade_conta;
-}
-
-char *getAccSt(User* user){
-    return strdup(user -> account_status);
 }
 
 User* lookup_users (char* key) {

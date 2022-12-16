@@ -31,24 +31,22 @@ void preco_medio_Q5(gpointer key, RIDES *value, Q5 *query5){
     char *data = getDateR(value);
     if((compareDates(data,query5->data_inferior) && !compareDates(data,query5->data_superior)) || !strcmp(data,query5->data_inferior) || !strcmp(data,query5->data_superior)){
         query5->numeroViagens++;
-        char *carro = getcarR(value);
-        char *distancia = getdistanceR(value);
+        char carro = getcarR(value);
+        int distancia = getdistanceR(value);
         switch (identifie_car_class_char(carro))
         {
          case 0:
-            query5->total_preco += strtod (distancia, NULL) * 0.62 + 3.25;
+            query5->total_preco += distancia * 0.62 + 3.25;
             break;
          case 1:
-            query5->total_preco += strtod (distancia, NULL) * 0.79 + 4;
+            query5->total_preco += distancia * 0.79 + 4;
             break;
          case 2:
-            query5->total_preco  += strtod (distancia, NULL) * 0.94 + 5.20;
+            query5->total_preco  += distancia * 0.94 + 5.20;
             break;
          default:
             break;
         }
-        free(carro);
-        free(distancia);
     }
     free(data);
 }

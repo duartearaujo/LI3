@@ -12,15 +12,14 @@ struct Q9{
     char *id;
     char *date;
     char *city;
-    char *distance;
     char *tip;
+    int distance;
 };
 
 void free_Q9 (Q9 *q) {
    free (q->id);
    free (q->date);
    free (q->city);
-   free (q->distance);
    free (q->tip);
    free (q);
 }
@@ -30,7 +29,7 @@ Q9* inicializaQ9 (){
     new->id = NULL;
     new->date = NULL;
     new->city = NULL;
-    new->distance = NULL;
+    new->distance = 0;
     new->tip = NULL;
     return new;
 }
@@ -96,8 +95,8 @@ void QuickSort_Q9(){
 int partition_Q9(int i, int j){
     Q9 *pivot = array->q[j];
     for(int t = i; t < j; t++){
-        int distance = atoi(array->q[t]->distance);
-        int PDistance = atoi(pivot->distance);
+        int distance = array->q[t]->distance;
+        int PDistance = pivot->distance;
         char *Date = array->q[t]->date;
         char *PDate = pivot->date;
         char *id = array->q[t]->id;
@@ -128,10 +127,10 @@ void Q9Print(FILE *res){
     while(i >= 0){ 
         char *id = array->q[i]->id;
         char *date = array->q[i]->date;
-        char *distance = array->q[i]->distance;
+        int distance = array->q[i]->distance;
         char *city = array->q[i]->city;
         double tip = strtod(array->q[i]->tip, NULL);
-        fprintf(res, "%s;%s;%s;%s;%.3f\n", id, date, distance, city, tip);
+        fprintf(res, "%s;%s;%d;%s;%.3f\n", id, date, distance, city, tip);
         i--; 
     }
 }

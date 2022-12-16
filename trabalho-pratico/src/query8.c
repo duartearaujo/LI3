@@ -22,7 +22,7 @@ struct dados_Q8{
 struct array_Q8{
     int pos;
     int idade_enunciado;
-    char *genero_enunciado;
+    char genero_enunciado;
     dados_Q8** lista;
 };
 
@@ -41,7 +41,7 @@ dados_Q8* inicializa_dados_Q8(){
     return dados;
 }
 
-void inicializa_array_Q8(int idade_enunciado,char *gender_enunciado){
+void inicializa_array_Q8(int idade_enunciado,char gender_enunciado){
     array = malloc(sizeof(array_Q8));
     array->pos = 0;
     array->idade_enunciado = idade_enunciado * 365;
@@ -63,9 +63,9 @@ void passa_Para_Struct(char *nome_driver,char *nome_user,char *id,char *id_viage
 void verifica_dados_Q8 (gpointer key, RIDES* ride, void *a){
     char *username = getUsernameR(ride);
     char *id = getIdDriverR(ride);
-    char *genero_user = getGenderU(lookup_users(username));
-    char *genero_driver = getGenderD(lookup_drivers(id));
-    if(!strcmp(genero_user,array->genero_enunciado) && !strcmp(genero_driver,array->genero_enunciado)){
+    char genero_user = getGenderU(lookup_users(username));
+    char genero_driver = getGenderD(lookup_drivers(id));
+    if( genero_user == array->genero_enunciado && genero_driver == array->genero_enunciado){
         int idade_conta_user = get_Idade_Conta_U(lookup_users(username));
         int idade_conta_driver = get_Idade_Conta_D(lookup_drivers(id));
         if(idade_conta_driver >= array->idade_enunciado && idade_conta_user >= array->idade_enunciado){
@@ -83,8 +83,6 @@ void verifica_dados_Q8 (gpointer key, RIDES* ride, void *a){
     }
     free(username);
     free(id);
-    free(genero_user);
-    free(genero_driver);
 }
 
 int desempate_Q8(const void *p1, const void* p2){
@@ -115,12 +113,10 @@ void ordena_Q8(){
 
 void printArray_Q8(FILE *res){
     for(int i = 0; i < array->pos;i++){
-        char *account_status_driver = getAccountStatusD(lookup_drivers(array->lista[i]->id_driver));
-        char *account_status_user = getAccStatusU(lookup_users(array->lista[i]->username_user));
-        if(strcmp(account_status_driver,"inactive") && strcmp(account_status_user,"inactive"))
+        char account_status_driver = getAccountStatusD(lookup_drivers(array->lista[i]->id_driver));
+        char account_status_user = getAccStatusU(lookup_users(array->lista[i]->username_user));
+        if(account_status_driver == 'a' && account_status_user == 'a')
             fprintf(res,"%s;%s;%s;%s\n",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);  
-        free(account_status_driver);
-        free(account_status_user);
     }
 }
 

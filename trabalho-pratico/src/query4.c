@@ -29,24 +29,22 @@ void preco_medio (gpointer key, RIDES *value, Q4 *total) {
     char *city = getcityR (value);
     if (!strcmp (total->city,city)) {
         total->n_viagens++;
-        char *car = getcarR(value);
-        char *distance = getdistanceR(value);
+        char car = getcarR(value);
+        int distance = getdistanceR(value);
         switch (identifie_car_class_char(car))
         {
          case 0:
-            total->total_preco += strtod (distance, NULL) * 0.62 + 3.25;
+            total->total_preco += distance * 0.62 + 3.25;
             break;
          case 1:
-            total->total_preco += strtod (distance, NULL) * 0.79 + 4;
+            total->total_preco += distance * 0.79 + 4;
             break;
          case 2:
-            total->total_preco  += strtod (distance, NULL) * 0.94 + 5.20;
+            total->total_preco  += distance * 0.94 + 5.20;
             break;
          default:
             break;
         }
-        free (distance);
-        free (car);
     }
     free (city);
 }

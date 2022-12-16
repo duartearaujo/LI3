@@ -23,11 +23,11 @@ void atribui_drv(DRIVERS* drv2 ,int pos,char* token);
 
 int car_lookup (GHashTable *drivers, char *id);
 
-void addToDriver(DRIVERS *driver,char *score_driver, char *date, char *distance, char *tip, char *city);
+void addToDriver(DRIVERS *driver,char *score_driver, char *date, int distance, char *tip, char *city);
 
 int identifie_car_class (DRIVERS *driver);
 
-int identifie_car_class_char (char *car_class);
+int identifie_car_class_char (char car_class);
 
 DRIVERS * GetcontentD(DRIVERS *d); 
 
@@ -35,7 +35,7 @@ AvC* getcontentAvC (AvC *a);
 
 void calcula_avaliacao_media_AvC (AvC *avaliacao);
 
-char *getcarD (DRIVERS *d);
+char getcarD (DRIVERS *d);
 
 char *getIdD(DRIVERS *d);
 
@@ -49,13 +49,13 @@ int getCountD(DRIVERS *d);
 
 int get_Idade_Conta_D(DRIVERS *d);
 
-char *getAccountStatusD(DRIVERS *d);
+char getAccountStatusD(DRIVERS *d);
 
 char *getMostRecentRideD(DRIVERS *d);
 
 void calculaAvaliacaoMedia(DRIVERS *d,double avaliacao_media);
 
-char *getGenderD(DRIVERS *d);
+char getGenderD(DRIVERS *d);
 
 char *getBirthD(DRIVERS *d);
 
@@ -92,5 +92,17 @@ int arrayOrdenado();
 DRIVERS* getElement_Q2(int index);
 
 void freeArray();
+
+void adicionaArrayQ7(AvC *avaliacao_cidade);
+
+void ordenaQ7 ();
+
+void free_Q7 ();
+
+int getPosQ7 ();
+
+AvC *getarrayQ7pos (int i);
+
+int isactive (AvC *driver); 
 
 #endif

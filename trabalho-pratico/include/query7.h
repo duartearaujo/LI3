@@ -7,10 +7,8 @@ void inicializaQ7 ();
 
 void avaliacao_media_city (gpointer key, DRIVERS *value, char *city);
 
-void ordenaQ7 ();
+int comparaAvC (const void *p1, const void* p2);
 
 void printQ7 (FILE *fp,int N);
-
-void free_Q7 ();
 
 #endif

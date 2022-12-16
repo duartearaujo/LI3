@@ -94,16 +94,15 @@ void Q3Print(FILE *res, int N){
     int i = (array->pos - 1);
     int j = 0;
     while(j < N){ /*Ciclo que limita o print dos elementos com base no input da querie*/
-        char *AccSt = getAccSt(array->user[i]);
+        char AccSt = getAccStatusU(array->user[i]);
         char *username = getUsername(array->user[i]);
         char *name =getNameU(array->user[i]);
         int distance = getDistance(array->user[i]);
-        if(!strcmp(AccSt, "active")){ /*Se o status for inativo então o user é ignorado e o print não é executado*/
+        if(AccSt == 'a'){ /*Se o status for inativo então o user é ignorado e o print não é executado*/
             fprintf(res, "%s;%s;%d\n", username, name, distance);
             j++;
         }
         i--; /*O print é feito do maior elemento para o menor*/
-        free(AccSt);
         free(username);
         free(name);
     }

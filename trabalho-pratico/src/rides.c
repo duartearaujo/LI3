@@ -15,11 +15,11 @@ struct RIDES{
    char *driver;
    char *user;
    char *city;
-   char *distance;
    char *score_user;
    char *score_driver;
    char *tip;
-   char *type_car;
+   char type_car;
+   int distance;
 };
 
 void free_ride (RIDES *value) {
@@ -28,11 +28,9 @@ void free_ride (RIDES *value) {
    free (value->driver);
    free (value->user);
    free (value->city);
-   free (value->distance);
    free (value->score_user);
    free (value->score_driver);
    free (value->tip);
-   if (value->type_car) free (value->type_car);
    free (value);
 }
 
@@ -70,7 +68,7 @@ void assignsData(RIDES* new_ride ,int pos ,char* token){
       new_ride->city = strdup(token);
       break;
       case 6:
-      new_ride->distance = strdup(token);
+      new_ride->distance = atoi(token);
       break;
       case 7:
       new_ride->score_user = strdup(token);
@@ -92,11 +90,11 @@ RIDES* GetcontentR(RIDES *ride){
       copy->driver = strdup(ride->driver);
       copy->user = strdup(ride->user);
       copy->city = strdup(ride->city);
-      copy->distance = strdup(ride->distance);
+      copy->distance = ride->distance;
       copy->score_user = strdup(ride->score_user);
       copy->score_driver = strdup(ride->score_driver);
       copy->tip = strdup(ride->tip);
-      copy->type_car = (!ride->type_car) ? NULL : strdup (ride->type_car);
+      copy->type_car = ride->type_car;
       return copy;
    }
    return NULL;
@@ -106,7 +104,6 @@ RIDES* GetcontentR(RIDES *ride){
 void adicionaHashRides(char *line){
    RIDES *new_ride = malloc(sizeof(RIDES));
    separa(line,new_ride,2);
-   new_ride ->type_car = NULL;
    g_hash_table_insert(rides,new_ride->id,new_ride);
    RIDES *copy = GetcontentR(new_ride);
    DRIVERS *driver = lookup_drivers(copy->driver);
@@ -124,12 +121,12 @@ char *getcityR (RIDES *ride) {
    return strdup(ride->city);
 }
 
-char *getcarR (RIDES *ride) {
-   return strdup (ride->type_car);
+char getcarR (RIDES *ride) {
+   return ride->type_car;
 }
 
-char *getdistanceR (RIDES *ride) {
-   return strdup (ride->distance);
+int getdistanceR (RIDES *ride) {
+   return ride->distance;
 }
 
 char *getUsernameR (RIDES *ride) {
