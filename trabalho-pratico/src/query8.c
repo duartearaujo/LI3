@@ -21,7 +21,6 @@ struct dados_Q8{
 
 struct array_Q8{
     int pos;
-    int ordenado;
     int idade_enunciado;
     char *genero_enunciado;
     dados_Q8** lista;
@@ -45,7 +44,6 @@ dados_Q8* inicializa_dados_Q8(){
 void inicializa_array_Q8(int idade_enunciado,char *gender_enunciado){
     array = malloc(sizeof(array_Q8));
     array->pos = 0;
-    array->ordenado = 0;
     array->idade_enunciado = idade_enunciado * 365;
     array-> genero_enunciado = gender_enunciado;
     array->lista = NULL;
@@ -65,57 +63,58 @@ void passa_Para_Struct(char *nome_driver,char *nome_user,char *id,char *id_viage
 void verifica_dados_Q8 (gpointer key, RIDES* ride, void *a){
     char *username = getUsernameR(ride);
     char *id = getIdDriverR(ride);
-    char *id_viagem = getIdR(ride);
     char *genero_user = getGenderU(lookup_users(username));
     char *genero_driver = getGenderD(lookup_drivers(id));
-    int idade_conta_user = get_Idade_Conta_U(lookup_users(username));
-    int idade_conta_driver = get_Idade_Conta_D(lookup_drivers(id));
     if(!strcmp(genero_user,array->genero_enunciado) && !strcmp(genero_driver,array->genero_enunciado)){
+        int idade_conta_user = get_Idade_Conta_U(lookup_users(username));
+        int idade_conta_driver = get_Idade_Conta_D(lookup_drivers(id));
         if(idade_conta_driver >= array->idade_enunciado && idade_conta_user >= array->idade_enunciado){
+            char *id_viagem = getIdR(ride);
             array->pos++;
             array->lista = (dados_Q8**) realloc(array->lista,array->pos * sizeof(dados_Q8*));
             array->lista[array->pos-1] = inicializa_dados_Q8();
             char *nome_driver = getNameD(lookup_drivers(id));
             char *nome_user = getNameU(lookup_users(username));
             passa_Para_Struct(nome_driver,nome_user,id,id_viagem,username,idade_conta_driver,idade_conta_user,array->pos-1);
+            free(id_viagem);
             free(nome_driver);
             free(nome_user);
-
         }
     }
     free(username);
     free(id);
-    free(id_viagem);
     free(genero_user);
     free(genero_driver);
 }
 
-void swap_Q8(dados_Q8** array, int a, int b){   
-  dados_Q8 *t = array[a];
-  array[a] = array[b];
-  array[b] = t;
+int desempate_Q8(const void *p1, const void* p2){
+    dados_Q8 *dados_1 = *((dados_Q8**) p1);
+    dados_Q8 *dados_2 = *((dados_Q8**) p2);
+    int result = 1;
+    int idade_conta_driver = dados_1->idade_conta_driver;
+    int idade_conta_driver2 = dados_2->idade_conta_driver;
+    int idade_conta_user = dados_1->idade_conta_user;
+    int idade_conta_user2 = dados_2->idade_conta_user;
+    char *id = strdup(dados_1->id_viagem );
+    char *id2 = strdup(dados_2->id_viagem);
+    if (idade_conta_driver > idade_conta_driver2) result = -1;
+    else if(idade_conta_driver== idade_conta_driver2){
+        if(idade_conta_user > idade_conta_user2) result = -1;
+        else if(idade_conta_user == idade_conta_user2){
+            if(atoi(id) < atoi(id2)) result = -1;
+        }
+    }
+    free(id);
+    free(id2);
+    return result;
 }
 
-void ordena_Array_Q8(){   
-   int i, j, m;
-   for (i = array->pos; i > 0; i--) {
-   m = 0;
-   for (j = 0; j < i; j++){
-        if (array->lista[j]->idade_conta_driver > array->lista[m]->idade_conta_driver) m = j;
-        else if(array->lista[j]->idade_conta_driver == array->lista[m]->idade_conta_driver){   /*desempate dos drivers(avaliação média =)->verificar as datas*/
-            if(array->lista[j]->idade_conta_user > array->lista[m]->idade_conta_user) m = j;   /*compareDates = 1 -> primeira data é mais recente*/
-            else if(array->lista[j]->idade_conta_user == array->lista[m]->idade_conta_user){    /*compareDates = 2 -> as duas datas são iguais*/
-                if(atoi(array->lista[j]->id_viagem) < atoi(array->lista[m]->id_viagem)) m = j;  /*se as datas forem iguais então compara-se os id*/
-            }
-        }
-   }
-    swap_Q8(array->lista, i-1, m);
-   }
-   array->ordenado = 1;
+void ordena_Q8(){  
+    qsort (array->lista,(size_t)array->pos, sizeof(dados_Q8*), desempate_Q8);
 }
 
 void printArray_Q8(FILE *res){
-    for(int i = array->pos-1; i >= 0;i--){
+    for(int i = 0; i < array->pos;i++){
         char *account_status_driver = getAccountStatusD(lookup_drivers(array->lista[i]->id_driver));
         char *account_status_user = getAccStatusU(lookup_users(array->lista[i]->username_user));
         if(strcmp(account_status_driver,"inactive") && strcmp(account_status_user,"inactive"))

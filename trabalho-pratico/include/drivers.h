@@ -9,7 +9,7 @@ typedef struct avaliacao_por_cidade AvC;
 
 typedef struct DRIVERS DRIVERS;
 
-typedef struct LISTA_DRIVERS LISTA_DRIVERS;
+typedef struct ARRAY_DRIVERS ARRAY_DRIVERS;
 
 #include "query2.h"
 
@@ -79,16 +79,18 @@ void hash_table_destroy_drivers ();
 
 void free_avaliacao_por_cidade (AvC *value);
 
-void createList();
+void createArray();
 
 void calcula_mediasQ2 (gpointer key, DRIVERS* driver, void *a);
 
 void foreach_drivers_Q2 ();
 
-int listOrdenado();
+void ordena_Q2();
+
+int arrayOrdenado();
 
 DRIVERS* getElement_Q2(int index);
 
-void freeList();
+void freeArray();
 
 #endif

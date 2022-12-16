@@ -57,7 +57,7 @@ void ordenaQ7 () {
 }
 
 void printQ7 (FILE *fp,int N) {
-    for (int i = array->pos -1; i > array->pos-N-1; i--) {
+    for (int i = array->pos -1; i > array->pos-N-1 && i > -1; i--) {
         AvC *pos = array->array_avaliacoes[i];
         char *id = getIdAvC (pos);
         char *name = getNameAvC (pos);

@@ -8,7 +8,7 @@
 
 
 /*faz print dos valores da query 2*/
-void printfList(FILE *res, int N){
+void printfArray(FILE *res, int N){
     int print = 0, i=0,j=0;
     while (i< N){
         DRIVERS *driver = getElement_Q2(j);

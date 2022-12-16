@@ -13,9 +13,9 @@ void passa_Para_Struct(char *nome_driver,char *nome_user,char *id,char *id_viage
 
 void verifica_dados_Q8 (gpointer key, RIDES* ride, void *a);
 
-void swap_Q8(dados_Q8** array, int a, int b);
+int desempate_Q8(const void *p1, const void* p2);
 
-void ordena_Array_Q8();
+void ordena_Q8();
 
 void printArray_Q8(FILE *res);
 

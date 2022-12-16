@@ -35,12 +35,14 @@ struct DRIVERS{
 };
 
 /*struct auxiliar usada para realizar a query 2*/
-struct LISTA_DRIVERS{
+struct ARRAY_DRIVERS{
     int ordenado;
-    GList *lista;   /*lista ligada de drivers*/
+    int pos;   /*posição na qual queremos inserir o próximo driver*/
+    DRIVERS **driver;   /*array de drivers*/
 };
 
-static LISTA_DRIVERS *lista_drivers = NULL;
+static ARRAY_DRIVERS *array = NULL;
+
 
 /*função responsável por dar free dos drivers, é usada para dar free da hashtable(dos drivers)*/
 void free_driver (DRIVERS *value) {   
@@ -202,7 +204,7 @@ DRIVERS* GetcontentD(DRIVERS *d) {
         copy-> ac_cr = strdup (d->ac_cr);
         copy-> ac_st = strdup (d->ac_st);
         copy->gender= strdup (d->gender);
-        copy->mostRecentRide= strdup (d->mostRecentRide);
+        copy->mostRecentRide= d->mostRecentRide ? strdup (d->mostRecentRide) : NULL;
         copy->avaliacao_media = d->avaliacao_media;
         copy->count = d->count;
         copy->valor_atual = d->valor_atual;
@@ -312,21 +314,24 @@ void hash_table_destroy_drivers () {
     g_hash_table_destroy (drivers);
 }
 
-/*função que inicializa a struct LISTA_DRIVERS*/
-void createList(){   
-    lista_drivers = malloc(sizeof(LISTA_DRIVERS));
-    lista_drivers->ordenado = 0;
-    lista_drivers->lista = NULL;
+/*função que inicializa a struct ARRAY_DRIVERS*/
+void createArray(){   
+    array = malloc(sizeof(ARRAY_DRIVERS));
+    array->pos = 0;
+    array->ordenado = 0;
+    array->driver = NULL;
 }
 
-int desempate_Q2(DRIVERS *p1,DRIVERS *p2){
+int desempate_Q2(const void *p1, const void* p2){
+    DRIVERS *driver_1 = *((DRIVERS**) p1);
+    DRIVERS *driver_2 = *((DRIVERS**) p2);
     int result = 1;
-    double avaliacao_media = p1->avaliacao_media;
-    double avaliacao_media2 = p2->avaliacao_media;
-    char *mostRecentRide = p1->mostRecentRide ? strdup (p1->mostRecentRide) : NULL;
-    char *mostRecentRide2 = p2->mostRecentRide ? strdup(p2->mostRecentRide) : NULL;
-    char *id = strdup(p1->id);
-    char *id2 = strdup(p2->id);
+    double avaliacao_media = driver_1->avaliacao_media;
+    double avaliacao_media2 = driver_2->avaliacao_media;
+    char *mostRecentRide = driver_1->mostRecentRide ? strdup (driver_1->mostRecentRide) : NULL;
+    char *mostRecentRide2 = driver_2->mostRecentRide ? strdup(driver_2->mostRecentRide) : NULL;
+    char *id = strdup(driver_1->id);
+    char *id2 = strdup(driver_2->id);
     if (avaliacao_media > avaliacao_media2) result = -1;
     else if(avaliacao_media == avaliacao_media2){   /*desempate dos drivers(avaliação média =)->verificar as datas*/
         if(compareDates(mostRecentRide,mostRecentRide2) == 1) result = -1;   /*compareDates = 1 -> primeira data é mais recente*/
@@ -344,32 +349,42 @@ int desempate_Q2(DRIVERS *p1,DRIVERS *p2){
 
 /*função que vai ser aplicada a cada membro da hashtable (dos drivers)*/
 void calcula_mediasQ2 (gpointer key, DRIVERS* driver, void *a){
-    int count = driver->count;
-    double valor_atual = driver->valor_atual;
-    double avaliacao_media = driver->avaliacao_media;
+    int count = getCountD(driver);
+    double valor_atual = getValorAtualD(driver);
+    double avaliacao_media = getAvaliacaoMediaD(driver);
     avaliacao_media = valor_atual / count;  /*calcula a avaliação média de cada driver*/
     calculaAvaliacaoMedia(driver,avaliacao_media);
-    if(!lista_drivers->lista) lista_drivers->lista =  g_list_append(lista_drivers->lista,driver);
-    else lista_drivers->lista = g_list_insert_sorted(lista_drivers->lista,driver,(GCompareFunc)desempate_Q2);
+    array->pos++;
+    array->driver = (DRIVERS**) realloc(array->driver,array->pos * sizeof(DRIVERS*));
+    array->driver[array->pos-1] = driver;
 }
+
 
 
 void foreach_drivers_Q2 () {
    g_hash_table_foreach (drivers,(GHFunc)calcula_mediasQ2, NULL);
 }
 
+void ordena_Q2(){
+    qsort (array->driver,(size_t)array->pos, sizeof(DRIVERS*), desempate_Q2);
+    array->ordenado = 1;
+}
 
-int listOrdenado(){
-    if(!lista_drivers) return 0;
-    return lista_drivers->ordenado;
+
+int arrayOrdenado(){
+    if(!array) return 0;
+    return array->ordenado;
 }
 
 
 DRIVERS* getElement_Q2(int index){
-    return GetcontentD(g_list_nth_data(lista_drivers->lista,index));
+    return GetcontentD(array->driver[index]);
 }
 
-void freeList(){
-    g_list_free(lista_drivers->lista);
-    free(lista_drivers);
+/*função que faz free da struct ARRAY_DRIVERS*/
+void freeArray(){
+    if(array){
+        free(array->driver);
+        free(array);
+    }
 }

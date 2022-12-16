@@ -32,7 +32,7 @@ int main(int argc, char **argv){
     hash_table_destroy_users ();
     hash_table_destroy_drivers ();
     hash_table_destroy_rides ();
-    freeList();
+    freeArray();
     freeArrayU();
     return 0;
 }

@@ -87,11 +87,12 @@ void querieIdentifier(char **argv, int n_querie) {
     }
     case 2: {
         clock_t t = clock();
-        if(!listOrdenado()){
-            createList();
+        if(!arrayOrdenado()){
+            createArray();
             foreach_drivers_Q2 ();
+            ordena_Q2();
         }
-        printfList(res,atoi(argv[1]));
+        printfArray(res,atoi(argv[1]));
         t = clock () -t;
         printf ("Query2: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
@@ -159,7 +160,7 @@ void querieIdentifier(char **argv, int n_querie) {
 
         inicializa_array_Q8(atoi(argv[2]),argv[1]);
         foreach_rides_Q8();
-        ordena_Array_Q8();
+        ordena_Q8();
         printArray_Q8(res);
         freeArray_Q8();
         t = clock () -t;
