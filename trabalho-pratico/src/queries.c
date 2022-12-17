@@ -103,7 +103,7 @@ void querieIdentifier(char **argv, int n_querie) {
         if(!arrayOrdenadoU()){
             createArrayUser();
             foreach_users_Q3();
-            QuickSort();
+            ordena_Q3();
         }
         Q3Print(res, atoi(argv[1]));
         t = clock () -t;

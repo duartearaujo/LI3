@@ -5,6 +5,8 @@
 
 typedef struct user User;
 
+typedef struct ARRAY_USERS ARRAY_USERS;
+
 #include "query3.h"
 
 void free_user(User *value);
@@ -45,7 +47,21 @@ int getDistance(User* user);
 
 User* lookup_users (char* key);
 
+void createArrayUser();
+
+int arrayOrdenadoU();
+
+void guardaUser(gpointer key, User *user, void *a);
+
+void ordena_Q3();
+
+int desempate_Q3(const void *p1, const void* p2);
+
+User* getElement_Q3(int i);
+
 void foreach_users_Q3 ();
+
+void freeArrayU();
 
 void hash_table_destroy_users ();
 

@@ -23,6 +23,15 @@ struct user {
     char gender;
 };
 
+/*struct auxiliar usada para realizar a query 3*/
+struct ARRAY_USERS{
+    int ordenado;
+    int pos; /*posição na qual queremos inserir a próxima struct user*/
+    User **user; /*array de users*/
+};
+
+static ARRAY_USERS *array = NULL;
+
 /*Função que faz free de todos os campos do user e da sua própria estrutura*/
 void free_user (User *value) {
     free(value->username);
@@ -182,8 +191,69 @@ User* lookup_users (char* key) {
     return (g_hash_table_lookup (users, key));
 }
 
+/*Função que inicializa o ARRAY_USERS*/
+void createArrayUser(){
+    array = malloc(sizeof(ARRAY_USERS));
+    array->pos = 0;
+    array->ordenado = 0;
+    array->user = NULL;
+}
+
+/*Função que guarda os users no ARRAY_USERS e incrementa o campo pos*/
+void guardaUser(gpointer key, User *user, void *a){
+    array->pos++;
+    array->user = (User**) realloc(array->user,array->pos * sizeof(User*));
+    array->user[(array->pos - 1)] = user;
+}
+
 void foreach_users_Q3 () {
    g_hash_table_foreach (users,(GHFunc)guardaUser, NULL);
+}
+
+int desempate_Q3(const void *p1, const void* p2){
+    User *user_1 = *((User**) p1);
+    User *user_2 = *((User**) p2);
+    int result = 1;
+    int Distance = user_1->distance;
+    int Pdistance = user_2->distance;
+    char *lastRide = user_1->last_ride ? strdup (user_1->last_ride) : NULL;
+    char *PLastRide = user_2->last_ride ? strdup(user_2->last_ride) : NULL;
+    char *username = strdup(user_1->username);
+    char *Pusername = strdup(user_2->username);
+    if (Distance > Pdistance) result = -1;
+    else if(Distance == Pdistance){   /*desempate dos drivers(avaliação média =)->verificar as datas*/
+        if(compareDates(lastRide,PLastRide) == 1) result = -1;   /*compareDates = 1 -> primeira data é mais recente*/
+        else if(!strcmp(lastRide,PLastRide)){    /*compareDates = 2 -> as duas datas são iguais*/
+            if(strcmp(username,Pusername) < 0) result = -1;  /*se as datas forem iguais então compara-se os id*/
+        }
+    }
+    free(lastRide);
+    free(PLastRide);
+    free(username);
+    free(Pusername);
+    return result;
+}
+
+void ordena_Q3(){
+    qsort (array->user,(size_t)array->pos, sizeof(User*), desempate_Q3);
+    array->ordenado = 1;
+}
+
+int arrayOrdenadoU(){
+    if(!array) return 0;
+    return array->ordenado;
+}
+
+User* getElement_Q3(int i){
+    return GetcontentU(array->user[i]);
+}
+
+/*Função que faz free do ARRAY_USERS*/
+void freeArrayU(){
+    if(array){
+        free(array->user);
+        free(array);
+    }
 }
 
 void hash_table_destroy_users () {
