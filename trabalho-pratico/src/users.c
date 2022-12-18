@@ -221,10 +221,11 @@ int desempate_Q3(const void *p1, const void* p2){
     char *username = strdup(user_1->username);
     char *Pusername = strdup(user_2->username);
     if (Distance > Pdistance) result = -1;
-    else if(Distance == Pdistance){   /*desempate dos drivers(avaliação média =)->verificar as datas*/
-        if(compareDates(lastRide,PLastRide) == 1) result = -1;   /*compareDates = 1 -> primeira data é mais recente*/
-        else if(!strcmp(lastRide,PLastRide)){    /*compareDates = 2 -> as duas datas são iguais*/
-            if(strcmp(username,Pusername) < 0) result = -1;  /*se as datas forem iguais então compara-se os id*/
+    else if(Distance == Pdistance){ 
+        int datas = compareDates(lastRide,PLastRide);  
+        if(datas == 1) result = -1;   
+        else if(datas == 2){    
+            if(strcmp(username,Pusername) < 0) result = -1;  
         }
     }
     free(lastRide);
