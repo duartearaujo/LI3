@@ -24,5 +24,6 @@ void Q3Print(FILE *res, int N){
         j++;
         free(username);
         free(name);
+        free_user(user);
     }
 }
