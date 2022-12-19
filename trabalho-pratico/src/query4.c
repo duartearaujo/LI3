@@ -50,6 +50,8 @@ void preco_medio (gpointer key, RIDES *value, Q4 *total) {
 }
 
 void printQ4 (Q4 *value, FILE *res) {
-    double media = value->total_preco / value ->n_viagens; 
-    fprintf (res, "%.3f\n", media);
+    if(value->n_viagens){
+        double media = value->total_preco / value ->n_viagens; 
+        fprintf (res, "%.3f\n", media);
+    }
 }

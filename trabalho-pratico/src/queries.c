@@ -33,8 +33,8 @@ return value == 0 se a primeira é mais antiga que a segunda
 return value == 2 se as datas são iguais */
 int compareDates(char *str, char *string){  
     int r = 0;
-    if(!str && string) r = 1;
-    else if(!string && str) r = 0;
+    if(str && !string) r = 1;
+    else if(!str && string) r = 0;
     else if(!string && !str) r = 2;
     else{
         char *str_ = strdup(str);                                    
@@ -191,8 +191,8 @@ int tempo_De_Vida(char *str){
     int dia = atoi(strsep(&str, "/"));
     int mes = atoi(strsep(&str, "/"));
     int ano = atoi(strsep(&str, "/"));
-    int tempo_ate_conta = 365 * ano + 31 * mes-1 + dia;
-    int tempo_ate_data = 365 * ANO + 31 * MES-1 + DIA;
+    int tempo_ate_conta = 372 * ano + 31 * (mes-1) + dia;
+    int tempo_ate_data = 372 * ANO + 31 * (MES-1) + DIA;
     int tempo_de_vida = tempo_ate_data - tempo_ate_conta;
     free(temp);
     return tempo_de_vida;

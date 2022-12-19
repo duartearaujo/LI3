@@ -36,8 +36,10 @@ void distancia_media(gpointer key, RIDES *ride, Q6 *q){
 }
 
 void printQ6(Q6 *q, FILE *res){
-    double distancia_media = (q->total_distance/q->n_rides);
-    fprintf(res, "%.3f\n", distancia_media);
+    if(q->n_rides){
+        double distancia_media = (q->total_distance/q->n_rides);
+        fprintf(res, "%.3f\n", distancia_media);
+    }
 }
 
 void freeQ6(Q6 *q){

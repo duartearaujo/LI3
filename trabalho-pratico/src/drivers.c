@@ -272,7 +272,8 @@ char getAccountStatusD(DRIVERS *d){
 }
 
 char *getMostRecentRideD(DRIVERS *d){
-    return strdup (d->mostRecentRide);
+    if(d->mostRecentRide) return strdup (d->mostRecentRide);
+    else return NULL;
 }
 
 void calculaAvaliacaoMedia(DRIVERS *d,double avaliacao_media){
@@ -329,30 +330,6 @@ void createArray(){
     array->pos = 0;
     array->ordenado = 0;
     array->driver = NULL;
-}
-
-int desempate_Q2(const void *p1, const void* p2){
-    DRIVERS *driver_1 = *((DRIVERS**) p1);
-    DRIVERS *driver_2 = *((DRIVERS**) p2);
-    int result = 1;
-    double avaliacao_media = driver_1->avaliacao_media;
-    double avaliacao_media2 = driver_2->avaliacao_media;
-    char *mostRecentRide = driver_1->mostRecentRide ? strdup (driver_1->mostRecentRide) : NULL;
-    char *mostRecentRide2 = driver_2->mostRecentRide ? strdup(driver_2->mostRecentRide) : NULL;
-    char *id = strdup(driver_1->id);
-    char *id2 = strdup(driver_2->id);
-    if (avaliacao_media > avaliacao_media2) result = -1;
-    else if(avaliacao_media == avaliacao_media2){   /*desempate dos drivers(avaliação média =)->verificar as datas*/
-        if(compareDates(mostRecentRide,mostRecentRide2) == 1) result = -1;   /*compareDates = 1 -> primeira data é mais recente*/
-        else if(compareDates(mostRecentRide,mostRecentRide2) == 2){    /*compareDates = 2 -> as duas datas são iguais*/
-            if(atoi(id) > atoi(id2)) result = -1;  /*se as datas forem iguais então compara-se os id*/
-        }
-    }
-    free(mostRecentRide);
-    free(mostRecentRide2);
-    free(id);
-    free(id2);
-    return result;
 }
 
 
