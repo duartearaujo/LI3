@@ -55,8 +55,6 @@ void guardaUser(gpointer key, User *user, void *a);
 
 void ordena_Q3();
 
-int desempate_Q3(const void *p1, const void* p2);
-
 User* getElement_Q3(int i);
 
 void foreach_users_Q3 ();

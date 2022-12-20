@@ -7,6 +7,33 @@
 #include "../include/queries.h"
 #include "../include/query3.h"
 
+int desempate_Q3(const void *p1, const void* p2){
+    User *user_1 = GetcontentU(*((User**) p1));
+    User *user_2 = GetcontentU(*((User**) p2));
+    int result = 1;
+    int Distance = getDistance(user_1);
+    int Pdistance = getDistance(user_2);
+    char *lastRide = getLastRide(user_1);
+    char *PLastRide = getLastRide(user_2);
+    char *username = getUsername(user_1);
+    char *Pusername = getUsername(user_2);
+    if (Distance > Pdistance) result = -1;
+    else if(Distance == Pdistance){ 
+        int datas = compareDates(lastRide,PLastRide);  
+        if(datas == 1) result = -1;   
+        else if(datas == 2){    
+            if(strcmp(username,Pusername) < 0) result = -1;  
+        }
+    }
+    free(lastRide);
+    free(PLastRide);
+    free(username);
+    free(Pusername);
+    free_user(user_1);
+    free_user(user_2);
+    return result;
+}
+
 /*Função que faz print dos resultados da querie 3*/
 void Q3Print(FILE *res, int N){
     int i = 0, j = 0, p = 0;

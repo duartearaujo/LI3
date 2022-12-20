@@ -52,10 +52,12 @@ void createArrayQ9(char *data1, char *data2){
 }
 
 void guardaQ9(gpointer key, RIDES *ride, void *a){
-    Q9 *q = inicializaQ9();
+    Q9 *q = inicializaQ9();                                // ver a inicialização
     char *data = getDateR(ride);
     char *tip = getTip (ride);
-    if(tip && ((compareDates(data, array->data1) && (compareDates(data, array->data2) == 2 || !compareDates(data, array->data2))) || !strcmp(data, array->data1) || !strcmp(data, array->data2))){
+    int datas_1 = compareDates(data, array->data1);
+    int datas_2 = compareDates(data, array->data2);
+    if(tip && ((datas_1 && (datas_2 == 2 || !datas_2)) || !strcmp(data, array->data1) || !strcmp(data, array->data2))){
         array->pos++;
         array->q = (Q9**) realloc(array->q,array->pos * sizeof(Q9*));
         q->id = getIdR(ride);
@@ -72,66 +74,41 @@ void guardaQ9(gpointer key, RIDES *ride, void *a){
     }
 }
 
-void swap_Q9(int i, int t){
-    Q9 *r = array->q[i];
-    array->q[i] = array->q[t];
-    array->q[t] = r;
-}
-
-
-void QSRecursion_Q9(int i, int j){
-    if(i < j){
-        int pivot_i = partition_Q9(i, j);
-        QSRecursion_Q9(i, pivot_i-1); 
-        QSRecursion_Q9(pivot_i+1, j); 
-    }
-}
-
-void QuickSort_Q9(){
-    int N = array->pos;
-    QSRecursion_Q9(0, N-1);
-}
-
-int partition_Q9(int i, int j){
-    Q9 *pivot = array->q[j];
-    for(int t = i; t < j; t++){
-        int distance = array->q[t]->distance;
-        int PDistance = pivot->distance;
-        char *Date = array->q[t]->date;
-        char *PDate = pivot->date;
-        char *id = array->q[t]->id;
-        char *Pid = pivot->id;
-        if(distance == PDistance){ 
-            if(compareDates(Date, PDate) == 2){ 
-                if(strcmp(id, Pid) < 0){  
-                    swap_Q9(i, t);
-                    i++;
-                }
-            }
-            else if(compareDates(Date, PDate) == 0){ 
-                swap_Q9(i, t);
-                i++;
-            }
+int desempate_Q9(const void *p1, const void* p2){
+    Q9 *dados_1 = *((Q9**) p1);
+    Q9 *dados_2 = *((Q9**) p2);
+    int result = 1;
+    int distance = dados_1->distance;
+    int PDistance = dados_2->distance;
+    char *Date = dados_1->date;
+    char *PDate = dados_2->date;
+    char *id = dados_1->id;
+    char *Pid = dados_2->id;
+    if(distance > PDistance) result = -1;
+    if(distance == PDistance){ 
+        int datas = compareDates(Date, PDate);
+        if(datas == 2){
+            if(strcmp(id, Pid) > 0) result = -1;
         }
-        if(distance < PDistance){ 
-            swap_Q9(i, t);
-            i++;
-        }
+        else if(datas == 1) result = -1;
     }
-    swap_Q9(i, j); 
-    return i;
+    return result;
+}
+
+void ordena_Q9(){  
+    qsort (array->q,(size_t)array->pos, sizeof(Q9*), desempate_Q9);
 }
 
 void Q9Print(FILE *res){
-    int i = (array->pos - 1);
-    while(i >= 0){ 
+    int i = 0;
+    while(i < array->pos){ 
         char *id = array->q[i]->id;
         char *date = array->q[i]->date;
         int distance = array->q[i]->distance;
         char *city = array->q[i]->city;
         double tip = strtod(array->q[i]->tip, NULL);
         fprintf(res, "%s;%s;%d;%s;%.3f\n", id, date, distance, city, tip);
-        i--; 
+        i++; 
     }
 }
 
@@ -146,3 +123,4 @@ void freeArrayQ9(){
         free(array);
     }
 }
+

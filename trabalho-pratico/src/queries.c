@@ -172,7 +172,7 @@ void querieIdentifier(char **argv, int n_querie) {
 
         createArrayQ9(strdup(argv[1]), strdup(argv[2]));
         foreach_rides_Q9(q);
-        QuickSort_Q9();
+        ordena_Q9();
         Q9Print(res);
         freeArrayQ9();
         t = clock () -t;

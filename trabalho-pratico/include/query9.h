@@ -11,13 +11,9 @@ void createArrayQ9(char *data1, char *data2);
 
 void guardaQ9(gpointer key, RIDES *ride, void *a);
 
-void swap_Q9(int i, int t);
+int desempate_Q9(const void *p1, const void* p2);
 
-void QuickSort_Q9();
-
-void QSRecursion_Q9(int i, int j);
-
-int partition_Q9(int i, int j);
+void ordena_Q9();
 
 void Q9Print(FILE *res);
 
