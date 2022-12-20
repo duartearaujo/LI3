@@ -87,25 +87,28 @@ void querieIdentifier(char **argv, int n_querie) {
     }
     case 2: {
         clock_t t = clock();
-        if(!arrayOrdenado()){
-            createArray();
-            foreach_drivers_Q2 ();
-            ordena_Q2();
+        if (atoi (argv[1])) {
+            if(!arrayOrdenado()){
+                createArray();
+                foreach_drivers_Q2 ();
+                ordena_Q2();
+            }
+            printfArray(res,atoi(argv[1]));
         }
-        printfArray(res,atoi(argv[1]));
         t = clock () -t;
         printf ("Query2: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 3: {
         clock_t t = clock();
-
-        if(!arrayOrdenadoU()){
-            createArrayUser();
-            foreach_users_Q3();
-            ordena_Q3();
+        if (atoi (argv[1])) {
+            if(!arrayOrdenadoU()){
+                createArrayUser();
+                foreach_users_Q3();
+                ordena_Q3();
+            }
+            Q3Print(res, atoi(argv[1]));
         }
-        Q3Print(res, atoi(argv[1]));
         t = clock () -t;
         printf ("Query3: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
@@ -145,12 +148,13 @@ void querieIdentifier(char **argv, int n_querie) {
     }
     case 7:{
         clock_t t = clock();
-
-        inicializaQ7();
-        foreach_drivers_Q7(argv[2]);
-        ordenaQ7();
-        printQ7(res,atoi (argv[1]));
-        free_Q7();
+        if (atoi (argv[1])) {
+            inicializaQ7();
+            foreach_drivers_Q7(argv[2]);
+            ordenaQ7();
+            printQ7(res,atoi (argv[1]));
+            free_Q7();
+        }
         t = clock () -t;
         printf ("Query7: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;

@@ -8,17 +8,15 @@
 
 
 void avaliacao_media_city (gpointer key, DRIVERS *value, char *city) {
-    AvC *avaliacao_cidade = lookup_AvC (value, city);
-    if (avaliacao_cidade) {
-        calcula_avaliacao_media_AvC (avaliacao_cidade);
-        adicionaArrayQ7 (avaliacao_cidade);
+    if (exist_AvC (value, city)) {
+        adicionaArrayQ7 (value,city);
     }
 }
 
 int comparaAvC (const void *p1, const void* p2) {
     int r = 1;
-    AvC *item1 = *((AvC**) p1);
-    AvC *item2 = *((AvC**) p2);
+    AvC *item1 = getcontentAvC (*((AvC**) p1));
+    AvC *item2 = getcontentAvC (*((AvC**) p2));
     double avaliacao1 = getAvaliacaoMediaAvC (item1);
     double avaliacao2 = getAvaliacaoMediaAvC (item2);
     if (avaliacao2 > avaliacao1) r = -1;
@@ -29,6 +27,8 @@ int comparaAvC (const void *p1, const void* p2) {
         free (id1);
         free (id2);
     }
+    free_avaliacao_por_cidade (item1);
+    free_avaliacao_por_cidade (item2);
     return r;
 }
 

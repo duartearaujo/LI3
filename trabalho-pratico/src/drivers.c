@@ -308,8 +308,8 @@ DRIVERS* lookup_drivers (char* key) {
    return (g_hash_table_lookup (drivers, key));
 }
 
-AvC* lookup_AvC (DRIVERS *driver, char *city) {
-    return (g_hash_table_lookup (driver->avaliacao_cidades, city));
+int exist_AvC (DRIVERS *value, char *city) {
+    return (g_hash_table_contains (value -> avaliacao_cidades, city));
 }
 
 size_t getsizeAvC () {
@@ -375,7 +375,9 @@ void freeArray(){
     }
 }
 
-void adicionaArrayQ7 (AvC *avaliacao_cidade) {
+void adicionaArrayQ7 (DRIVERS *value, char *city) {
+    AvC *avaliacao_cidade =  g_hash_table_lookup (value->avaliacao_cidades, city);
+    avaliacao_cidade-> avaliacao_media = avaliacao_cidade -> avaliacao_total / avaliacao_cidade ->n_viagens;
     arrayQ7->pos++;
     arrayQ7->array_avaliacoes = (AvC**) realloc (arrayQ7->array_avaliacoes, arrayQ7->pos * sizeof (AvC *));
     arrayQ7->array_avaliacoes[arrayQ7->pos-1] = getcontentAvC (avaliacao_cidade);

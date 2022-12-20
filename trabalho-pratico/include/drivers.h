@@ -69,7 +69,7 @@ char* getNameAvC (AvC *a);
 
 DRIVERS* lookup_drivers (char* key);
 
-AvC* lookup_AvC (DRIVERS *driver, char *city);
+int exist_AvC (DRIVERS *driver, char *city);
 
 size_t getsizeAvC ();
 
@@ -93,7 +93,7 @@ DRIVERS* getElement_Q2(int index);
 
 void freeArray();
 
-void adicionaArrayQ7(AvC *avaliacao_cidade);
+void adicionaArrayQ7(DRIVERS *value, char *city);
 
 void ordenaQ7 ();
 
