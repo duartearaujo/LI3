@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>
+#include <ctype.h>
 #include "../include/parse.h"
 #include "../include/users.h"
 #include "../include/queries.h"
+#include "../include/dataverification.h"
 
 static GHashTable *users;
 
@@ -61,40 +63,93 @@ void iniciaHashUsers (char *path) {
 /*Aloca uma nova estrura User para adicionar à hash dos Users*/
 void adicionaHashUsers (char *line) {
     User *new = malloc (sizeof (User));
-    separa (line,new,1);
-    new->total_gasto = 0;
-    new ->n_viagens = 0;
-    new ->acc_avaliation = 0;
-    new ->distance = 0;
-    new->idade_conta = tempo_De_Vida(strdup(new->account_creation));
-    new ->last_ride = NULL;
-    g_hash_table_insert(users,new->username,new);
+    if (separa (line,new,1)) {
+        new ->total_gasto = 0;
+        new ->n_viagens = 0;
+        new ->acc_avaliation = 0;
+        new ->distance = 0;
+        new ->idade_conta = tempo_De_Vida(strdup(new->account_creation));
+        new ->last_ride = NULL;
+        g_hash_table_insert(users,new->username,new);
+    }
 }
 
 /*Atribui a informação recebida do ficheio users.csv ao campo correspondente da struct User*/
-void atribui (User *user, int pos, char *info) {
+int atribui (User *user, int pos, char *info) {
     switch (pos){
         case 1:
+            if (info[0] == '\0') {
+                free (user);
+                return 0;
+            }
             user->username = strdup (info); 
             break;
         case 2:
+            if (info[0] == '\0') {
+                free (user->username);
+                free (user);
+                return 0;
+            }
             user->name = strdup (info); 
             break;
         case 3:
-            user->gender = info[0]; 
+            info[0] = toupper (info [0]);
+            if ((info [0] == 'M' || info[0] == 'F') && info [1] == '\0')
+                user->gender = info[0]; 
+            else {
+                free (user->username);
+                free (user->name);
+                free (user);
+                return 0;
+            }
             break;
         case 4:
-            user->data = strdup (info); 
+            if (verificadata (info)) 
+                user->data = strdup (info);
+            else {
+                free (user->username);
+                free (user->name);
+                free (user);                
+                return 0;
+            } 
             break;
         case 5:
-            user->account_creation = strdup (info); 
+            if (verificadata (info)) 
+                user->account_creation = strdup (info);
+            else {
+                free (user->username);
+                free (user->name);
+                free (user->data);
+                free (user);                
+                return 0;
+            } 
+            break;
+        case 6:
+            if (info[0] == '\0') {
+                free (user->username);
+                free (user->name);
+                free (user->data);
+                free (user->account_creation);
+                free (user); 
+                return 0;
+            }
             break;
         case 7:
-            user->account_status = info[0]; 
+            if (verificastatus (info))
+                user->account_status = info[0]; 
+            else {
+                free (user->username);
+                free (user->name);
+                free (user->data);
+                free (user->account_creation);
+                free (user); 
+                return 0;
+            }
             break;
         default:
             break;
         }
+    return 1;
 }
 
 void addToUser (User *user, int distance, char *tip, int car_class, char *avaliation, char *date) {

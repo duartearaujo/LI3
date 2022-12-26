@@ -5,6 +5,6 @@ void parsequerie (FILE *fp);
 
 void parser(FILE *fp, int h);
 
-void separa (char *str, void *data, int s);
+int separa (char *str, void *data, int s);
 
 #endif

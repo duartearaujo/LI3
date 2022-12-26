@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <glib.h>
 #include <time.h>
+#include <ctype.h>
 #include "../include/parse.h"
 #include "../include/queries.h"
 #include "../include/drivers.h"
 #include "../include/query7.h"
+#include "../include/dataverification.h"
 
 static GHashTable* drivers;
 
@@ -20,7 +22,6 @@ struct DRIVERS{
     char* id;
     char* name;
     char* birth;
-    char* city;
     char* ac_cr;
     char *mostRecentRide;
     GHashTable *avaliacao_cidades;
@@ -61,7 +62,6 @@ void free_driver (DRIVERS *value) {
     free (value->id);
     free (value->name);
     free (value->birth);
-    free (value->city);
     free (value->ac_cr);
     free (value->mostRecentRide);
     if (value->avaliacao_cidades) g_hash_table_destroy (value->avaliacao_cidades);
@@ -103,48 +103,115 @@ AvC *iniciaHashAvC (char *name, char *id, char *city, double avaliacao) {
 }
 
 /*atribui cada token extraído ao respetivo campo da struct DRIVERS*/
-void atribui_drv(DRIVERS* drv2 ,int pos,char* token){   
+int atribui_drv(DRIVERS* drv2 ,int pos,char* token){   
     switch(pos){
         case 1:
+            if (token [0] == '\0') {
+                free (drv2);
+                return 0;
+            }
             drv2 -> id = strdup(token);
         break;
         case 2:
+            if (token [0] == '\0') {
+                free (drv2->id);
+                free (drv2);
+                return 0;
+            }
             drv2 -> name = strdup(token);
         break;
         case 3:
-            drv2 -> birth = strdup(token);
+            if (verificadata (token))
+                drv2 -> birth = strdup(token);
+            else {
+                free (drv2->id);
+                free (drv2->name);
+                free (drv2);
+                return 0;
+            }
         break;
         case 4:
-            drv2 -> gender = token[0];
+            token[0] = toupper (token[0]);
+            if ((token [0]== 'M' || token [0]== 'F') && token [1] == '\0')
+                drv2 -> gender = token[0];
+            else {
+                free (drv2->id);
+                free (drv2->name);
+                free (drv2->birth);
+                free (drv2);
+                return 0;
+            }
         break;
         case 5:
-            drv2-> car_class = token[0];
+            if (verificacar(token))
+                drv2-> car_class = token[0];
+            else {
+                free (drv2->id);
+                free (drv2->name);
+                free (drv2->birth);
+                free (drv2);      
+                return 0;    
+            }
+        break;
+        case 6:
+            if (token[0] == '\0') {
+                free (drv2->id);
+                free (drv2->name);
+                free (drv2->birth);
+                free (drv2);
+                return 0;
+            }
         break;
         case 7:
-            drv2 -> city = strdup(token);
+            if (token[0] == '\0') {
+                free (drv2->id);
+                free (drv2->name);
+                free (drv2->birth);
+                free (drv2);
+                return 0;
+            }
         break;
         case 8:
-            drv2 -> ac_cr = strdup(token);
+            if (verificadata (token))
+                drv2 -> ac_cr = strdup(token);
+            else {
+                free (drv2->id);
+                free (drv2->name);
+                free (drv2->birth);
+                free (drv2);
+                return 0;
+            }
         break;
         case 9:
-            drv2 -> ac_st = token[0];
+            if (verificastatus (token))
+                drv2 -> ac_st = token[0];
+            else {
+                free (drv2->id);
+                free (drv2->name);
+                free (drv2->birth);
+                free (drv2->ac_cr);
+                free (drv2);
+                return 0;
+            }
         break;
         default:
             break;
         }
+    return 1;
 }
 
 /*função que inicializa cada driver*/
 void adicionaHashDrivers(char *line){   
     DRIVERS *drv2 = malloc(sizeof(DRIVERS));
-    separa(line,drv2,3);
-    drv2->count = 0;
-    drv2->valor_atual = 0;
-    drv2->idade_conta = tempo_De_Vida(strdup(drv2->ac_cr));
-    drv2->mostRecentRide = NULL;
-    drv2-> total_auferido = 0;
-    drv2 -> avaliacao_cidades = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify)free_avaliacao_por_cidade); 
-    g_hash_table_insert(drivers, drv2 -> id, drv2);  /*depois de todos os campos da struct estarem preenchidos insere o driver na hashtable*/
+    if(separa(line,drv2,3)) {
+        drv2->count = 0;
+        drv2->valor_atual = 0;
+        drv2->idade_conta = tempo_De_Vida(strdup(drv2->ac_cr));
+        drv2->mostRecentRide = NULL;
+        drv2-> total_auferido = 0;
+        drv2 -> avaliacao_cidades = g_hash_table_new_full (g_str_hash, g_str_equal, NULL, (GDestroyNotify)free_avaliacao_por_cidade); 
+        g_hash_table_insert(drivers, drv2 -> id, drv2);  /*depois de todos os campos da struct estarem preenchidos insere o driver na hashtable*/
+    }
 }
 
 /*atribiu um int consoante o tipo de carro do driver*/
@@ -209,7 +276,6 @@ DRIVERS* GetcontentD(DRIVERS *d) {
         copy-> name = strdup (d->name);
         copy-> birth = strdup (d->birth);
         copy-> car_class = d->car_class;
-        copy->city= strdup (d->city);
         copy-> ac_cr = strdup (d->ac_cr);
         copy-> ac_st = d->ac_st;
         copy->gender = d->gender;
@@ -380,7 +446,7 @@ void adicionaArrayQ7 (DRIVERS *value, char *city) {
     avaliacao_cidade-> avaliacao_media = avaliacao_cidade -> avaliacao_total / avaliacao_cidade ->n_viagens;
     arrayQ7->pos++;
     arrayQ7->array_avaliacoes = (AvC**) realloc (arrayQ7->array_avaliacoes, arrayQ7->pos * sizeof (AvC *));
-    arrayQ7->array_avaliacoes[arrayQ7->pos-1] = getcontentAvC (avaliacao_cidade);
+    arrayQ7->array_avaliacoes[arrayQ7->pos-1] = avaliacao_cidade;
 }
 
 void ordenaQ7 () {
@@ -388,7 +454,6 @@ void ordenaQ7 () {
 }
 
 void free_Q7 () {
-    for (int i = 0; i < arrayQ7->pos; i++) free_avaliacao_por_cidade (arrayQ7->array_avaliacoes[i]);
     free (arrayQ7->array_avaliacoes);
     free (arrayQ7);
 }

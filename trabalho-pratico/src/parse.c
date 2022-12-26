@@ -62,22 +62,22 @@ void parser(FILE *fp, int h) {
 }
 
 /*chama as funções responsáveis por atribuir os tokens recebidos a cada campo do user/driver/ride*/
-void separa(char *str, void *data,int s){  
+int separa(char *str, void *data,int s){  
     int pos= 1;
     char *token = strsep(&str,";");
     while(token){
         switch (s)  /*o s permite distinguir a que struct queremos mandar o token*/
         {
         case 1: {
-            atribui ((User*)data, pos++, token);
+            if (!atribui ((User*)data, pos++, token)) return 0;
             break;
         }
         case 2: {
-            assignsData ((RIDES*)data, pos++, token);
+            if (!assignsData ((RIDES*)data, pos++, token)) return 0;
             break;
         }
         case 3: {
-            atribui_drv((DRIVERS*)data, pos++, token);
+            if(!atribui_drv((DRIVERS*)data, pos++, token)) return 0;
             break;  
         }
         default:
@@ -85,4 +85,5 @@ void separa(char *str, void *data,int s){
         }
         token = strsep(&str,";");
     }
+    return 1;
 }

@@ -5,6 +5,7 @@
 #include "../include/drivers.h"
 #include "../include/parse.h"
 #include "../include/queries.h"
+#include "../include/dataverification.h"
 
 static GHashTable* rides;
 
@@ -50,36 +51,111 @@ void iniciaHashRides (char *path) {
    fclose (fp);
 }
 
-void assignsData(RIDES* new_ride ,int pos ,char* token){
+int assignsData(RIDES* new_ride ,int pos ,char* token){
    switch(pos){
       case 1:
-      new_ride->id = strdup(token);
+         if (token[0] == '\0') {
+            free (new_ride);
+            return 0;
+         }         
+         new_ride->id = strdup(token);
       break;
       case 2:
-      new_ride->date = strdup(token);
+         if (verificadata (token))
+            new_ride->date = strdup(token);
+         else {
+            free (new_ride->id);
+            free (new_ride);
+            return 0;
+         }
       break;
       case 3:
-      new_ride->driver = strdup(token);
+         if (token[0] == '\0') {
+            free (new_ride->id);
+            free (new_ride->date);
+            free (new_ride);
+            return 0;
+         }
+         new_ride->driver = strdup(token);
       break;
       case 4:
-      new_ride->user = strdup(token);
+         if (token[0] == '\0') {
+            free (new_ride->id);
+            free (new_ride->date);
+            free (new_ride->driver);
+            free (new_ride);
+            return 0;
+         }
+         new_ride->user = strdup(token);
       break;
       case 5:
-      new_ride->city = strdup(token);
+         if (token[0] == '\0') {
+            free (new_ride->id);
+            free (new_ride->date);
+            free (new_ride->driver);
+            free (new_ride->user);
+            free (new_ride);
+            return 0;
+         }
+         new_ride->city = strdup(token);
       break;
       case 6:
-      new_ride->distance = atoi(token);
+         if (verificadistancia (token))
+            new_ride->distance = atoi(token);
+         else {
+            free (new_ride->id);
+            free (new_ride->date);
+            free (new_ride->driver);
+            free (new_ride->user);
+            free (new_ride->city);
+            free (new_ride);
+            return 0;
+         }
       break;
       case 7:
-      new_ride->score_user = strdup(token);
+         if (verificaavaliacao (token))
+            new_ride->score_user = strdup(token);
+         else {
+            free (new_ride->id);
+            free (new_ride->date);
+            free (new_ride->driver);
+            free (new_ride->user);
+            free (new_ride->city);
+            free (new_ride);
+            return 0;
+         }
       break;
       case 8:
-      new_ride->score_driver = strdup(token);
+         if (verificaavaliacao (token))
+            new_ride->score_driver = strdup(token);
+         else {
+            free (new_ride->id);
+            free (new_ride->date);
+            free (new_ride->driver);
+            free (new_ride->user);
+            free (new_ride->city);
+            free (new_ride->score_user);
+            free (new_ride);
+            return 0;
+         }
       break;
       case 9:
-      new_ride->tip = strdup(token);
+         if (verificatip (token))
+            new_ride->tip = strdup(token);
+         else {
+            free (new_ride->id);
+            free (new_ride->date);
+            free (new_ride->driver);
+            free (new_ride->user);
+            free (new_ride->city);
+            free (new_ride->score_user);
+            free (new_ride->score_driver);
+            free (new_ride);
+            return 0;
+         }
       break;
    }
+   return 1;
 }
 
 RIDES* GetcontentR(RIDES *ride){
@@ -103,18 +179,19 @@ RIDES* GetcontentR(RIDES *ride){
 
 void adicionaHashRides(char *line){
    RIDES *new_ride = malloc(sizeof(RIDES));
-   separa(line,new_ride,2);
-   g_hash_table_insert(rides,new_ride->id,new_ride);
-   RIDES *copy = GetcontentR(new_ride);
-   DRIVERS *driver = lookup_drivers(copy->driver);
-   addToDriver(driver, copy->score_driver,copy->date,copy->distance, copy->tip, copy->city);
-   
-   new_ride->type_car = getcarD (driver);
-   
-   User *user = lookup_users (copy->user);
-   int car_class = identifie_car_class (driver);
-   addToUser (user,copy->distance, copy->tip, car_class, copy->score_user,copy->date);
-   free_ride(copy);
+   if (separa(line,new_ride,2)) {
+      g_hash_table_insert(rides,new_ride->id,new_ride);
+      RIDES *copy = GetcontentR(new_ride);
+      DRIVERS *driver = lookup_drivers(copy->driver);
+      addToDriver(driver, copy->score_driver,copy->date,copy->distance, copy->tip, copy->city);
+      
+      new_ride->type_car = getcarD (driver);
+      
+      User *user = lookup_users (copy->user);
+      int car_class = identifie_car_class (driver);
+      addToUser (user,copy->distance, copy->tip, car_class, copy->score_user,copy->date);
+      free_ride(copy);
+   }
 }
 
 char *getcityR (RIDES *ride) {

@@ -19,7 +19,7 @@ void iniciaHashDrivers (char *path);
 
 void adicionaHashDrivers(char *line);
 
-void atribui_drv(DRIVERS* drv2 ,int pos,char* token);
+int atribui_drv(DRIVERS* drv2 ,int pos,char* token);
 
 int car_lookup (GHashTable *drivers, char *id);
 

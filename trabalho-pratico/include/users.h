@@ -15,7 +15,7 @@ void iniciaHashUsers (char *path);
 
 void adicionaHashUsers (char *line);
 
-void atribui (User* user, int pos, char *info);
+int atribui (User* user, int pos, char *info);
 
 int lookupUser (GHashTable *user, FILE *res, char *name);
 
