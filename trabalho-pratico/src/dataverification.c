@@ -58,7 +58,7 @@ int verificastatus (char *status) {
 int verificaavaliacao (char *avaliacao) {
     if (avaliacao[0] == '\0' || avaliacao[0] < '0' || avaliacao[0] > '9') return 0;
     char *sobra;
-    double res = strtod (avaliacao, &sobra);
+    long res = strtol (avaliacao, &sobra, 10);
     if (strlen (sobra) != 0) return 0;
     if (res <= 0) return 0;
     return 1;
@@ -67,7 +67,7 @@ int verificaavaliacao (char *avaliacao) {
 int verificadistancia (char *distance) {
     if (distance[0] == '\0') return 0;
     char *sobra;
-    int res = strtol (distance, &sobra,10);
+    long res = strtol (distance, &sobra,10);
     if (sobra[0] != '\0') return 0;
     if (res <= 0) return 0;
     return 1;
