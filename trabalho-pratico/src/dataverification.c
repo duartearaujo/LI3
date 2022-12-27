@@ -56,7 +56,7 @@ int verificastatus (char *status) {
 }
 
 int verificaavaliacao (char *avaliacao) {
-    if (avaliacao[0] == '\0') return 0;
+    if (avaliacao[0] == '\0' || avaliacao[0] < '0' || avaliacao[0] > '9') return 0;
     char *sobra;
     double res = strtod (avaliacao, &sobra);
     if (strlen (sobra) != 0) return 0;
@@ -74,7 +74,7 @@ int verificadistancia (char *distance) {
 }
 
 int verificatip (char *tip) {
-    if (tip[0] == '\0') return 0;
+    if (tip[0] == '\0' || tip[0] < '0' || tip[0] > '9') return 0;
     char *sobra;
     double res = strtod (tip, &sobra);
     if (sobra[0] != '\0') return 0;

@@ -154,6 +154,8 @@ int assignsData(RIDES* new_ride ,int pos ,char* token){
             return 0;
          }
       break;
+      default:
+         break;
    }
    return 1;
 }
