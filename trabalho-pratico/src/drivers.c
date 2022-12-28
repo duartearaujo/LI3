@@ -404,7 +404,8 @@ void calcula_mediasQ2 (gpointer key, DRIVERS* driver, void *a){
     int count = getCountD(driver);
     double valor_atual = getValorAtualD(driver);
     double avaliacao_media = getAvaliacaoMediaD(driver);
-    avaliacao_media = valor_atual / count;  /*calcula a avaliação média de cada driver*/
+    if (count) avaliacao_media = valor_atual / count;  /*calcula a avaliação média de cada driver*/
+    else avaliacao_media = 0;
     calculaAvaliacaoMedia(driver,avaliacao_media);
     array->pos++;
     array->driver = (DRIVERS**) realloc(array->driver,array->pos * sizeof(DRIVERS*));

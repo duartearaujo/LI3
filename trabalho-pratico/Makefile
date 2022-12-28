@@ -24,3 +24,6 @@ $(MAIN): $(OBJS) Resultados
 
 clean:
 	@rm -rf src/*.o $(MAIN) Resultados
+
+out_clean: 
+	@rm -f Resultados/*.txt

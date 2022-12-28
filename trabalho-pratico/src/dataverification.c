@@ -59,7 +59,7 @@ int verificaavaliacao (char *avaliacao) {
     if (avaliacao[0] == '\0' || avaliacao[0] < '0' || avaliacao[0] > '9') return 0;
     char *sobra;
     long res = strtol (avaliacao, &sobra, 10);
-    if (strlen (sobra) != 0) return 0;
+    if (sobra[0] != '\0') return 0;
     if (res <= 0) return 0;
     return 1;
 }
