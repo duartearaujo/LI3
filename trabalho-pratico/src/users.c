@@ -16,8 +16,8 @@ struct user {
     char* data;
     char* account_creation;
     char* last_ride;
-    double acc_avaliation;
     double total_gasto;
+    int acc_avaliation;
     int idade_conta;
     int n_viagens;
     int distance;
@@ -152,7 +152,7 @@ int atribui (User *user, int pos, char *info) {
     return 1;
 }
 
-void addToUser (User *user, int distance, char *tip, int car_class, char *avaliation, char *date) {
+void addToUser (User *user, int distance, char *tip, int car_class, int avaliation, char *date) {
     switch (car_class) /*calcula os valores dependendo do int q identifica o tipo de carro.*/ 
       {
          case 0:
@@ -168,7 +168,7 @@ void addToUser (User *user, int distance, char *tip, int car_class, char *avalia
             break;
       }
     user->n_viagens ++;
-    user-> acc_avaliation += strtod (avaliation, NULL); /*acumula o valor da avaliação dada ao user*/
+    user-> acc_avaliation += avaliation; /*acumula o valor da avaliação dada ao user*/
     /*acumula a distância viajada e guarda a data da última viagem*/
     if(!user->last_ride) user->last_ride = strdup(date);
     else if(compareDates(date,user->last_ride)){
@@ -222,7 +222,7 @@ double getTotalGastoU (User *u) {
     return u->total_gasto;
 }
 
-double getAccAvaliationU (User *u) {
+int getAccAvaliationU (User *u) {
     return u->acc_avaliation;
 }
 

@@ -23,7 +23,7 @@ int atribui_drv(DRIVERS* drv2 ,int pos,char* token);
 
 int car_lookup (GHashTable *drivers, char *id);
 
-void addToDriver(DRIVERS *driver,char *score_driver, char *date, int distance, char *tip, char *city);
+void addToDriver(DRIVERS *driver,int score_driver, char *date, int distance, char *tip, char *city);
 
 int identifie_car_class (DRIVERS *driver);
 
@@ -43,7 +43,7 @@ char *getNameD(DRIVERS *d);
 
 double getAvaliacaoMediaD(DRIVERS *d);
 
-double getValorAtualD(DRIVERS *d);
+int getValorAtualD(DRIVERS *d);
 
 int getCountD(DRIVERS *d);
 
@@ -52,8 +52,6 @@ int get_Idade_Conta_D(DRIVERS *d);
 char getAccountStatusD(DRIVERS *d);
 
 char *getMostRecentRideD(DRIVERS *d);
-
-void calculaAvaliacaoMedia(DRIVERS *d,double avaliacao_media);
 
 char getGenderD(DRIVERS *d);
 

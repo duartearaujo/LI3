@@ -16,10 +16,10 @@ struct RIDES{
    char *driver;
    char *user;
    char *city;
-   char *score_user;
-   char *score_driver;
    char *tip;
    char type_car;
+   int score_user;
+   int score_driver;
    int distance;
 };
 
@@ -29,8 +29,6 @@ void free_ride (RIDES *value) {
    free (value->driver);
    free (value->user);
    free (value->city);
-   free (value->score_user);
-   free (value->score_driver);
    free (value->tip);
    free (value);
 }
@@ -114,7 +112,7 @@ int assignsData(RIDES* new_ride ,int pos ,char* token){
       break;
       case 7:
          if (verificaavaliacao (token))
-            new_ride->score_user = strdup(token);
+            new_ride->score_user = atoi(token);
          else {
             free (new_ride->id);
             free (new_ride->date);
@@ -127,14 +125,13 @@ int assignsData(RIDES* new_ride ,int pos ,char* token){
       break;
       case 8:
          if (verificaavaliacao (token))
-            new_ride->score_driver = strdup(token);
+            new_ride->score_driver = atoi(token);
          else {
             free (new_ride->id);
             free (new_ride->date);
             free (new_ride->driver);
             free (new_ride->user);
             free (new_ride->city);
-            free (new_ride->score_user);
             free (new_ride);
             return 0;
          }
@@ -148,8 +145,6 @@ int assignsData(RIDES* new_ride ,int pos ,char* token){
             free (new_ride->driver);
             free (new_ride->user);
             free (new_ride->city);
-            free (new_ride->score_user);
-            free (new_ride->score_driver);
             free (new_ride);
             return 0;
          }
@@ -169,8 +164,8 @@ RIDES* GetcontentR(RIDES *ride){
       copy->user = strdup(ride->user);
       copy->city = strdup(ride->city);
       copy->distance = ride->distance;
-      copy->score_user = strdup(ride->score_user);
-      copy->score_driver = strdup(ride->score_driver);
+      copy->score_user = ride->score_user;
+      copy->score_driver = ride->score_driver;
       copy->tip = strdup(ride->tip);
       copy->type_car = ride->type_car;
       return copy;

@@ -19,7 +19,7 @@ int atribui (User* user, int pos, char *info);
 
 int lookupUser (GHashTable *user, FILE *res, char *name);
 
-void addToUser (User *user, int distance, char *tip, int car_class , char *avaliation, char *date);
+void addToUser (User *user, int distance, char *tip, int car_class , int avaliation, char *date);
 
 User* GetcontentU(User *u);
 
@@ -37,7 +37,7 @@ int getNViagensU (User *u);
 
 double getTotalGastoU (User *u);
 
-double getAccAvaliationU (User *u);
+int getAccAvaliationU (User *u);
 
 char *getUsername(User* user);
 

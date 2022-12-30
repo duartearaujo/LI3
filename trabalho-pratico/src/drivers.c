@@ -13,7 +13,7 @@ static GHashTable* drivers;
 struct avaliacao_por_cidade {
     char *name, *id, *city;
     int n_viagens;
-    double avaliacao_total;
+    int avaliacao_total;
     double avaliacao_media;
 };
 
@@ -25,12 +25,12 @@ struct DRIVERS{
     char* ac_cr;
     char *mostRecentRide;
     GHashTable *avaliacao_cidades;
-    double valor_atual;
     double avaliacao_media;
     double total_auferido;
     char ac_st;
     char gender;
     char car_class;
+    int valor_atual;
     int idade_conta;
     int count;
 };
@@ -91,7 +91,7 @@ void iniciaHashDrivers (char *path) {
     fclose (fp);
 }
 
-AvC *iniciaHashAvC (char *name, char *id, char *city, double avaliacao) {
+AvC *iniciaHashAvC (char *name, char *id, char *city, int avaliacao) {
     AvC *new = malloc (sizeof (AvC));
     new->id = id;
     new->name = name;
@@ -228,7 +228,7 @@ int identifie_car_class_char (char car_class) {
 }
 
 /*adiciona a cada driver da hashtable(dos drivers) os valores dos rides que interessam para resolver a query 1, 2 e 7*/
-void addToDriver(DRIVERS *driver,char *score_driver, char *date, int distance, char *tip, char *city){   
+void addToDriver(DRIVERS *driver,int score_driver, char *date, int distance, char *tip, char *city){   
     int r = 0;
     if(!driver->mostRecentRide) driver->mostRecentRide = strdup(date);   /*compara as duas datas*/
     else if((r = compareDates(date,driver->mostRecentRide)) != 0){   /*se a primeira data for igual ou mais recente que a segunda*/
@@ -237,7 +237,7 @@ void addToDriver(DRIVERS *driver,char *score_driver, char *date, int distance, c
         free (temp);
     }
     driver->count += 1;   /*incrementa o nºtotal de viajens*/
-    driver->valor_atual += strtod(score_driver,NULL);   /*incrementa o score_driver à soma total de todos os score_driver(valor_atual)*/
+    driver->valor_atual += score_driver;   /*incrementa o score_driver à soma total de todos os score_driver(valor_atual)*/
     
     int identifier_car = identifie_car_class (driver); 
     
@@ -259,11 +259,11 @@ void addToDriver(DRIVERS *driver,char *score_driver, char *date, int distance, c
     if (g_hash_table_contains (driver->avaliacao_cidades, city)) {
         AvC *cidade = g_hash_table_lookup (driver->avaliacao_cidades, city);
         cidade->n_viagens ++;
-        cidade->avaliacao_total += strtod (score_driver, NULL);
+        cidade->avaliacao_total += score_driver;
     }
     else {
         char *key = strdup (city);
-        AvC *new = iniciaHashAvC (strdup (driver->name), strdup(driver->id), key ,strtod (score_driver, NULL));
+        AvC *new = iniciaHashAvC (strdup (driver->name), strdup(driver->id), key ,score_driver);
         g_hash_table_insert (driver->avaliacao_cidades, key,new );
     }
 }
@@ -321,7 +321,7 @@ double getAvaliacaoMediaD(DRIVERS *d){
     return d->avaliacao_media;
 }
 
-double getValorAtualD(DRIVERS *d){
+int getValorAtualD(DRIVERS *d){
     return d->valor_atual;
 }
 
@@ -340,10 +340,6 @@ char getAccountStatusD(DRIVERS *d){
 char *getMostRecentRideD(DRIVERS *d){
     if(d->mostRecentRide) return strdup (d->mostRecentRide);
     else return NULL;
-}
-
-void calculaAvaliacaoMedia(DRIVERS *d,double avaliacao_media){
-    d->avaliacao_media = avaliacao_media;
 }
 
 char getGenderD(DRIVERS *d){
@@ -402,11 +398,10 @@ void createArray(){
 /*função que vai ser aplicada a cada membro da hashtable (dos drivers)*/
 void calcula_mediasQ2 (gpointer key, DRIVERS* driver, void *a){
     int count = getCountD(driver);
-    double valor_atual = getValorAtualD(driver);
-    double avaliacao_media = getAvaliacaoMediaD(driver);
-    if (count) avaliacao_media = valor_atual / count;  /*calcula a avaliação média de cada driver*/
-    else avaliacao_media = 0;
-    calculaAvaliacaoMedia(driver,avaliacao_media);
+    int valor_atual = getValorAtualD(driver);
+    double avaliacao_media = 0;
+    if (count) avaliacao_media = (double)valor_atual / (double)count;  /*calcula a avaliação média de cada driver*/
+    driver->avaliacao_media = avaliacao_media;
     array->pos++;
     array->driver = (DRIVERS**) realloc(array->driver,array->pos * sizeof(DRIVERS*));
     array->driver[array->pos-1] = driver;
@@ -444,7 +439,7 @@ void freeArray(){
 
 void adicionaArrayQ7 (DRIVERS *value, char *city) {
     AvC *avaliacao_cidade =  g_hash_table_lookup (value->avaliacao_cidades, city);
-    avaliacao_cidade-> avaliacao_media = avaliacao_cidade -> avaliacao_total / avaliacao_cidade ->n_viagens;
+    avaliacao_cidade-> avaliacao_media = (double)avaliacao_cidade -> avaliacao_total / (double)avaliacao_cidade ->n_viagens;
     arrayQ7->pos++;
     arrayQ7->array_avaliacoes = (AvC**) realloc (arrayQ7->array_avaliacoes, arrayQ7->pos * sizeof (AvC *));
     arrayQ7->array_avaliacoes[arrayQ7->pos-1] = avaliacao_cidade;
