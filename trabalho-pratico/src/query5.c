@@ -6,30 +6,29 @@
 #include "../include/drivers.h"
 
 struct Q5{
-    char *data_inferior;
-    char *data_superior;
+    int data_inferior;
+    int data_superior;
     int numeroViagens;
     double total_preco;
 };
 
 Q5* inicializaQ5(char *data_inferior, char *data_superior){
     Q5* query5 = malloc(sizeof(Q5));
-    query5->data_inferior = data_inferior;
-    query5->data_superior = data_superior;
+    query5->data_inferior = tempo_De_Vida(data_inferior);
+    query5->data_superior = tempo_De_Vida(data_superior);
     query5->numeroViagens = 0;
     query5->total_preco = 0;
     return query5;
 }
 
 void freeQ5 (Q5 *query5) {
-    free (query5->data_inferior);
-    free(query5->data_superior);
     free (query5);
 }
 
 void preco_medio_Q5(gpointer key, RIDES *value, Q5 *query5){
     char *data = getDateR(value);
-    if((compareDates(data,query5->data_inferior) && !compareDates(data,query5->data_superior)) || !strcmp(data,query5->data_inferior) || !strcmp(data,query5->data_superior)){
+    int tempo = tempo_De_Vida(data);
+    if((tempo != -1 && query5->data_inferior != -1 && query5->data_superior != -1) && (tempo <= query5->data_inferior && tempo >= query5->data_superior)){
         query5->numeroViagens++;
         char carro = getcarR(value);
         int distancia = getdistanceR(value);
@@ -48,7 +47,6 @@ void preco_medio_Q5(gpointer key, RIDES *value, Q5 *query5){
             break;
         }
     }
-    free(data);
 }
 
 void printQ5 (Q5 *query5, FILE *res) {

@@ -191,14 +191,18 @@ void querieIdentifier(char **argv, int n_querie) {
 }
 
 int tempo_De_Vida(char *str){
+    int tempo_de_vida;
     char *temp = str;
-    int dia = atoi(strsep(&str, "/"));
-    int mes = atoi(strsep(&str, "/"));
-    int ano = atoi(strsep(&str, "/"));
-    int tempo_ate_conta = 372 * ano + 31 * (mes-1) + dia;
-    int tempo_ate_data = 372 * ANO + 31 * (MES-1) + DIA;
-    int tempo_de_vida = tempo_ate_data - tempo_ate_conta;
-    free(temp);
+    if(!temp) tempo_de_vida = -1;
+    else{ 
+        int dia = atoi(strsep(&str, "/"));
+        int mes = atoi(strsep(&str, "/"));
+        int ano = atoi(strsep(&str, "/"));
+        int tempo_ate_conta = 372 * ano + 31 * (mes-1) + dia;
+        int tempo_ate_data = 372 * ANO + 31 * (MES-1) + DIA;
+        tempo_de_vida = tempo_ate_data - tempo_ate_conta;
+        free(temp);
+    }
     return tempo_de_vida;
 }
 
