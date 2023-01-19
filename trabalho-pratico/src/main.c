@@ -7,6 +7,7 @@
 #include "../include/users.h"
 #include "../include/rides.h"
 #include "../include/drivers.h"
+#include "../include/cidades.h"
 #include "../include/query2.h"
 
 /*função main do projeto*/
@@ -19,6 +20,7 @@ int main(int argc, char **argv){
         clock_t t = clock();
         iniciaHashUsers (argv[1]);
         iniciaHashDrivers (argv[1]);
+        iniciaHashCidades ();
         iniciaHashRides (argv[1]);
         t = clock () -t;
         printf ("Load Time: %f\n", ((float)t)/CLOCKS_PER_SEC);
@@ -31,6 +33,7 @@ int main(int argc, char **argv){
     fclose (fp);
     hash_table_destroy_users ();
     hash_table_destroy_drivers ();
+    destroyHashCidades ();
     hash_table_destroy_rides ();
     freeArray();
     freeArrayU();

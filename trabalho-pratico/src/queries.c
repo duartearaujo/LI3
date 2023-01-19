@@ -7,6 +7,7 @@
 #include "../include/rides.h"
 #include "../include/queries.h"
 #include "../include/drivers.h"
+#include "../include/cidades.h"
 #include "../include/query1.h"
 #include "../include/query2.h"
 #include "../include/query3.h"
@@ -116,10 +117,8 @@ void querieIdentifier(char **argv, int n_querie) {
     case 4: {
         clock_t t = clock();
 
-        Q4* value = inicializaQ4 (strdup (argv[1]));
-        foreach_rides_Q4(value);
-        printQ4 (value, res);
-        freeQ4 (value);
+        exec_Q4 (argv[1], res);
+
         t = clock () -t;
         printf ("Query4: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
@@ -148,13 +147,7 @@ void querieIdentifier(char **argv, int n_querie) {
     }
     case 7:{
         clock_t t = clock();
-        if (atoi (argv[1])) {
-            inicializaQ7();
-            foreach_drivers_Q7(argv[2]);
-            ordenaQ7();
-            printQ7(res,atoi (argv[1]));
-            free_Q7();
-        }
+        exec_Q7 (argv [2], atoi (argv[1]), res);
         t = clock () -t;
         printf ("Query7: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;

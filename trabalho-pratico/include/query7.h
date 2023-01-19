@@ -1,14 +1,8 @@
 #ifndef q7
 #define q7
 
-typedef struct Q7 Q7;
+gint organiza_arvore (gconstpointer a, gconstpointer b, gpointer c);
 
-void inicializaQ7 ();
-
-void avaliacao_media_city (gpointer key, DRIVERS *value, char *city);
-
-int comparaAvC (const void *p1, const void* p2);
-
-void printQ7 (FILE *fp,int N);
+void exec_Q7 (char *city,int N ,FILE *res);
 
 #endif

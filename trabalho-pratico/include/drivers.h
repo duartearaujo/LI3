@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <glib.h>
 
-typedef struct avaliacao_por_cidade AvC;
-
 typedef struct DRIVERS DRIVERS;
 
 typedef struct ARRAY_DRIVERS ARRAY_DRIVERS;
@@ -23,17 +21,13 @@ int atribui_drv(DRIVERS* drv2 ,int pos,char* token);
 
 int car_lookup (GHashTable *drivers, char *id);
 
-void addToDriver(DRIVERS *driver,int score_driver, char *date, int distance, char *tip, char *city);
+void addToDriver(DRIVERS *driver,int score_driver, char *date, int distance, char *tip);
 
 int identifie_car_class (DRIVERS *driver);
 
 int identifie_car_class_char (char car_class);
 
 DRIVERS * GetcontentD(DRIVERS *d); 
-
-AvC* getcontentAvC (AvC *a);
-
-void calcula_avaliacao_media_AvC (AvC *avaliacao);
 
 char getcarD (DRIVERS *d);
 
@@ -59,12 +53,6 @@ char *getBirthD(DRIVERS *d);
 
 double getTotalAuferido (DRIVERS *d);
 
-double getAvaliacaoMediaAvC (AvC *a);
-
-char* getIdAvC (AvC *a);
-
-char* getNameAvC (AvC *a);
-
 DRIVERS* lookup_drivers (char* key);
 
 int exist_AvC (DRIVERS *driver, char *city);
@@ -74,8 +62,6 @@ size_t getsizeAvC ();
 void foreach_drivers_Q7 ();
 
 void hash_table_destroy_drivers ();
-
-void free_avaliacao_por_cidade (AvC *value);
 
 void createArray();
 
@@ -98,9 +84,5 @@ void ordenaQ7 ();
 void free_Q7 ();
 
 int getPosQ7 ();
-
-AvC *getarrayQ7pos (int i);
-
-int isactive (AvC *driver); 
 
 #endif

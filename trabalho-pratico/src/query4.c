@@ -4,54 +4,13 @@
 #include "../include/rides.h"
 #include "../include/queries.h"
 #include "../include/drivers.h"
+#include "../include/cidades.h"
 #include "../include/query4.h"
 
-struct Q4 {
-    char *city;
-    int n_viagens;
-    double total_preco;
-};
-
-Q4* inicializaQ4 (char *city) {
-    Q4 *new = malloc (sizeof (Q4));
-    new->city = city;
-    new->n_viagens = 0;
-    new->total_preco = 0;
-    return new;
-}
-
-void freeQ4 (Q4 *value) {
-    free (value->city);
-    free (value);
-}
-
-void preco_medio (gpointer key, RIDES *value, Q4 *total) {
-    char *city = getcityR (value);
-    if (!strcmp (total->city,city)) {
-        total->n_viagens++;
-        char car = getcarR(value);
-        int distance = getdistanceR(value);
-        switch (identifie_car_class_char(car))
-        {
-         case 0:
-            total->total_preco += distance * 0.62 + 3.25;
-            break;
-         case 1:
-            total->total_preco += distance * 0.79 + 4;
-            break;
-         case 2:
-            total->total_preco  += distance * 0.94 + 5.20;
-            break;
-         default:
-            break;
-        }
-    }
-    free (city);
-}
-
-void printQ4 (Q4 *value, FILE *res) {
-    if(value->n_viagens){
-        double media = value->total_preco / value ->n_viagens; 
-        fprintf (res, "%.3f\n", media);
-    }
+void exec_Q4 (char *city, FILE *res) {
+    double preco_medio [2] = {0};
+    foreach_tree_city (city, preco_medio);
+    if (preco_medio [1]) 
+        preco_medio[0] = preco_medio[0] / preco_medio [1];
+    fprintf (res, "%.3f\n", preco_medio[0]);
 }

@@ -40,8 +40,6 @@ char *getTip (RIDES *ride);
 
 RIDES* lookup_rides (char* key);
 
-void foreach_rides_Q4 (Q4 *preco);
-
 void foreach_rides_Q5 (Q5 *preco);
 
 void foreach_rides_Q6 (Q6 *q);

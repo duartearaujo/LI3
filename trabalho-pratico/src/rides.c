@@ -6,6 +6,7 @@
 #include "../include/parse.h"
 #include "../include/queries.h"
 #include "../include/dataverification.h"
+#include "../include/cidades.h"
 
 static GHashTable* rides;
 
@@ -180,13 +181,15 @@ void adicionaHashRides(char *line){
       g_hash_table_insert(rides,new_ride->id,new_ride);
       RIDES *copy = GetcontentR(new_ride);
       DRIVERS *driver = lookup_drivers(copy->driver);
-      addToDriver(driver, copy->score_driver,copy->date,copy->distance, copy->tip, copy->city);
+      addToDriver(driver, copy->score_driver,copy->date,copy->distance, copy->tip);
       
       new_ride->type_car = getcarD (driver);
       
       User *user = lookup_users (copy->user);
       int car_class = identifie_car_class (driver);
       addToUser (user,copy->distance, copy->tip, car_class, copy->score_user,copy->date);
+
+      addToCidades (copy->city,copy->distance, new_ride->type_car, copy->driver, getNameD(driver), copy->score_driver);
       free_ride(copy);
    }
 }
@@ -225,10 +228,6 @@ char *getTip (RIDES *ride) {
 
 RIDES* lookup_rides (char* key) {
     return (g_hash_table_lookup (rides, key));
-}
-
-void foreach_rides_Q4 (Q4 *preco) {
-   g_hash_table_foreach (rides,(GHFunc)preco_medio, preco);
 }
 
 void foreach_rides_Q5 (Q5 *query5) {
