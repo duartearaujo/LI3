@@ -19,8 +19,6 @@ void adicionaHashDrivers(char *line);
 
 int atribui_drv(DRIVERS* drv2 ,int pos,char* token);
 
-int car_lookup (GHashTable *drivers, char *id);
-
 void addToDriver(DRIVERS *driver,int score_driver, char *date, int distance, char *tip);
 
 int identifie_car_class (DRIVERS *driver);
@@ -55,12 +53,6 @@ double getTotalAuferido (DRIVERS *d);
 
 DRIVERS* lookup_drivers (char* key);
 
-int exist_AvC (DRIVERS *driver, char *city);
-
-size_t getsizeAvC ();
-
-void foreach_drivers_Q7 ();
-
 void hash_table_destroy_drivers ();
 
 void createArray();
@@ -77,12 +69,6 @@ DRIVERS* getElement_Q2(int index);
 
 void freeArray();
 
-void adicionaArrayQ7(DRIVERS *value, char *city);
-
-void ordenaQ7 ();
-
-void free_Q7 ();
-
-int getPosQ7 ();
+int verifica_ativo (char *id);
 
 #endif

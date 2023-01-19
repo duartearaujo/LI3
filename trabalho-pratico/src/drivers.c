@@ -346,3 +346,9 @@ void freeArray(){
         free(array);
     }
 }
+
+int verifica_ativo (char *id) {
+    char s = ((DRIVERS*)g_hash_table_lookup (drivers, id))->ac_st;
+    if (s == 'a') return 1;
+    return 0;
+}

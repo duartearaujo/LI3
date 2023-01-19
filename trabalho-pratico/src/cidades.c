@@ -157,8 +157,10 @@ typedef struct PrintQ7 {
 gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
     PrintQ7 *ficheiro = user_data;
     AvC* driver = value;
-    fprintf (ficheiro->res,"%s;%s;%.3f\n",driver->id, driver->name, driver->avaliacao_media);
-    ficheiro->N--;
+    if (verifica_ativo(driver->id)) {
+        fprintf (ficheiro->res,"%s;%s;%.3f\n",driver->id, driver->name, driver->avaliacao_media);
+        ficheiro->N--;
+    }
     if (ficheiro->N)
         return FALSE;
     return TRUE;

@@ -10,7 +10,8 @@
 void exec_Q4 (char *city, FILE *res) {
     double preco_medio [2] = {0};
     foreach_tree_city (city, preco_medio);
-    if (preco_medio [1]) 
+    if (preco_medio [1]) {
         preco_medio[0] = preco_medio[0] / preco_medio [1];
-    fprintf (res, "%.3f\n", preco_medio[0]);
+        fprintf (res, "%.3f\n", preco_medio[0]);
+    }
 }
