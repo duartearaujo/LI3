@@ -22,7 +22,6 @@ struct dados_Q8{
 struct array_Q8{
     int pos;
     int idade_enunciado;
-    char genero_enunciado;
     dados_Q8** lista;
 };
 
@@ -41,11 +40,10 @@ dados_Q8* inicializa_dados_Q8(){
     return dados;
 }
 
-void inicializa_array_Q8(int idade_enunciado,char gender_enunciado){
+void inicializa_array_Q8(int idade_enunciado){
     array = malloc(sizeof(array_Q8));
     array->pos = 0;
     array->idade_enunciado = idade_enunciado * 372;
-    array-> genero_enunciado = gender_enunciado;
     array->lista = NULL;
 }
 
@@ -60,27 +58,23 @@ void passa_Para_Struct(char *nome_driver,char *nome_user,char *id,char *id_viage
 }
 
 
-void verifica_dados_Q8 (gpointer key, RIDES* ride, void *a){
+void verifica_dados_Q8 (RIDES* ride){
     char *username = getUsernameR(ride);
     char *id = getIdDriverR(ride);
-    char genero_user = getGenderU(lookup_users(username));
-    char genero_driver = getGenderD(lookup_drivers(id));
-    if( genero_user == array->genero_enunciado && genero_driver == array->genero_enunciado){
-        int idade_conta_user = get_Idade_Conta_U(lookup_users(username));
-        int idade_conta_driver = get_Idade_Conta_D(lookup_drivers(id));
-        if(idade_conta_driver >= array->idade_enunciado && idade_conta_user >= array->idade_enunciado){
-            char *id_viagem = getIdR(ride);
-            array->pos++;
-            array->lista = (dados_Q8**) realloc(array->lista,array->pos * sizeof(dados_Q8*));
-            array->lista[array->pos-1] = inicializa_dados_Q8();
-            char *nome_driver = getNameD(lookup_drivers(id));
-            char *nome_user = getNameU(lookup_users(username));
-            passa_Para_Struct(nome_driver,nome_user,id,id_viagem,username,idade_conta_driver,idade_conta_user,array->pos-1);
-            free(id_viagem);
-            free(nome_driver);
-            free(nome_user);
+    int idade_conta_user = get_Idade_Conta_U(lookup_users(username));
+    int idade_conta_driver = get_Idade_Conta_D(lookup_drivers(id));
+    if(idade_conta_driver >= array->idade_enunciado && idade_conta_user >= array->idade_enunciado){
+        char *id_viagem = getIdR(ride);
+        array->pos++;
+        array->lista = (dados_Q8**) realloc(array->lista,array->pos * sizeof(dados_Q8*));
+        array->lista[array->pos-1] = inicializa_dados_Q8();
+        char *nome_driver = getNameD(lookup_drivers(id));
+        char *nome_user = getNameU(lookup_users(username));
+        passa_Para_Struct(nome_driver,nome_user,id,id_viagem,username,idade_conta_driver,idade_conta_user,array->pos-1);
+        free(id_viagem);
+        free(nome_driver);
+        free(nome_user);
         }
-    }
     free(username);
     free(id);
 }

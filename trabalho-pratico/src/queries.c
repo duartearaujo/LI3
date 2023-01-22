@@ -156,8 +156,9 @@ void querieIdentifier(char **argv, int n_querie) {
     case 8: {
         clock_t t = clock();
 
-        inicializa_array_Q8(atoi(argv[2]),argv[1][0]);
-        foreach_rides_Q8();
+        inicializa_array_Q8(atoi(argv[2]));
+        if(argv[1][0] == 'M') foreach_rides_Q8_male();
+        else if(argv[1][0] == 'F') foreach_rides_Q8_female();
         ordena_Q8();
         printArray_Q8(res);
         freeArray_Q8();

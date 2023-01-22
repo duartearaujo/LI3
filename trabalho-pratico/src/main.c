@@ -37,5 +37,6 @@ int main(int argc, char **argv){
     hash_table_destroy_rides ();
     freeArray();
     freeArrayU();
+    free_Arrays_Q8();
     return 0;
 }

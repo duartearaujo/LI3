@@ -24,6 +24,15 @@ struct RIDES{
    int distance;
 };
 
+struct arrays_Q8{
+   RIDES **array_female;
+   RIDES **array_male;
+   int pos_female;
+   int pos_male;
+};
+
+static arrays_Q8 *arrays_query8 = NULL;
+
 void free_ride (RIDES *value) {
    free (value->id);
    free (value->date);
@@ -34,8 +43,17 @@ void free_ride (RIDES *value) {
    free (value);
 }
 
+void inicializaArrays_Q8(){
+   arrays_query8 = malloc(sizeof(arrays_Q8));
+   arrays_query8->pos_male = 0;
+   arrays_query8->pos_female = 0;
+   arrays_query8->array_male = NULL;
+   arrays_query8->array_female = NULL;
+}
+
 void iniciaHashRides (char *path) {
    FILE *fp = NULL;
+   inicializaArrays_Q8();
    rides = g_hash_table_new_full(g_str_hash, g_str_equal,NULL,(GDestroyNotify) free_ride);
    char *filename = malloc ((strlen (path) + strlen ("/rides.csv") + 1)*sizeof (char));
    strcpy(filename,path);
@@ -181,6 +199,18 @@ void adicionaHashRides(char *line){
       g_hash_table_insert(rides,new_ride->id,new_ride);
       RIDES *copy = GetcontentR(new_ride);
       DRIVERS *driver = lookup_drivers(copy->driver);
+      char gender_Driver = getGenderD(lookup_drivers(copy->driver));
+      char gender_User = getGenderU(lookup_users(copy->user));
+      if(gender_Driver == 'M' && gender_User == 'M'){
+            arrays_query8->pos_male++;
+            arrays_query8->array_male = (RIDES**) realloc(arrays_query8->array_male,arrays_query8->pos_male * sizeof(RIDES*));
+            arrays_query8->array_male[arrays_query8->pos_male-1] = GetcontentR(new_ride);
+      }
+      else if(gender_Driver == 'F' && gender_User == 'F'){
+            arrays_query8->pos_female++;
+            arrays_query8->array_female = (RIDES**) realloc(arrays_query8->array_female,arrays_query8->pos_female * sizeof(RIDES*));
+            arrays_query8->array_female[arrays_query8->pos_female-1] = GetcontentR(new_ride);
+      }
       addToDriver(driver, copy->score_driver,copy->date,copy->distance, copy->tip);
       
       new_ride->type_car = getcarD (driver);
@@ -238,8 +268,31 @@ void foreach_rides_Q6 (Q6 *q) {
    g_hash_table_foreach (rides, (GHFunc)distancia_media, q);
 }
 
-void foreach_rides_Q8 () {
-   g_hash_table_foreach (rides,(GHFunc)verifica_dados_Q8, NULL);
+void foreach_rides_Q8_male () {
+   int i;
+   for(i = 0; i < arrays_query8->pos_male; i++){
+      verifica_dados_Q8(arrays_query8->array_male[i]);
+   }
+}
+
+void foreach_rides_Q8_female () {
+   int i;
+   for(i = 0; i < arrays_query8->pos_female; i++){
+      verifica_dados_Q8(arrays_query8->array_female[i]);
+   }
+}
+
+void free_Arrays_Q8(){
+   int i,j;
+   for(i = 0; i < arrays_query8->pos_female; i++){
+      free_ride(arrays_query8->array_female[i]);
+   }
+   for(j = 0; j < arrays_query8->pos_male; j++){
+      free_ride(arrays_query8->array_male[j]);
+   }
+   free(arrays_query8->array_female);
+   free(arrays_query8->array_male);
+   free(arrays_query8);
 }
 
 void foreach_rides_Q9 (){
