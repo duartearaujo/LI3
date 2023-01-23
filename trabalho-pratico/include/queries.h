@@ -3,7 +3,7 @@
 
 #include "../include/parse.h"
 
-void querieIdentifier(char **argv, int n_querie);
+void querieIdentifier(char **argv, int n_querie, int i);
 
 int querie1(char *str);
 

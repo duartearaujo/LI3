@@ -13,4 +13,6 @@ int verificadistancia (char *distancia);
 
 int verificatip (char *tip);
 
+int verifica_inteiro (char *inteiro);
+
 #endif

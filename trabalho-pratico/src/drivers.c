@@ -46,7 +46,7 @@ void free_driver (DRIVERS *value) {
     free (value);
 }
 
-void iniciaHashDrivers (char *path) {
+int iniciaHashDrivers (char *path) {
     FILE *fp = NULL;
     drivers = g_hash_table_new_full(g_str_hash, g_str_equal, NULL, (GDestroyNotify) free_driver);
     char *filename = malloc ((strlen (path) + strlen ("/drivers.csv") +1)*sizeof (char));
@@ -55,11 +55,12 @@ void iniciaHashDrivers (char *path) {
     fp = fopen(filename,"r");
     if(!fp){
         perror("Não conseguiu abrir o ficheiro");
-        return;
+        return 0;
     }
     parser(fp,2);
     free (filename);
     fclose (fp);
+    return 1;
 }
 
 

@@ -7,11 +7,14 @@
 #include "../include/cidades.h"
 #include "../include/query4.h"
 
-void exec_Q4 (char *city, FILE *res) {
+void exec_Q4 (char *city, FILE *res, int modo) {
     double preco_medio [2] = {0};
     foreach_tree_city (city, preco_medio);
     if (preco_medio [1]) {
         preco_medio[0] = preco_medio[0] / preco_medio [1];
-        fprintf (res, "%.3f\n", preco_medio[0]);
+        if (modo == 0)
+            fprintf (res, "%.3f\n", preco_medio[0]);
+        else
+            printf ("\t%.3f\n", preco_medio[0]);
     }
 }

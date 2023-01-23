@@ -35,10 +35,13 @@ void distancia_media(gpointer key, RIDES *ride, Q6 *q){
     free(data);
 }
 
-void printQ6(Q6 *q, FILE *res){
+void printQ6(Q6 *q, FILE *res, int modo){
     if(q->n_rides){
         double distancia_media = (q->total_distance/q->n_rides);
-        fprintf(res, "%.3f\n", distancia_media);
+        if (modo == 0)
+            fprintf(res, "%.3f\n", distancia_media);
+        else
+            printf("\t%.3f\n", distancia_media); 
     }
 }
 

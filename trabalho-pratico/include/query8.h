@@ -17,7 +17,7 @@ int desempate_Q8(const void *p1, const void* p2);
 
 void ordena_Q8();
 
-void printArray_Q8(FILE *res);
+void printArray_Q8(FILE *res, int modo);
 
 void freeDados_Q8(dados_Q8* data);
 

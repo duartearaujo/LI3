@@ -5,6 +5,7 @@
 #include "../include/drivers.h"
 #include "../include/parse.h"
 #include "../include/queries.h"
+#include "../include/query9.h"
 #include "../include/dataverification.h"
 #include "../include/cidades.h"
 
@@ -51,7 +52,7 @@ void inicializaArrays_Q8(){
    arrays_query8->array_female = NULL;
 }
 
-void iniciaHashRides (char *path) {
+int iniciaHashRides (char *path) {
    FILE *fp = NULL;
    inicializaArrays_Q8();
    rides = g_hash_table_new_full(g_str_hash, g_str_equal,NULL,(GDestroyNotify) free_ride);
@@ -61,11 +62,12 @@ void iniciaHashRides (char *path) {
    fp = fopen(filename,"r");
    if(!fp){
       perror("Não conseguiu abrir o ficheiro");
-      return;
+      return 0;
    }
    parser(fp, 3);
    free (filename);
    fclose (fp);
+   return 1;
 }
 
 int assignsData(RIDES* new_ride ,int pos ,char* token){
@@ -218,8 +220,12 @@ void adicionaHashRides(char *line){
       User *user = lookup_users (copy->user);
       int car_class = identifie_car_class (driver);
       addToUser (user,copy->distance, copy->tip, car_class, copy->score_user,copy->date);
-
+      
       addToCidades (copy->city,copy->distance, new_ride->type_car, copy->driver, getNameD(driver), copy->score_driver);
+      
+      // Array para a query 9
+      if(strtod(new_ride->tip, NULL)) addQ9(new_ride);
+
       free_ride(copy);
    }
 }
@@ -293,10 +299,6 @@ void free_Arrays_Q8(){
    free(arrays_query8->array_female);
    free(arrays_query8->array_male);
    free(arrays_query8);
-}
-
-void foreach_rides_Q9 (){
-   g_hash_table_foreach (rides, (GHFunc)guardaQ9, NULL);
 }
 
 void hash_table_destroy_rides () {

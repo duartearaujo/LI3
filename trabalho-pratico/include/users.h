@@ -11,7 +11,7 @@ typedef struct ARRAY_USERS ARRAY_USERS;
 
 void free_user(User *value);
 
-void iniciaHashUsers (char *path);
+int iniciaHashUsers (char *path);
 
 void adicionaHashUsers (char *line);
 

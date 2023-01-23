@@ -9,34 +9,42 @@
 #include "../include/drivers.h"
 #include "../include/cidades.h"
 #include "../include/query2.h"
+#include "../include/query9.h"
+#include "../include/interactive.h"
 
 /*função main do projeto*/
 int main(int argc, char **argv){  
     FILE *fp = NULL;
     if(argc < 2){
-        fp = stdin;
+        int i = iniciaI();
+        if (i) parsequeryI();
     }
     else{
         clock_t t = clock();
-        iniciaHashUsers (argv[1]);
-        iniciaHashDrivers (argv[1]);
+        int u = iniciaHashUsers (argv[1]);
+        int d = iniciaHashDrivers (argv[1]);
+        createArrayQ9();
         iniciaHashCidades ();
-        iniciaHashRides (argv[1]);
+        int r = iniciaHashRides (argv[1]);
+        if (!(u && d && r)) return 1;
+        ordena_Q9();
+
         t = clock () -t;
         printf ("Load Time: %f\n", ((float)t)/CLOCKS_PER_SEC);
-    }
-    /*parse das queries*/
-    fp = fopen (argv[2], "r");  /*abre o ficheiro com os testes(queries)*/
-    parsequerie (fp);  /*parse das queries*/
+         /*parse das queries*/
+        fp = fopen (argv[2], "r");  /*abre o ficheiro com os testes(queries)*/
+        parsequerie (fp);  /*parse das queries*/
 
-    /*free das hashes e mais*/
-    fclose (fp);
+        /*free das hashes e mais*/
+        fclose (fp);
+    }
     hash_table_destroy_users ();
     hash_table_destroy_drivers ();
     destroyHashCidades ();
     hash_table_destroy_rides ();
     freeArray();
     freeArrayU();
+    freeArrayQ9();
     free_Arrays_Q8();
     return 0;
 }

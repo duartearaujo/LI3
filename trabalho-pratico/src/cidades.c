@@ -152,13 +152,17 @@ void ordena_arvore_Q7 (char *city) {
 typedef struct PrintQ7 {
     FILE *res;
     int N;
+    int modo;
 } PrintQ7;
 
 gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
     PrintQ7 *ficheiro = user_data;
     AvC* driver = value;
     if (verifica_ativo(driver->id)) {
-        fprintf (ficheiro->res,"%s;%s;%.3f\n",driver->id, driver->name, driver->avaliacao_media);
+        if (ficheiro->modo == 0)
+            fprintf (ficheiro->res,"%s;%s;%.3f\n",driver->id, driver->name, driver->avaliacao_media);
+        else
+            printf ("\t%s;%s;%.3f\n",driver->id, driver->name, driver->avaliacao_media);
         ficheiro->N--;
     }
     if (ficheiro->N)
@@ -166,12 +170,13 @@ gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
     return TRUE;
 }
 
-void printQ7 (char *city,int N, FILE *res) {
+void printQ7 (char *city,int N, FILE *res, int modo) {
     HTree *c= g_hash_table_lookup (cidades,city);
     if (c) {
         PrintQ7 *p = malloc(sizeof (PrintQ7));
         p->N = N;
         p->res = res;
+        p->modo = modo;
         g_tree_foreach (c->t, printQ7_aux, p);
         free (p);
     }

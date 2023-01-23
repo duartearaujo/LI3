@@ -105,12 +105,16 @@ void ordena_Q8(){
     qsort (array->lista,(size_t)array->pos, sizeof(dados_Q8*), desempate_Q8);
 }
 
-void printArray_Q8(FILE *res){
+void printArray_Q8(FILE *res, int modo){
     for(int i = 0; i < array->pos;i++){
         char account_status_driver = getAccountStatusD(lookup_drivers(array->lista[i]->id_driver));
         char account_status_user = getAccStatusU(lookup_users(array->lista[i]->username_user));
-        if(account_status_driver == 'a' && account_status_user == 'a')
-            fprintf(res,"%s;%s;%s;%s\n",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);  
+        if(account_status_driver == 'a' && account_status_user == 'a') {
+            if (modo == 0)
+                fprintf(res,"%s;%s;%s;%s\n",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);
+            else
+                printf("\t%s;%s;%s;%s\n",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);
+        }  
     }
 }
 

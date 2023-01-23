@@ -13,7 +13,7 @@ typedef struct ARRAY_DRIVERS ARRAY_DRIVERS;
 
 void free_driver (DRIVERS *value);
 
-void iniciaHashDrivers (char *path);
+int iniciaHashDrivers (char *path);
 
 void adicionaHashDrivers(char *line);
 

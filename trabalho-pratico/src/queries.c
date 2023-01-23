@@ -59,11 +59,16 @@ int compareDates(char *str, char *string){
 }
 
 /*função usada para responder às queries, ou chamar as funções que resolvem as queries */
-void querieIdentifier(char **argv, int n_querie) {  
+void querieIdentifier(char **argv, int n_querie, int modo) {  
+    FILE *res = NULL;
     int q = atoi (argv[0]);
-    char filename [29 + n_querie];
-    sprintf(filename, "Resultados/command%d_output.txt", n_querie);
-    FILE *res = fopen(filename, "a");
+    if(modo == 0){ // modo Batch
+        char filename [29 + n_querie];
+        sprintf(filename, "Resultados/command%d_output.txt", n_querie);
+        res = fopen(filename, "a");
+    }
+    else
+        printf ("Resultado:\n");
     switch (q)  /*q == nº da query que queremos responder*/
     {
     case 1: {
@@ -71,19 +76,23 @@ void querieIdentifier(char **argv, int n_querie) {
         if(querie1(argv[1])) {
             DRIVERS *d =GetcontentD (lookup_drivers (argv[1])); /*faz lookup na hash dos drivers do Driver pedido*/
             if (d) { 
-                printvaloresQ1 (d, res); /*Função que faz print aos valores pretendidos dos drivers*/
+                printvaloresQ1 (d, res,modo); /*Função que faz print aos valores pretendidos dos drivers*/
                 free_driver (d);
             }
+            else if (modo == 1) 
+                printf ("\tO driver inserido não existe.\n");
         }
         else {
             User *u = GetcontentU( lookup_users (argv[1]) ); /*faz lookup na hash dos users do User pedido*/
             if (u) { 
-                printvaloresQ1_2 (u, res); /*Função que faz print aos valores pretendidos dos users*/
+                printvaloresQ1_2 (u, res,modo); /*Função que faz print aos valores pretendidos dos users*/
                 free_user (u);
             }
+            else if (modo == 1) 
+                printf ("\tO user inserido não existe.\n");
         }
         t = clock () -t;
-        printf ("Query1: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        if (modo == 0) printf ("Query1: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 2: {
@@ -94,10 +103,10 @@ void querieIdentifier(char **argv, int n_querie) {
                 foreach_drivers_Q2 ();
                 ordena_Q2();
             }
-            printfArray(res,atoi(argv[1]));
+            printfArray(res,atoi(argv[1]),modo);
         }
         t = clock () -t;
-        printf ("Query2: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        if (modo == 0) printf ("Query2: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 3: {
@@ -108,19 +117,19 @@ void querieIdentifier(char **argv, int n_querie) {
                 foreach_users_Q3();
                 ordena_Q3();
             }
-            Q3Print(res, atoi(argv[1]));
+            Q3Print(res, atoi(argv[1]),modo);
         }
         t = clock () -t;
-        printf ("Query3: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        if (modo == 0) printf ("Query3: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 4: {
         clock_t t = clock();
 
-        exec_Q4 (argv[1], res);
+        exec_Q4 (argv[1], res, modo);
 
         t = clock () -t;
-        printf ("Query4: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        if (modo == 0) printf ("Query4: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 5: {
@@ -128,10 +137,10 @@ void querieIdentifier(char **argv, int n_querie) {
 
         Q5* query5 = inicializaQ5 (strdup(argv[1]),strdup(argv[2]));
         foreach_rides_Q5(query5);
-        printQ5(query5, res);
+        printQ5(query5, res, modo);
         freeQ5(query5);
         t = clock () -t;
-        printf ("Query5: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        if (modo == 0) printf ("Query5: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 6: {
@@ -139,18 +148,18 @@ void querieIdentifier(char **argv, int n_querie) {
 
         Q6* q = inicializaQ6(strdup(argv[1]), strdup(argv[2]), strdup(argv[3]));
         foreach_rides_Q6(q);
-        printQ6(q, res);
+        printQ6(q, res,modo);
         freeQ6(q);
         t = clock () -t;
-        printf ("Query6: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        if (modo == 0) printf ("Query6: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 7:{
         clock_t t = clock();
         if (atoi (argv[1])) 
-            exec_Q7 (argv [2], atoi (argv[1]), res);
+            exec_Q7 (argv [2], atoi (argv[1]), res, modo);
         t = clock () -t;
-        printf ("Query7: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        if (modo == 0) printf ("Query7: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 8: {
@@ -160,28 +169,25 @@ void querieIdentifier(char **argv, int n_querie) {
         if(argv[1][0] == 'M') foreach_rides_Q8_male();
         else if(argv[1][0] == 'F') foreach_rides_Q8_female();
         ordena_Q8();
-        printArray_Q8(res);
+        printArray_Q8(res, modo);
         freeArray_Q8();
         t = clock () -t;
-        printf ("Query8: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        if (modo == 0) printf ("Query8: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 9: {
         clock_t t = clock();
-
-        createArrayQ9(strdup(argv[1]), strdup(argv[2]));
-        foreach_rides_Q9(q);
-        ordena_Q9();
-        Q9Print(res);
-        freeArrayQ9();
+        int t1 = tempo_De_Vida(strdup(argv[1]));
+        int t2 = tempo_De_Vida(strdup(argv[2]));
+        Q9Print(res, t1, t2, modo);
         t = clock () -t;
-        printf ("Query9: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        if (modo == 0) printf ("Query9: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     default:
         break;
     }
-    fclose (res);
+    if (res) fclose (res);
     return;
 }
 

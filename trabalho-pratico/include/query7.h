@@ -3,6 +3,6 @@
 
 gint organiza_arvore (gconstpointer a, gconstpointer b, gpointer c);
 
-void exec_Q7 (char *city,int N ,FILE *res);
+void exec_Q7 (char *city,int N ,FILE *res, int modo);
 
 #endif

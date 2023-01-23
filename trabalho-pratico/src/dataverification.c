@@ -81,3 +81,12 @@ int verificatip (char *tip) {
     if (res < 0) return 0;
     return 1;
 }
+
+int verifica_inteiro (char *inteiro) {
+    if (inteiro[0] == '\0' || inteiro[0] < '0' || inteiro[0] > '9') return 0;
+    char *sobra;
+    long res = strtol (inteiro, &sobra, 10);
+    if (sobra[0] != '\0') return 0;
+    if (res < 0) return 0;
+    return 1;
+}

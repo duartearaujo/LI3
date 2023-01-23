@@ -28,7 +28,7 @@ void parsequerie (FILE *fp) {
             token = strsep(&temp," ");
             i++;
         }
-        querieIdentifier(querie, n_querie++); /*chama a função que vai realizar cada querie consoante os valores presentes no array "querie"*/
+        querieIdentifier(querie, n_querie++, 0); /*chama a função que vai realizar cada querie consoante os valores presentes no array "querie"*/
         for (--i; i>= 0; i--) free (querie[i]);  /*free do array*/
         i = 0;
         free (querie);

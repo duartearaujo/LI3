@@ -16,7 +16,7 @@ typedef struct arrays_Q8 arrays_Q8;
 #include "query8.h"
 #include "query9.h"
 
-void iniciaHashRides (char *path);
+int iniciaHashRides (char *path);
 
 void inicializaArrays_Q8();
 
@@ -53,8 +53,6 @@ void foreach_rides_Q8_female();
 void foreach_rides_Q8_male();
 
 void free_Arrays_Q8();
-
-void foreach_rides_Q9 ();
 
 void hash_table_destroy_rides ();
 

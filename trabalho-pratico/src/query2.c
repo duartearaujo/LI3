@@ -35,7 +35,7 @@ int desempate_Q2(const void *p1, const void* p2){
 
 
 /*faz print dos valores da query 2*/
-void printfArray(FILE *res, int N){
+void printfArray(FILE *res, int N, int modo){
     int print = 0, i=0,j=0;
     while (i< N){
         DRIVERS *driver = getElement_Q2(j);
@@ -44,7 +44,10 @@ void printfArray(FILE *res, int N){
         char *name = getNameD(driver);
         double avaliacao_media = getAvaliacaoMediaD(driver);
         if(ac_st == 'a'){
-            fprintf(res,"%s;%s;%.3f\n",id,name,avaliacao_media);
+            if (modo == 0)
+                fprintf(res,"%s;%s;%.3f\n",id,name,avaliacao_media);
+            else
+                printf("\t%s;%s;%.3f\n",id,name,avaliacao_media);
             print++;
             i++;
         }

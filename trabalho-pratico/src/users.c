@@ -44,7 +44,7 @@ void free_user (User *value) {
     free (value);
 }
 
-void iniciaHashUsers (char *path) {
+int iniciaHashUsers (char *path) {
     FILE *fp = NULL;
     users = g_hash_table_new_full(g_str_hash, g_str_equal,NULL, (GDestroyNotify)free_user);  /*cria a hashtable dos users*/
     char *filename = malloc ((strlen (path) + strlen ("/users.csv") + 1)*sizeof (char));  /*alloca espaço para o input(path dos ficheiros) + o nome do ficheiro que se pretende ler*/
@@ -53,11 +53,12 @@ void iniciaHashUsers (char *path) {
     fp = fopen(filename,"r");  /*abre o ficheiro*/
     if(!fp){
         perror("Não conseguiu abrir o ficheiro");
-        return;
+        return 0;
     }
     parser (fp,1);  /*faz o parse do ficheiro*/
     free (filename);  /*free do path*/
     fclose (fp);  /*fecha o ficheiro*/
+    return 1;
 }
 
 /*Aloca uma nova estrura User para adicionar à hash dos Users*/

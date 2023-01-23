@@ -5,8 +5,8 @@
 #include "../include/drivers.h"
 #include "../include/users.h"
 
-void printvaloresQ1 (DRIVERS *d, FILE *res);
+void printvaloresQ1 (DRIVERS *d, FILE *res, int modo);
 
-void printvaloresQ1_2 (User *u, FILE *res);
+void printvaloresQ1_2 (User *u, FILE *res, int modo);
 
 #endif

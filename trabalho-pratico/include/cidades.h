@@ -19,7 +19,7 @@ void foreach_tree_city (char *city, double preco_medio []);
 
 void ordena_arvore_Q7 (char *city);
 
-void printQ7 (char *city,int N, FILE *res);
+void printQ7 (char *city,int N, FILE *res, int modo);
 
 char *getIdC (AvC const* a);
 

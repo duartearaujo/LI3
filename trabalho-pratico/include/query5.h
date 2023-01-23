@@ -9,6 +9,6 @@ void freeQ5 (Q5 *query5);
 
 void preco_medio_Q5(gpointer key, RIDES *value, Q5 *query5);
 
-void printQ5 (Q5 *query5, FILE *res);
+void printQ5 (Q5 *query5, FILE *res, int modo);
 
 #endif
