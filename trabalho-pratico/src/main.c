@@ -23,7 +23,7 @@ int main(int argc, char **argv){
         clock_t t = clock();
         int u = iniciaHashUsers (argv[1]);
         int d = iniciaHashDrivers (argv[1]);
-        createArrayQ9();
+        inicializaQ9();
         iniciaHashCidades ();
         int r = iniciaHashRides (argv[1]);
         if (!(u && d && r)) return 1;
