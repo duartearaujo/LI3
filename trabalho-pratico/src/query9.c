@@ -8,7 +8,6 @@
 #include "../include/drivers.h"
 #include "../include/query9.h"
 
-
 gint desempate_Q9(gconstpointer p1, gconstpointer p2){
     RIDES const*dados_1 = p1;
     RIDES const*dados_2 = p2;
@@ -30,7 +29,6 @@ gint desempate_Q9(gconstpointer p1, gconstpointer p2){
     }
     return result;
 }
-
 
 struct Q9_aux {
     FILE *res;
