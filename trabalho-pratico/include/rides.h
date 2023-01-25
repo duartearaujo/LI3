@@ -10,6 +10,8 @@ typedef struct RIDES RIDES;
 
 typedef struct arrays_Q8 arrays_Q8;
 
+typedef struct array_Q9 array_Q9;
+
 #include "query4.h"
 #include "query5.h"
 #include "query6.h"
@@ -19,6 +21,8 @@ typedef struct arrays_Q8 arrays_Q8;
 int iniciaHashRides (char *path);
 
 void inicializaArrays_Q8();
+
+void inicializaQ9 ();
 
 void free_ride (RIDES *value);
 
@@ -44,6 +48,22 @@ char *getTip (RIDES *ride);
 
 RIDES* lookup_rides (char* key);
 
+int getIdadeViagem (RIDES *ride);
+
+char* getId_Q9 (int pos); 
+
+char* getDate_Q9 (int pos);
+
+char* getCity_Q9 (int pos);
+
+int getDistance_Q9 (int pos);
+
+double getTip_Q9 (int pos); 
+
+int getIdadeViagem_Q9 (int pos);
+
+int getposQ9 ();
+
 void foreach_rides_Q5 (Q5 *preco);
 
 void foreach_rides_Q6 (Q6 *q);
@@ -55,5 +75,11 @@ void foreach_rides_Q8_male();
 void free_Arrays_Q8();
 
 void hash_table_destroy_rides ();
+
+void addQ9(RIDES *ride);
+
+void ordena_Q9();
+
+void freeArrayQ9();
 
 #endif

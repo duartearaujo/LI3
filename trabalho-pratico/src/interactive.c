@@ -28,7 +28,7 @@ int iniciaI(){
 
     int u = iniciaHashUsers (path);
     int d = iniciaHashDrivers (path);
-    createArrayQ9();
+    inicializaQ9();
     iniciaHashCidades();
     int r = iniciaHashRides (path);
     if (!(u && d && r)) return 0;
