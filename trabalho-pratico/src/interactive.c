@@ -32,6 +32,7 @@ int iniciaI(){
     iniciaHashCidades();
     int r = iniciaHashRides (path);
     if (!(u && d && r)) return 0;
+    ordena_Q9();
     free (path);
     return 1;
 }

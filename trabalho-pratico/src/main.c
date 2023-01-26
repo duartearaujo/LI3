@@ -27,7 +27,7 @@ int main(int argc, char **argv){
         iniciaHashCidades ();
         int r = iniciaHashRides (argv[1]);
         if (!(u && d && r)) return 1;
-
+        ordena_Q9();
         t = clock () -t;
         printf ("Load Time: %f\n", ((float)t)/CLOCKS_PER_SEC);
          /*parse das queries*/
@@ -43,6 +43,6 @@ int main(int argc, char **argv){
     hash_table_destroy_rides ();
     freeArray();
     freeArrayU();
-    freeArvoreQ9();
+    freeArrayQ9();
     return 0;
 }

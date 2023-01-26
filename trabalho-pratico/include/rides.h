@@ -44,6 +44,24 @@ double getTip (RIDES *ride);
 
 RIDES* lookup_rides (char* key);
 
+char* getId_Q9 (int pos); 
+
+char* getDate_Q9 (int pos);
+
+char* getCity_Q9 (int pos);
+
+int getDistance_Q9 (int pos);
+
+double getTip_Q9 (int pos); 
+
+int getIdadeViagem_Q9 (int pos);
+
+int getposQ9 ();
+
+int getIdadeViagem (RIDES *ride);
+
+int getposQ9 ();
+
 int getIdadeViagem (RIDES *ride);
 
 int getposQ9 ();
@@ -56,14 +74,10 @@ void foreach_rides_Q8 ();
 
 void hash_table_destroy_rides ();
 
-void foreach_print_Q9 (Q9_aux *print);
+void addQ9(RIDES *ride);
 
-void freeArvoreQ9();
+void ordena_Q9();
 
-char *getIdR_Q9 (RIDES const*ride);
-
-int getdistanceR_Q9 (RIDES const*ride);
-
-int getIdadeViagem_Q9 (RIDES const*ride);
+void freeArrayQ9();
 
 #endif
