@@ -44,6 +44,5 @@ int main(int argc, char **argv){
     freeArray();
     freeArrayU();
     freeArvoreQ9();
-    free_Arrays_Q8();
     return 0;
 }

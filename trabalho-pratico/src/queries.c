@@ -165,14 +165,13 @@ void querieIdentifier(char **argv, int n_querie, int modo) {
     case 8: {
         clock_t t = clock();
 
-        inicializa_array_Q8(atoi(argv[2]));
-        if(argv[1][0] == 'M') foreach_rides_Q8_male();
-        else if(argv[1][0] == 'F') foreach_rides_Q8_female();
+        inicializa_array_Q8(atoi(argv[2]),argv[1][0]);
+        foreach_rides_Q8();
         ordena_Q8();
-        printArray_Q8(res, modo);
+        printArray_Q8(res);
         freeArray_Q8();
         t = clock () -t;
-        if (modo == 0) printf ("Query8: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        printf ("Query8: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 9: {

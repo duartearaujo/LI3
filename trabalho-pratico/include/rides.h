@@ -8,8 +8,6 @@
 
 typedef struct RIDES RIDES;
 
-typedef struct arrays_Q8 arrays_Q8;
-
 typedef struct array_Q9 array_Q9;
 
 #include "query4.h"
@@ -19,8 +17,6 @@ typedef struct array_Q9 array_Q9;
 #include "query9.h"
 
 int iniciaHashRides (char *path);
-
-void inicializaArrays_Q8();
 
 void inicializaQ9 ();
 
@@ -56,11 +52,7 @@ void foreach_rides_Q5 (Q5 *preco);
 
 void foreach_rides_Q6 (Q6 *q);
 
-void foreach_rides_Q8_female();
-
-void foreach_rides_Q8_male();
-
-void free_Arrays_Q8();
+void foreach_rides_Q8 ();
 
 void hash_table_destroy_rides ();
 
