@@ -168,10 +168,10 @@ void querieIdentifier(char **argv, int n_querie, int modo) {
         inicializa_array_Q8(atoi(argv[2]),argv[1][0]);
         foreach_rides_Q8();
         ordena_Q8();
-        printArray_Q8(res);
+        printArray_Q8(res, modo);
         freeArray_Q8();
         t = clock () -t;
-        printf ("Query8: %f\n", ((float)t)/CLOCKS_PER_SEC);
+        if (modo == 0) printf ("Query8: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 9: {
