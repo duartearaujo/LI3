@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ncurses.h>
+#include <interactive.h>
 #include "../include/queries.h"
 #include "../include/users.h"
 #include "../include/rides.h"
@@ -9,22 +11,40 @@
 #include "../include/dataverification.h"
 #include "../include/cidades.h"
 
-
-int iniciaI(){
-    if (system("clear")) {
-        perror("O sistema não conseguiu limpar o terminal.");
+int novapagina(int *informacoespaginas, char (*paginas)[][linhas_por_pagina]) {
+    mvprintw (informacoespaginas[0],0,"\t\t---- FIM DA PÁGINA ----\nn - proxima pagina       p - pagina anterior       e - exit\n");
+    int ch = getch();
+    if (ch == 'n') {
+        informacoespaginas[1] ++;
+        informacoespaginas[0] = 0;
+        return 1;
+    }
+    if (ch == 'p' && informacoespaginas [1] >= 0) {
+        informacoespaginas[1]--;
+        for (int i = 0; i < informacoespaginas[2]; i++) mvprintw (i,0,"%s", (*paginas) [informacoespaginas[1]]  [i]);
+    }
+    if (ch == 'e')
         return 0;
-    };
+    return -1;
+}
 
-    printf("PROJETO DE LI3\n");
-    printf("by Filipe Rodrigues, João Coelho e Duarte Araújo\n\n");
-    size_t len;
-    ssize_t read;
-    char *path = NULL;
-    printf("Insira o path para os ficheiros: ");
-    read = getline(&path, &len, stdin);
-    path[read-1] = '\0';
-    printf ("Carregando os ficheiros...\n");
+int iniciaI(int *informacoespaginas,  char (*paginas)[][linhas_por_pagina]){
+    mvprintw (informacoespaginas[0]++,0,"PROJETO DE LI3");
+    if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+
+    mvprintw (informacoespaginas[0]++,0,"by Filipe Rodrigues, João Coelho e Duarte Araújo");
+    if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+
+    char *path = malloc (sizeof (char) * 256);
+    mvprintw(informacoespaginas[0]++,0,"Insira o path para os ficheiros: ");
+ 
+    getstr(path);
+    refresh ();
+    if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+
+    mvprintw (informacoespaginas[0]++,0,"Carregando os ficheiros...");
+    if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+    refresh ();
 
     int u = iniciaHashUsers (path);
     int d = iniciaHashDrivers (path);
@@ -54,33 +74,33 @@ int verifica_input (char **query) {
     return -1;
 }
 
-void menudequeries () {
-    printf ("\nMenu de Queries:\n");
-    printf ("Query |                                               Descrição                                                         | Argumentos\n");
-    printf ("  1   | Resumo de um perfil (User ou driver).                                                                           | Id/Username\n");
-    printf ("  2   | Listar os N condutores com maior avaliação média.                                                               | N\n");
-    printf ("  3   | Listar os N utilizadores com maior distância viajada.                                                           | N\n");
-    printf ("  4   | Preço médio das viagens numa cidade.                                                                            | Cidade\n");
-    printf ("  5   | Preço médio das viagens entre duas datas:                                                                       | Data1 Data2\n");
-    printf ("  6   | Distância média percorrida, numa determinada cidade, num dado intervalo de tempo.                               | Cidade Data1 Data2\n");
-    printf ("  7   | Listar os N condutores com maior avaliação média numa cidade.                                                   | N Cidade\n");
-    printf ("  8   | Listar todas as viagens nas quais o utilizador e o condutor são do mesmo género e têm perfis com X ou mais anos.| M/F X\n");
-    printf ("  9   | Listar as viagens nas quais o passageiro deu gorjeta num dado intervalo de tempo.                               | Data1 Data2\n\n");
+void menudequeries (int *informacoespaginas, char (*paginas)[][linhas_por_pagina]) {
+    informacoespaginas[0]++;
+    mvprintw (informacoespaginas[0]++,0,"Menu de Queries:");
+    mvprintw (informacoespaginas[0]++,0,"Query |                                               Descrição                                                       | Argumentos");
+    mvprintw (informacoespaginas[0]++,0,"  1   | Resumo de um perfil (User ou driver).                                                                           | Id/Username");
+    mvprintw (informacoespaginas[0]++,0,"  2   | Listar os N condutores com maior avaliação média.                                                            | N");
+    mvprintw (informacoespaginas[0]++,0,"  3   | Listar os N utilizadores com maior distância viajada.                                                          | N");
+    mvprintw (informacoespaginas[0]++,0,"  4   | Preço médio das viagens numa cidade.                                                                          | Cidade");
+    mvprintw (informacoespaginas[0]++,0,"  5   | Preço médio das viagens entre duas datas:                                                                     | Data1 Data2");
+    mvprintw (informacoespaginas[0]++,0,"  6   | Distância média percorrida, numa determinada cidade, num dado intervalo de tempo.                             | Cidade Data1 Data2");
+    mvprintw (informacoespaginas[0]++,0,"  7   | Listar os N condutores com maior avaliação média numa cidade.                                                | N Cidade");
+    mvprintw (informacoespaginas[0]++,0,"  8   | Listar todas as viagens nas quais o utilizador e o condutor são do mesmo género e têm perfis com X ou mais anos.| M/F X");
+    mvprintw (informacoespaginas[0]++,0,"  9   | Listar as viagens nas quais o passageiro deu gorjeta num dado intervalo de tempo.                               | Data1 Data2");
+    informacoespaginas[0]++;
 }
 
-void parsequeryI(){
-    menudequeries ();
+void parsequeryI(int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
+    menudequeries (informacoespaginas,paginas);
     int i = 1;
     int n_query = 1;
     char **query = NULL;
-    char *q = NULL;
-    char *args = NULL;
-    size_t len;
-    ssize_t read;
+    char *q = malloc (sizeof (char) *2);
+    char *args = malloc (sizeof (char) * 256);
 
-    printf("Especifique a query: ");
-    read = getline(&q, &len, stdin);
-    q[read-1] = '\0';
+    if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+    mvprintw(informacoespaginas[0]++,0,"Especifique a query: ");
+    getstr(q);
     
     int Nquery = atoi (q);
     if (Nquery < 1 || Nquery > 9){
@@ -88,9 +108,9 @@ void parsequeryI(){
         return;
     }
 
-    printf("Insira os argumentos separados por espaço: ");
-    read = getline(&args, &len, stdin);
-    args[read-1] = '\0';
+    mvprintw(informacoespaginas[0]++,0,"Insira os argumentos separados por espaço: ");
+    getstr (args);
+
     char *temp = args;
     char *token = strsep(&temp," ");
 
@@ -115,7 +135,7 @@ void parsequeryI(){
         i++;
     }
     if (!verifica_input (query)) {
-        printf ("Argumentos inválidos.\n");
+        mvprintw (informacoespaginas[0]++,0,"Argumentos inválidos.\n");
         return;
     }
     querieIdentifier(query, n_query++, 1);
@@ -124,14 +144,26 @@ void parsequeryI(){
     free (query);
     free (q);
     free (args);
-    char *confirmacao = NULL;
-    printf ("Pretende continuar?(y or n): ");
-    read = getline (&confirmacao, &len, stdin);
-    confirmacao[read -1] = '\0';
-    if (confirmacao [0] != 'y' && confirmacao [0] != 'n') {
+    int confirmacao;
+    mvprintw (informacoespaginas[0]++,0, "Pretende continuar?(y or n): ");
+    confirmacao = getch();
+    if (confirmacao != 'y' && confirmacao != 'n') {
         printf ("Formato inválido de resposta. Terminando o programa...\n");
         return;
     }
-    if (confirmacao[0] == 'y') parsequeryI();
-    free (confirmacao);
+    if (confirmacao == 'y') parsequeryI(informacoespaginas, paginas);
+}
+
+void main_I () {
+    initscr();
+    refresh();
+    int informacoespaginas[3];
+    informacoespaginas [0]= 0; //Linha atual
+    informacoespaginas [1]= 0; //Pagina atual
+    informacoespaginas [2]= linhas_por_pagina; //Linhas por pagina
+    int total_paginas= 10000 / linhas_por_pagina;  // Total number of pages
+    char (*paginas)[total_paginas][linhas_por_pagina] = {0};
+    int i = iniciaI(informacoespaginas, paginas);
+    if (i) parsequeryI(informacoespaginas, paginas);
+    endwin();
 }
