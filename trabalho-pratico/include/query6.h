@@ -11,4 +11,6 @@ void printQ6(Q6 *q, FILE *res, int modo);
 
 void freeQ6(Q6 *q);
 
+void query6Exe(FILE *res, int modo, char **argv);
+
 #endif 

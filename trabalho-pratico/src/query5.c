@@ -58,3 +58,10 @@ void printQ5 (Q5 *query5, FILE *res, int modo) {
             printf ("\t%.3f\n", valor_medio);
     }
 }
+
+void query5Exe(FILE *res, int modo, char **argv){
+    Q5* query5 = inicializaQ5 (strdup(argv[1]),strdup(argv[2]));
+        foreach_rides_Q5(query5);
+        printQ5(query5, res, modo);
+        freeQ5(query5);
+}

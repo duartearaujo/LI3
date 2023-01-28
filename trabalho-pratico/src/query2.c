@@ -57,3 +57,14 @@ void printfArray(FILE *res, int N, int modo){
         j++;
    }
 }
+
+void query2Exe(FILE *res,int modo, char *argv){
+    if (atoi (argv)) {
+        if(!arrayOrdenado()){
+            createArray();
+            foreach_drivers_Q2 ();
+            ordena_Q2();
+        }
+        printfArray(res,atoi(argv),modo);
+    }
+}

@@ -57,3 +57,14 @@ void Q3Print(FILE *res, int N, int modo){
         free_user(user);
     }
 }
+
+void query3Exe(FILE *res,int modo,char* argv){
+    if (atoi (argv)) {
+        if(!arrayOrdenadoU()){
+            createArrayUser();
+            foreach_users_Q3();
+            ordena_Q3();
+        }
+        Q3Print(res, atoi(argv),modo);
+    }
+}

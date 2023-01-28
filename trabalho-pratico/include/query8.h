@@ -23,4 +23,6 @@ void freeDados_Q8(dados_Q8* data);
 
 void freeArray_Q8();
 
+void query8Exe(FILE *res, int modo, char **argv);
+
 #endif
