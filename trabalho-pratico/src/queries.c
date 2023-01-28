@@ -23,7 +23,7 @@
 #define ANO 2022
 
 /*Função para identificar se o input recebido da query 1 é um id(driver) ou um username (user)*/
-int querie1(char *str){  
+int identifyArgument(char *str){  
     int id = 0;
     if(str[1] >= 48 && str[1] <= 57) id = 1;
     return id;
@@ -73,83 +73,42 @@ void querieIdentifier(char **argv, int n_querie, int modo) {
     {
     case 1: {
         clock_t t = clock();
-        if(querie1(argv[1])) {
-            DRIVERS *d =GetcontentD (lookup_drivers (argv[1])); /*faz lookup na hash dos drivers do Driver pedido*/
-            if (d) { 
-                printvaloresQ1 (d, res,modo); /*Função que faz print aos valores pretendidos dos drivers*/
-                free_driver (d);
-            }
-            else if (modo == 1) 
-                printf ("\tO driver inserido não existe.\n");
-        }
-        else {
-            User *u = GetcontentU( lookup_users (argv[1]) ); /*faz lookup na hash dos users do User pedido*/
-            if (u) { 
-                printvaloresQ1_2 (u, res,modo); /*Função que faz print aos valores pretendidos dos users*/
-                free_user (u);
-            }
-            else if (modo == 1) 
-                printf ("\tO user inserido não existe.\n");
-        }
+        query1Exe(res,modo,argv[1]);
         t = clock () -t;
         if (modo == 0) printf ("Query1: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 2: {
         clock_t t = clock();
-        if (atoi (argv[1])) {
-            if(!arrayOrdenado()){
-                createArray();
-                foreach_drivers_Q2 ();
-                ordena_Q2();
-            }
-            printfArray(res,atoi(argv[1]),modo);
-        }
+        query2Exe(res,modo,argv[1]);
         t = clock () -t;
         if (modo == 0) printf ("Query2: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 3: {
         clock_t t = clock();
-        if (atoi (argv[1])) {
-            if(!arrayOrdenadoU()){
-                createArrayUser();
-                foreach_users_Q3();
-                ordena_Q3();
-            }
-            Q3Print(res, atoi(argv[1]),modo);
-        }
+        query3Exe(res,modo,argv[1]);
         t = clock () -t;
         if (modo == 0) printf ("Query3: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 4: {
         clock_t t = clock();
-
         exec_Q4 (argv[1], res, modo);
-
         t = clock () -t;
         if (modo == 0) printf ("Query4: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 5: {
         clock_t t = clock();
-
-        Q5* query5 = inicializaQ5 (strdup(argv[1]),strdup(argv[2]));
-        foreach_rides_Q5(query5);
-        printQ5(query5, res, modo);
-        freeQ5(query5);
+        query5Exe(res,modo,argv);
         t = clock () -t;
         if (modo == 0) printf ("Query5: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 6: {
         clock_t t = clock();
-
-        Q6* q = inicializaQ6(strdup(argv[1]), strdup(argv[2]), strdup(argv[3]));
-        foreach_rides_Q6(q);
-        printQ6(q, res,modo);
-        freeQ6(q);
+        query6Exe(res,modo,argv);
         t = clock () -t;
         if (modo == 0) printf ("Query6: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
@@ -164,21 +123,14 @@ void querieIdentifier(char **argv, int n_querie, int modo) {
     }
     case 8: {
         clock_t t = clock();
-
-        inicializa_array_Q8(atoi(argv[2]),argv[1][0]);
-        foreach_rides_Q8();
-        ordena_Q8();
-        printArray_Q8(res, modo);
-        freeArray_Q8();
+        query8Exe(res,modo,argv);
         t = clock () -t;
         if (modo == 0) printf ("Query8: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 9: {
         clock_t t = clock();
-        int t1 = tempo_De_Vida(strdup(argv[1]));
-        int t2 = tempo_De_Vida(strdup(argv[2]));
-        Q9Print(res, t1, t2, modo);
+        query9Exe(res,modo,argv);
         t = clock () -t;
         if (modo == 0) printf ("Query9: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;

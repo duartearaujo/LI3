@@ -52,3 +52,9 @@ void freeQ6(Q6 *q){
     free(q);
 }
 
+void query6Exe(FILE *res, int modo, char **argv){
+    Q6* q = inicializaQ6(strdup(argv[1]), strdup(argv[2]), strdup(argv[3]));
+    foreach_rides_Q6(q);
+    printQ6(q, res,modo);
+    freeQ6(q);
+}

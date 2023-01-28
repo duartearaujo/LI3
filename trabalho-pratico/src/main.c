@@ -12,6 +12,7 @@
 #include "../include/query2.h"
 #include "../include/query9.h"
 #include "../include/interactive.h"
+#include "../include/catalogos.h"
 
 /*função main do projeto*/
 int main(int argc, char **argv){  
@@ -21,13 +22,7 @@ int main(int argc, char **argv){
     }
     else{
         clock_t t = clock();
-        int u = iniciaHashUsers (argv[1]);
-        int d = iniciaHashDrivers (argv[1]);
-        inicializaQ9();
-        iniciaHashCidades ();
-        int r = iniciaHashRides (argv[1]);
-        if (!(u && d && r)) return 1;
-        ordena_Q9();
+        if(!iniciaHashTables(argv[1])) return 1;
         t = clock () -t;
         printf ("Load Time: %f\n", ((float)t)/CLOCKS_PER_SEC);
          /*parse das queries*/

@@ -51,3 +51,24 @@ void printvaloresQ1_2 (User *u, FILE *res, int modo)  {
     else if (modo == 1)
         printf ("\tO User está inativo\n");
 }
+
+void query1Exe(FILE *res, int modo,char* argv){
+    if(identifyArgument(argv)) {
+            DRIVERS *d =GetcontentD (lookup_drivers (argv)); /*faz lookup na hash dos drivers do Driver pedido*/
+            if (d) { 
+                printvaloresQ1 (d, res,modo); /*Função que faz print aos valores pretendidos dos drivers*/
+                free_driver (d);
+            }
+            else if (modo == 1) 
+                printf ("\tO driver inserido não existe.\n");
+        }
+        else {
+            User *u = GetcontentU( lookup_users (argv) ); /*faz lookup na hash dos users do User pedido*/
+            if (u) { 
+                printvaloresQ1_2 (u, res,modo); /*Função que faz print aos valores pretendidos dos users*/
+                free_user (u);
+            }
+            else if (modo == 1) 
+                printf ("\tO user inserido não existe.\n");
+        }
+}

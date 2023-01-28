@@ -5,7 +5,7 @@
 
 void querieIdentifier(char **argv, int n_querie, int i);
 
-int querie1(char *str);
+int identifyArgument(char *str);
 
 int tempo_De_Vida(char *str);
 

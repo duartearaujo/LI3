@@ -54,3 +54,9 @@ void Q9Print(FILE *res, int t1, int t2, int modo){
         i++;
     }
 }
+
+void query9Exe(FILE *res, int modo, char **argv){
+    int t1 = tempo_De_Vida(strdup(argv[1]));
+    int t2 = tempo_De_Vida(strdup(argv[2]));
+    Q9Print(res, t1, t2, modo);
+}

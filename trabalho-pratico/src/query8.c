@@ -142,3 +142,11 @@ void freeArray_Q8(){
         free(array);
     }
 }
+
+void query8Exe(FILE *res, int modo, char **argv){
+    inicializa_array_Q8(atoi(argv[2]),argv[1][0]);
+    foreach_rides_Q8();
+    ordena_Q8();
+    printArray_Q8(res, modo);
+    freeArray_Q8();
+}
