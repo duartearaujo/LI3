@@ -36,7 +36,7 @@ void distancia_media(gpointer key, RIDES *ride, Q6 *q){
     free(data);
 }
 
-void printQ6(Q6 *q, FILE *res, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
+void printQ6(Q6 *q, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     if(q->n_rides){
         double distancia_media = (q->total_distance/q->n_rides);
         if (modo == 0)
@@ -55,7 +55,7 @@ void freeQ6(Q6 *q){
     free(q);
 }
 
-void query6Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
+void query6Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     Q6* q = inicializaQ6(strdup(argv[1]), strdup(argv[2]), strdup(argv[3]));
     foreach_rides_Q6(q);
     printQ6(q, res, modo, informacoespaginas, paginas);

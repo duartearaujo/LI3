@@ -35,7 +35,7 @@ int desempate_Q2(const void *p1, const void* p2){
 
 
 /*faz print dos valores da query 2*/
-void printfArray(FILE *res, int N, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
+void printfArray(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int print = 0, i=0,j=0;
     while (i< N){
         DRIVERS *driver = getElement_Q2(j);
@@ -60,7 +60,7 @@ void printfArray(FILE *res, int N, int modo, int *informacoespaginas, char (*pag
    }
 }
 
-void query2Exe(FILE *res,int modo, char *argv, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
+void query2Exe(FILE *res,int modo, char *argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     if (atoi (argv)) {
         if(!arrayOrdenado()){
             createArray();

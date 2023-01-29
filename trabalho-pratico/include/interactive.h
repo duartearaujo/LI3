@@ -5,11 +5,9 @@
 
 #define linhas_por_pagina (LINES-2)
 
-//int iniciaI(int *informacoespaginas, char (*paginas)[][LINES - 2]);
+int novapagina(int *informacoespaginas, char *paginas[][linhas_por_pagina]);
 
-int novapagina(int *informacoespaginas, char (*paginas)[][linhas_por_pagina]);
-
-void parsequeryI();
+void parsequeryI(int *informacoespaginas,char *paginas[][linhas_por_pagina]);
 
 void main_I ();
 

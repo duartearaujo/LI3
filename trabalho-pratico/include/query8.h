@@ -19,12 +19,12 @@ int desempate_Q8(const void *p1, const void* p2);
 
 void ordena_Q8();
 
-void printArray_Q8(FILE *res, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]);
+void printArray_Q8(FILE *res, int modo, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
 
 void freeDados_Q8(dados_Q8* data);
 
 void freeArray_Q8();
 
-void query8Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]);
+void query8Exe(FILE *res, int modo, char **argv, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
 
 #endif

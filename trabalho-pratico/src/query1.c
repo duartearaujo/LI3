@@ -9,7 +9,7 @@
 #include "../include/interactive.h"
 
 /* Função para fazer print dos valores do driver pedido na query 1 no ficheiro */
-void printvaloresQ1 (DRIVERS *d, FILE *res, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]) {  
+void printvaloresQ1 (DRIVERS *d, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {  
     char account_st = getAccountStatusD (d);
     if (account_st == 'a') {
         double valor_atual = getValorAtualD (d);
@@ -34,7 +34,7 @@ void printvaloresQ1 (DRIVERS *d, FILE *res, int modo, int *informacoespaginas, c
 }
 
 /* Função para fazer print dos valores do user pedido na query 1 no ficheiro */
-void printvaloresQ1_2 (User *u, FILE *res, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina])  {
+void printvaloresQ1_2 (User *u, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina])  {
     char account_st = getAccStatusU (u);
     if (account_st == 'a') {
         double acc_avaliation = getAccAvaliationU (u);
@@ -58,7 +58,7 @@ void printvaloresQ1_2 (User *u, FILE *res, int modo, int *informacoespaginas, ch
         printf ("\tO User está inativo\n");
 }
 
-void query1Exe(FILE *res, int modo, char* argv, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
+void query1Exe(FILE *res, int modo, char* argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     if(identifyArgument(argv)) {
             DRIVERS *d =GetcontentD (lookup_drivers (argv)); /*faz lookup na hash dos drivers do Driver pedido*/
             if (d) { 

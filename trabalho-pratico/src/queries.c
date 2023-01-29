@@ -59,7 +59,7 @@ int compareDates(char *str, char *string){
 }
 
 /*função usada para responder às queries, ou chamar as funções que resolvem as queries */
-void querieIdentifier(char **argv, int n_querie, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]) {  
+void querieIdentifier(char **argv, int n_querie, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {  
     FILE *res = NULL;
     int q = atoi (argv[0]);
     if(modo == 0){ // modo Batch

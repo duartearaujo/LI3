@@ -32,7 +32,7 @@ int desempate_Q9(const void *p1, const void* p2) {
     return result;
 }
 
-void Q9Print(FILE *res, int t1, int t2, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
+void Q9Print(FILE *res, int t1, int t2, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int t;
     int i = 0;
     int tamanho = getposQ9 ();
@@ -58,7 +58,7 @@ void Q9Print(FILE *res, int t1, int t2, int modo, int *informacoespaginas, char 
     }
 }
 
-void query9Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
+void query9Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int t1 = tempo_De_Vida(strdup(argv[1]));
     int t2 = tempo_De_Vida(strdup(argv[2]));
     Q9Print(res, t1, t2, modo, informacoespaginas, paginas);

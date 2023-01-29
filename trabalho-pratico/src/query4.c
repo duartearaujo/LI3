@@ -8,7 +8,7 @@
 #include "../include/query4.h"
 #include "../include/interactive.h"
 
-void exec_Q4 (char *city, FILE *res, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]) {
+void exec_Q4 (char *city, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
     double preco_medio [2] = {0};
     foreach_tree_city (city, preco_medio);
     if (preco_medio [1]) {

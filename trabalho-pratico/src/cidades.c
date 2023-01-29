@@ -176,7 +176,7 @@ gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
     return TRUE;
 }
 
-void printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]) {
+void printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
     HTree *c= g_hash_table_lookup (cidades,city);
     if (c) {
         PrintQ7 *p = malloc(sizeof (PrintQ7));

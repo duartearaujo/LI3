@@ -22,7 +22,7 @@ void foreach_tree_city (char *city, double preco_medio []);
 
 void ordena_arvore_Q7 (char *city);
 
-void printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]);
+void printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
 
 char *getIdC (AvC const* a);
 

@@ -112,7 +112,7 @@ void ordena_Q8(){
     qsort (array->lista,(size_t)array->pos, sizeof(dados_Q8*), desempate_Q8);
 }
 
-void printArray_Q8(FILE *res, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
+void printArray_Q8(FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     for(int i = 0; i < array->pos;i++){
         char account_status_driver = getAccountStatusD(lookup_drivers(array->lista[i]->id_driver));
         char account_status_user = getAccStatusU(lookup_users(array->lista[i]->username_user));
@@ -146,7 +146,7 @@ void freeArray_Q8(){
     }
 }
 
-void query8Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
+void query8Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     inicializa_array_Q8(atoi(argv[2]),argv[1][0]);
     foreach_rides_Q8();
     ordena_Q8();
