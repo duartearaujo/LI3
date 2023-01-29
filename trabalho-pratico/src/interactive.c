@@ -3,7 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include <ncurses.h>
-#include <interactive.h>
+#include "../include/interactive.h"
 #include "../include/queries.h"
 #include "../include/users.h"
 #include "../include/rides.h"
@@ -138,7 +138,7 @@ void parsequeryI(int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
         mvprintw (informacoespaginas[0]++,0,"Argumentos inválidos.\n");
         return;
     }
-    querieIdentifier(query, n_query++, 1);
+    querieIdentifier(query, n_query++, 1, informacoespaginas, paginas);
 
     for (--i; i>= 0; i--) free (query[i]);  /*free do array*/
     free (query);
@@ -158,10 +158,10 @@ void main_I () {
     initscr();
     refresh();
     int informacoespaginas[3];
-    informacoespaginas [0]= 0; //Linha atual
-    informacoespaginas [1]= 0; //Pagina atual
-    informacoespaginas [2]= linhas_por_pagina; //Linhas por pagina
-    int total_paginas= 10000 / linhas_por_pagina;  // Total number of pages
+    informacoespaginas [0] = 0; //Linha atual
+    informacoespaginas [1] = 0; //Pagina atual
+    informacoespaginas [2] = linhas_por_pagina; //Linhas por pagina
+    int total_paginas = 10000 / linhas_por_pagina;  // Total number of pages
     char (*paginas)[total_paginas][linhas_por_pagina] = {0};
     int i = iniciaI(informacoespaginas, paginas);
     if (i) parsequeryI(informacoespaginas, paginas);

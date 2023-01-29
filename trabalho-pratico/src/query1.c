@@ -5,9 +5,11 @@
 #include "../include/users.h"
 #include "../include/drivers.h"
 #include "../include/queries.h"
+#include "../include/query1.h"
+#include "../include/interactive.h"
 
 /* Função para fazer print dos valores do driver pedido na query 1 no ficheiro */
-void printvaloresQ1 (DRIVERS *d, FILE *res, int modo) {  
+void printvaloresQ1 (DRIVERS *d, FILE *res, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]) {  
     char account_st = getAccountStatusD (d);
     if (account_st == 'a') {
         double valor_atual = getValorAtualD (d);
@@ -20,8 +22,10 @@ void printvaloresQ1 (DRIVERS *d, FILE *res, int modo) {
         char * birth = getBirthD (d);
         if (modo == 0)
             fprintf (res,"%s;%c;%d;%.3f;%d;%.3f\n",name, gender, calculaIdade(birth), avaliacao_media, count, total_auferido);
-        else 
-            printf ("\t%s;%c;%d;%.3f;%d;%.3f\n",name, gender, calculaIdade(birth), avaliacao_media, count, total_auferido);
+        else{
+            mvprintw (informacoespaginas[0]++, 0, "\t%s;%c;%d;%.3f;%d;%.3f",name, gender, calculaIdade(birth), avaliacao_media, count, total_auferido);
+            if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+        }
         free (name);
         free (birth);
     }
@@ -30,7 +34,7 @@ void printvaloresQ1 (DRIVERS *d, FILE *res, int modo) {
 }
 
 /* Função para fazer print dos valores do user pedido na query 1 no ficheiro */
-void printvaloresQ1_2 (User *u, FILE *res, int modo)  {
+void printvaloresQ1_2 (User *u, FILE *res, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina])  {
     char account_st = getAccStatusU (u);
     if (account_st == 'a') {
         double acc_avaliation = getAccAvaliationU (u);
@@ -43,8 +47,10 @@ void printvaloresQ1_2 (User *u, FILE *res, int modo)  {
         char *data = getDataU (u);
         if (modo == 0)  
             fprintf (res,"%s;%c;%d;%.3f;%d;%.3f\n",name, gender, calculaIdade(data), avaliacao_media, n_viagens, total_gasto);
-        else
-            printf ("\t%s;%c;%d;%.3f;%d;%.3f\n",name, gender, calculaIdade(data), avaliacao_media, n_viagens, total_gasto);
+        else{
+            mvprintw (informacoespaginas[0]++, 0, "\t%s;%c;%d;%.3f;%d;%.3f",name, gender, calculaIdade(data), avaliacao_media, n_viagens, total_gasto);
+            if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+        }
         free (name);
         free (data);
     }
@@ -52,11 +58,11 @@ void printvaloresQ1_2 (User *u, FILE *res, int modo)  {
         printf ("\tO User está inativo\n");
 }
 
-void query1Exe(FILE *res, int modo,char* argv){
+void query1Exe(FILE *res, int modo, char* argv, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
     if(identifyArgument(argv)) {
             DRIVERS *d =GetcontentD (lookup_drivers (argv)); /*faz lookup na hash dos drivers do Driver pedido*/
             if (d) { 
-                printvaloresQ1 (d, res,modo); /*Função que faz print aos valores pretendidos dos drivers*/
+                printvaloresQ1 (d, res, modo, informacoespaginas, paginas); /*Função que faz print aos valores pretendidos dos drivers*/
                 free_driver (d);
             }
             else if (modo == 1) 
@@ -65,7 +71,7 @@ void query1Exe(FILE *res, int modo,char* argv){
         else {
             User *u = GetcontentU( lookup_users (argv) ); /*faz lookup na hash dos users do User pedido*/
             if (u) { 
-                printvaloresQ1_2 (u, res,modo); /*Função que faz print aos valores pretendidos dos users*/
+                printvaloresQ1_2 (u, res,modo, informacoespaginas, paginas); /*Função que faz print aos valores pretendidos dos users*/
                 free_user (u);
             }
             else if (modo == 1) 

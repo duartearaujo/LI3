@@ -5,7 +5,7 @@
 #include "../include/drivers.h"
 #include "../include/queries.h"
 #include "../include/query2.h"
-
+#include "../include/interactive.h"
 
 int desempate_Q2(const void *p1, const void* p2){
     DRIVERS *driver_1 = GetcontentD(*((DRIVERS**) p1));
@@ -35,7 +35,7 @@ int desempate_Q2(const void *p1, const void* p2){
 
 
 /*faz print dos valores da query 2*/
-void printfArray(FILE *res, int N, int modo){
+void printfArray(FILE *res, int N, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
     int print = 0, i=0,j=0;
     while (i< N){
         DRIVERS *driver = getElement_Q2(j);
@@ -46,8 +46,10 @@ void printfArray(FILE *res, int N, int modo){
         if(ac_st == 'a'){
             if (modo == 0)
                 fprintf(res,"%s;%s;%.3f\n",id,name,avaliacao_media);
-            else
-                printf("\t%s;%s;%.3f\n",id,name,avaliacao_media);
+            else{
+                mvprintw(informacoespaginas[0]++, 0, "\t%s;%s;%.3f",id,name,avaliacao_media);
+                if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+            }
             print++;
             i++;
         }
@@ -58,13 +60,13 @@ void printfArray(FILE *res, int N, int modo){
    }
 }
 
-void query2Exe(FILE *res,int modo, char *argv){
+void query2Exe(FILE *res,int modo, char *argv, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
     if (atoi (argv)) {
         if(!arrayOrdenado()){
             createArray();
             foreach_drivers_Q2 ();
             ordena_Q2();
         }
-        printfArray(res,atoi(argv),modo);
+        printfArray(res,atoi(argv),modo,informacoespaginas,paginas);
     }
 }

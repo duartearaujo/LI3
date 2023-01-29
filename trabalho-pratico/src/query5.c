@@ -4,6 +4,7 @@
 #include "../include/rides.h"
 #include "../include/queries.h"
 #include "../include/drivers.h"
+#include "../include/interactive.h"
 
 struct Q5{
     int data_inferior;
@@ -49,19 +50,21 @@ void preco_medio_Q5(gpointer key, RIDES *value, Q5 *query5){
     }
 }
 
-void printQ5 (Q5 *query5, FILE *res, int modo) {
+void printQ5 (Q5 *query5, FILE *res, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]) {
     if(query5->numeroViagens){
         double valor_medio = query5->total_preco / query5->numeroViagens; 
         if (modo == 0)
             fprintf (res, "%.3f\n", valor_medio);
-        else
-            printf ("\t%.3f\n", valor_medio);
+        else{
+            mvprintw (informacoespaginas[0]++, 0, "\t%.3f", valor_medio);
+            if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+        }
     }
 }
 
-void query5Exe(FILE *res, int modo, char **argv){
+void query5Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
     Q5* query5 = inicializaQ5 (strdup(argv[1]),strdup(argv[2]));
         foreach_rides_Q5(query5);
-        printQ5(query5, res, modo);
+        printQ5(query5, res, modo, informacoespaginas, paginas);
         freeQ5(query5);
 }

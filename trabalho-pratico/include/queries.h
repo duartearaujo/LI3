@@ -1,9 +1,11 @@
 #ifndef queries
 #define queries
 
+#include <ncurses.h>
+#include "../include/interactive.h"
 #include "../include/parse.h"
 
-void querieIdentifier(char **argv, int n_querie, int i);
+void querieIdentifier(char **argv, int n_querie, int i, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]);
 
 int identifyArgument(char *str);
 

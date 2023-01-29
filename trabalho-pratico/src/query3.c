@@ -6,6 +6,7 @@
 #include "../include/users.h"
 #include "../include/queries.h"
 #include "../include/query3.h"
+#include "../include/interactive.h"
 
 int desempate_Q3(const void *p1, const void* p2){
     User *user_1 = GetcontentU(*((User**) p1));
@@ -35,7 +36,7 @@ int desempate_Q3(const void *p1, const void* p2){
 }
 
 /*Função que faz print dos resultados da querie 3*/
-void Q3Print(FILE *res, int N, int modo){
+void Q3Print(FILE *res, int N, int modo, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
     int i = 0, j = 0, p = 0;
     while(i < N){ /*Ciclo que limita o print dos elementos com base no input da querie*/
         User *user = getElement_Q3(j);
@@ -46,8 +47,10 @@ void Q3Print(FILE *res, int N, int modo){
         if(AccSt == 'a'){ /*Se o status for inativo então o user é ignorado e o print não é executado*/
             if (modo == 0)
                 fprintf(res, "%s;%s;%d\n", username, name, distance);
-            else
-                printf("\t%s;%s;%d\n", username, name, distance);
+            else{
+                mvprintw(informacoespaginas[0]++, 0, "\t%s;%s;%d", username, name, distance);
+                if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+            }
             i++;
             p++;
         }
@@ -58,13 +61,13 @@ void Q3Print(FILE *res, int N, int modo){
     }
 }
 
-void query3Exe(FILE *res,int modo,char* argv){
+void query3Exe(FILE *res,int modo,char* argv, int *informacoespaginas, char (*paginas)[][linhas_por_pagina]){
     if (atoi (argv)) {
         if(!arrayOrdenadoU()){
             createArrayUser();
             foreach_users_Q3();
             ordena_Q3();
         }
-        Q3Print(res, atoi(argv),modo);
+        Q3Print(res, atoi(argv), modo, informacoespaginas, paginas);
     }
 }
