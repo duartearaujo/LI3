@@ -67,8 +67,10 @@ void querieIdentifier(char **argv, int n_querie, int modo, int *informacoespagin
         sprintf(filename, "Resultados/command%d_output.txt", n_querie);
         res = fopen(filename, "a");
     }
-    else
-        printf ("Resultado:\n");
+    else {
+        mvprintw (informacoespaginas[0]++,0,"Resultado:");
+        if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+    }
     switch (q)  /*q == nº da query que queremos responder*/
     {
     case 1: {
@@ -116,7 +118,7 @@ void querieIdentifier(char **argv, int n_querie, int modo, int *informacoespagin
     case 7:{
         clock_t t = clock();
         if (atoi (argv[1])) 
-            exec_Q7 (argv [2], atoi (argv[1]), res, modo);
+            exec_Q7 (argv [2], atoi (argv[1]), res, modo, informacoespaginas, paginas);
         t = clock () -t;
         if (modo == 0) printf ("Query7: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
