@@ -36,7 +36,7 @@ int desempate_Q3(const void *p1, const void* p2){
 }
 
 /*Função que faz print dos resultados da querie 3*/
-void Q3Print(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int Q3Print(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int i = 0, j = 0, p = 0;
     char line[256] = {0};
     while(i < N){ /*Ciclo que limita o print dos elementos com base no input da querie*/
@@ -52,7 +52,7 @@ void Q3Print(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[
                 mvprintw(informacoespaginas[0], 0, "\t%s;%s;%d", username, name, distance);
                 sprintf(line, "\t%s;%s;%d", username, name, distance);
                 paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
-                if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
+                if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0; 
             }
             i++;
             p++;
@@ -62,15 +62,18 @@ void Q3Print(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[
         free(name);
         free_user(user);
     }
+    return 1;
 }
 
-void query3Exe(FILE *res,int modo,char* argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int query3Exe(FILE *res,int modo,char* argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+    int r = 1;
     if (atoi (argv)) {
         if(!arrayOrdenadoU()){
             createArrayUser();
             foreach_users_Q3();
             ordena_Q3();
         }
-        Q3Print(res, atoi(argv), modo, informacoespaginas, paginas);
+        r = Q3Print(res, atoi(argv), modo, informacoespaginas, paginas);
     }
+    return r;
 }

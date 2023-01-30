@@ -36,7 +36,7 @@ void distancia_media(gpointer key, RIDES *ride, Q6 *q){
     free(data);
 }
 
-void printQ6(Q6 *q, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int printQ6(Q6 *q, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     char line[256] = {0};
     if(q->n_rides){
         double distancia_media = (q->total_distance/q->n_rides);
@@ -46,9 +46,10 @@ void printQ6(Q6 *q, FILE *res, int modo, int *informacoespaginas, char *paginas[
             mvprintw(informacoespaginas[0], 0, "\t%.3f", distancia_media);
             sprintf(line, "\t%.3f", distancia_media);
             paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
-            if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
+            if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
         }
     }
+    return 1;
 }
 
 void freeQ6(Q6 *q){
@@ -58,9 +59,11 @@ void freeQ6(Q6 *q){
     free(q);
 }
 
-void query6Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int query6Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+    int r = 1;
     Q6* q = inicializaQ6(strdup(argv[1]), strdup(argv[2]), strdup(argv[3]));
     foreach_rides_Q6(q);
-    printQ6(q, res, modo, informacoespaginas, paginas);
+    r = printQ6(q, res, modo, informacoespaginas, paginas);
     freeQ6(q);
+    return r;
 }

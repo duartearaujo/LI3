@@ -159,9 +159,12 @@ typedef struct PrintQ7 {
     int modo;
 } PrintQ7;
 
+void copia (int *informacoespaginas, char *paginas[][linhas_por_pagina], char line[]) {
+    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+}
+
 gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
     PrintQ7 *ficheiro = user_data;
-    char ***paginas = ficheiro->paginas;
     AvC* driver = value;
     char line[256] = {0};
     if (verifica_ativo(driver->id)) {
@@ -170,8 +173,8 @@ gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
         else{
             mvprintw (ficheiro->informacoespaginas[0],0,"\t%s;%s;%.3f",driver->id, driver->name, driver->avaliacao_media);
             sprintf(line, "\t%s;%s;%.3f",driver->id, driver->name, driver->avaliacao_media);
-            paginas[ficheiro->informacoespaginas[1]] [ficheiro->informacoespaginas[0]++] = strdup(line);
-            if (ficheiro->informacoespaginas[0] >= ficheiro->informacoespaginas [2]) novapagina (ficheiro->informacoespaginas, ficheiro->paginas);
+            copia (ficheiro->informacoespaginas, ficheiro->paginas, line);
+            if (ficheiro->informacoespaginas[0] >= linhas_por_pagina) if (novapagina (ficheiro->informacoespaginas, ficheiro->paginas)) return FALSE;
         }
         ficheiro->N--;
     }
@@ -180,7 +183,8 @@ gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
     return TRUE;
 }
 
-void printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
+int printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
+    int r = 1;
     HTree *c= g_hash_table_lookup (cidades,city);
     if (c) {
         PrintQ7 *p = malloc(sizeof (PrintQ7));
@@ -190,8 +194,10 @@ void printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas, ch
         p->informacoespaginas = informacoespaginas;
         p->paginas = paginas;
         g_tree_foreach (c->t, printQ7_aux, p);
+        if (p->N) r = 0; 
         free (p);
     }
+    return r;
 }
 
 char *getIdC (AvC const* a) {

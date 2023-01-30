@@ -35,7 +35,7 @@ int desempate_Q2(const void *p1, const void* p2){
 
 
 /*faz print dos valores da query 2*/
-void printfArray(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int printfArray(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int print = 0, i=0,j=0;
     char line[256] = {0};
     while (i< N){
@@ -51,7 +51,7 @@ void printfArray(FILE *res, int N, int modo, int *informacoespaginas, char *pagi
                 mvprintw(informacoespaginas[0], 0, "\t%s;%s;%.3f",id,name,avaliacao_media);
                 sprintf(line, "\t%s;%s;%.3f",id,name,avaliacao_media);
                 paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
-                if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
+                if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
             }
             print++;
             i++;
@@ -61,15 +61,18 @@ void printfArray(FILE *res, int N, int modo, int *informacoespaginas, char *pagi
         free_driver(driver);
         j++;
    }
+   return 1;
 }
 
-void query2Exe(FILE *res,int modo, char *argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int query2Exe(FILE *res,int modo, char *argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+    int r = 1;
     if (atoi (argv)) {
         if(!arrayOrdenado()){
             createArray();
             foreach_drivers_Q2 ();
             ordena_Q2();
         }
-        printfArray(res,atoi(argv),modo,informacoespaginas,paginas);
+        r = printfArray(res,atoi(argv),modo,informacoespaginas,paginas);
     }
+    return r;
 }

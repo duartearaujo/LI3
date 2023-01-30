@@ -7,7 +7,7 @@
 
 int novapagina(int *informacoespaginas, char *paginas[][linhas_por_pagina]);
 
-void parsequeryI(int *informacoespaginas,char *paginas[][linhas_por_pagina]);
+int parsequeryI(int *informacoespaginas,char *paginas[][linhas_por_pagina]);
 
 void main_I ();
 

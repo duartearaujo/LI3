@@ -13,7 +13,7 @@ all: $(MAIN)
 Resultados:
 	@mkdir -p $@
 
-debug: CFLAGS = `pkg-config --cflags --libs glib-2.0` -g
+debug: CFLAGS = `pkg-config --cflags --libs glib-2.0` -g -lncurses
 debug: $(MAIN)
 
 $(MAIN): $(OBJS) Resultados

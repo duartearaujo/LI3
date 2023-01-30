@@ -32,7 +32,7 @@ int desempate_Q9(const void *p1, const void* p2) {
     return result;
 }
 
-void Q9Print(FILE *res, int t1, int t2, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int Q9Print(FILE *res, int t1, int t2, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int t;
     int i = 0;
     int tamanho = getposQ9 ();
@@ -51,7 +51,7 @@ void Q9Print(FILE *res, int t1, int t2, int modo, int *informacoespaginas, char 
                 mvprintw(informacoespaginas[0], 0, "\t%s;%s;%d;%s;%.3f", id, date, distance, city, tip);
                 sprintf(line, "\t%s;%s;%d;%s;%.3f", id, date, distance, city, tip);
                 paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
-                if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
+                if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
             }
             free (id);
             free (date);
@@ -59,10 +59,13 @@ void Q9Print(FILE *res, int t1, int t2, int modo, int *informacoespaginas, char 
         }
         i++;
     }
+    return 1;
 }
 
-void query9Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int query9Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+    int r = 1;
     int t1 = tempo_De_Vida(strdup(argv[1]));
     int t2 = tempo_De_Vida(strdup(argv[2]));
-    Q9Print(res, t1, t2, modo, informacoespaginas, paginas);
+    r = Q9Print(res, t1, t2, modo, informacoespaginas, paginas);
+    return r;
 }
