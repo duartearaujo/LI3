@@ -161,12 +161,16 @@ typedef struct PrintQ7 {
 
 gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
     PrintQ7 *ficheiro = user_data;
+    char ***paginas = ficheiro->paginas;
     AvC* driver = value;
+    char line[256] = {0};
     if (verifica_ativo(driver->id)) {
         if (ficheiro->modo == 0)
             fprintf (ficheiro->res,"%s;%s;%.3f\n",driver->id, driver->name, driver->avaliacao_media);
         else{
-            mvprintw (ficheiro->informacoespaginas[0]++,0,"\t%s;%s;%.3f",driver->id, driver->name, driver->avaliacao_media);
+            mvprintw (ficheiro->informacoespaginas[0],0,"\t%s;%s;%.3f",driver->id, driver->name, driver->avaliacao_media);
+            sprintf(line, "\t%s;%s;%.3f",driver->id, driver->name, driver->avaliacao_media);
+            paginas[ficheiro->informacoespaginas[1]] [ficheiro->informacoespaginas[0]++] = strdup(line);
             if (ficheiro->informacoespaginas[0] >= ficheiro->informacoespaginas [2]) novapagina (ficheiro->informacoespaginas, ficheiro->paginas);
         }
         ficheiro->N--;

@@ -38,6 +38,7 @@ int desempate_Q3(const void *p1, const void* p2){
 /*Função que faz print dos resultados da querie 3*/
 void Q3Print(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int i = 0, j = 0, p = 0;
+    char line[256] = {0};
     while(i < N){ /*Ciclo que limita o print dos elementos com base no input da querie*/
         User *user = getElement_Q3(j);
         char AccSt = getAccStatusU(user);
@@ -48,8 +49,10 @@ void Q3Print(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[
             if (modo == 0)
                 fprintf(res, "%s;%s;%d\n", username, name, distance);
             else{
-                mvprintw(informacoespaginas[0]++, 0, "\t%s;%s;%d", username, name, distance);
-                if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+                mvprintw(informacoespaginas[0], 0, "\t%s;%s;%d", username, name, distance);
+                sprintf(line, "\t%s;%s;%d", username, name, distance);
+                paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+                if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
             }
             i++;
             p++;

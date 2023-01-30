@@ -11,6 +11,7 @@
 /* Função para fazer print dos valores do driver pedido na query 1 no ficheiro */
 void printvaloresQ1 (DRIVERS *d, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {  
     char account_st = getAccountStatusD (d);
+    char line[256] = {0};
     if (account_st == 'a') {
         double valor_atual = getValorAtualD (d);
         int count = getCountD (d);
@@ -23,19 +24,25 @@ void printvaloresQ1 (DRIVERS *d, FILE *res, int modo, int *informacoespaginas, c
         if (modo == 0)
             fprintf (res,"%s;%c;%d;%.3f;%d;%.3f\n",name, gender, calculaIdade(birth), avaliacao_media, count, total_auferido);
         else{
-            mvprintw (informacoespaginas[0]++, 0, "\t%s;%c;%d;%.3f;%d;%.3f",name, gender, calculaIdade(birth), avaliacao_media, count, total_auferido);
-            if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+            mvprintw (informacoespaginas[0], 0, "\t%s;%c;%d;%.3f;%d;%.3f",name, gender, calculaIdade(birth), avaliacao_media, count, total_auferido);
+            sprintf(line, "\t%s;%c;%d;%.3f;%d;%.3f",name, gender, calculaIdade(birth), avaliacao_media, count, total_auferido);
+            paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+            if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
         }
         free (name);
         free (birth);
     }
-    else if (modo == 1)
-        printf ("\tO Driver está inativo\n");
+    else if (modo == 1){
+        mvprintw (informacoespaginas[0], 0, "\tO Driver está inativo");
+        paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup("\tO Driver está inativo");
+        if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
+    }
 }
 
 /* Função para fazer print dos valores do user pedido na query 1 no ficheiro */
 void printvaloresQ1_2 (User *u, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina])  {
     char account_st = getAccStatusU (u);
+    char line[256] = {0};
     if (account_st == 'a') {
         double acc_avaliation = getAccAvaliationU (u);
         int n_viagens = getNViagensU (u);
@@ -45,17 +52,22 @@ void printvaloresQ1_2 (User *u, FILE *res, int modo, int *informacoespaginas, ch
         char *name = getNameU (u);
         char gender= getGenderU (u);
         char *data = getDataU (u);
-        if (modo == 0)  
+        if (modo == 0)
             fprintf (res,"%s;%c;%d;%.3f;%d;%.3f\n",name, gender, calculaIdade(data), avaliacao_media, n_viagens, total_gasto);
-        else{
-            mvprintw (informacoespaginas[0]++, 0, "\t%s;%c;%d;%.3f;%d;%.3f",name, gender, calculaIdade(data), avaliacao_media, n_viagens, total_gasto);
-            if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+        else{ 
+            mvprintw (informacoespaginas[0], 0, "\t%s;%c;%d;%.3f;%d;%.3f",name, gender, calculaIdade(data), avaliacao_media, n_viagens, total_gasto);
+            sprintf(line, "\t%s;%c;%d;%.3f;%d;%.3f",name, gender, calculaIdade(data), avaliacao_media, n_viagens, total_gasto);
+            paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+            if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
         }
         free (name);
         free (data);
     }
-    else if (modo == 1)
-        printf ("\tO User está inativo\n");
+    else if (modo == 1){
+        mvprintw (informacoespaginas[0], 0, "\tO User está inativo");
+        paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup("\tO User está inativo");
+        if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
+    }
 }
 
 void query1Exe(FILE *res, int modo, char* argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
@@ -65,8 +77,11 @@ void query1Exe(FILE *res, int modo, char* argv, int *informacoespaginas, char *p
                 printvaloresQ1 (d, res, modo, informacoespaginas, paginas); /*Função que faz print aos valores pretendidos dos drivers*/
                 free_driver (d);
             }
-            else if (modo == 1) 
-                printf ("\tO driver inserido não existe.\n");
+            else if (modo == 1){
+                mvprintw (informacoespaginas[0], 0, "\tO driver inserido não existe.");
+                paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup("\tO driver inserido não existe.");
+                if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
+            }
         }
         else {
             User *u = GetcontentU( lookup_users (argv) ); /*faz lookup na hash dos users do User pedido*/
@@ -74,7 +89,10 @@ void query1Exe(FILE *res, int modo, char* argv, int *informacoespaginas, char *p
                 printvaloresQ1_2 (u, res,modo, informacoespaginas, paginas); /*Função que faz print aos valores pretendidos dos users*/
                 free_user (u);
             }
-            else if (modo == 1) 
-                printf ("\tO user inserido não existe.\n");
+            else if (modo == 1){
+                mvprintw (informacoespaginas[0], 0, "\tO user inserido não existe.");
+                paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup("\tO user inserido não existe.");
+                if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
+            }
         }
 }

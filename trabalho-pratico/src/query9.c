@@ -36,6 +36,7 @@ void Q9Print(FILE *res, int t1, int t2, int modo, int *informacoespaginas, char 
     int t;
     int i = 0;
     int tamanho = getposQ9 ();
+    char line[256] = {0};
     while(i < tamanho){ 
         t = getIdadeViagem_Q9 (i);
         if(t <= t1 && t2 <= t){
@@ -47,8 +48,10 @@ void Q9Print(FILE *res, int t1, int t2, int modo, int *informacoespaginas, char 
             if(modo == 0) 
                 fprintf(res, "%s;%s;%d;%s;%.3f\n", id, date, distance, city, tip);
             else{
-                mvprintw(informacoespaginas[0]++, 0, "\t%s;%s;%d;%s;%.3f", id, date, distance, city, tip);
-                if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+                mvprintw(informacoespaginas[0], 0, "\t%s;%s;%d;%s;%.3f", id, date, distance, city, tip);
+                sprintf(line, "\t%s;%s;%d;%s;%.3f", id, date, distance, city, tip);
+                paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+                if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
             }
             free (id);
             free (date);

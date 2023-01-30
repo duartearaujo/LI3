@@ -51,13 +51,16 @@ void preco_medio_Q5(gpointer key, RIDES *value, Q5 *query5){
 }
 
 void printQ5 (Q5 *query5, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
+    char line[256] = {0};
     if(query5->numeroViagens){
         double valor_medio = query5->total_preco / query5->numeroViagens; 
         if (modo == 0)
             fprintf (res, "%.3f\n", valor_medio);
         else{
-            mvprintw (informacoespaginas[0]++, 0, "\t%.3f", valor_medio);
-            if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+            mvprintw (informacoespaginas[0], 0, "\t%.3f", valor_medio);
+            sprintf(line, "\t%.3f", valor_medio);
+            paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+            if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
         }
     }
 }

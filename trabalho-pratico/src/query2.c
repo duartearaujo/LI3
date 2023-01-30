@@ -37,6 +37,7 @@ int desempate_Q2(const void *p1, const void* p2){
 /*faz print dos valores da query 2*/
 void printfArray(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int print = 0, i=0,j=0;
+    char line[256] = {0};
     while (i< N){
         DRIVERS *driver = getElement_Q2(j);
         char ac_st = getAccountStatusD(driver);
@@ -47,8 +48,10 @@ void printfArray(FILE *res, int N, int modo, int *informacoespaginas, char *pagi
             if (modo == 0)
                 fprintf(res,"%s;%s;%.3f\n",id,name,avaliacao_media);
             else{
-                mvprintw(informacoespaginas[0]++, 0, "\t%s;%s;%.3f",id,name,avaliacao_media);
-                if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+                mvprintw(informacoespaginas[0], 0, "\t%s;%s;%.3f",id,name,avaliacao_media);
+                sprintf(line, "\t%s;%s;%.3f",id,name,avaliacao_media);
+                paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+                if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
             }
             print++;
             i++;

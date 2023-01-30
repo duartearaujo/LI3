@@ -37,13 +37,16 @@ void distancia_media(gpointer key, RIDES *ride, Q6 *q){
 }
 
 void printQ6(Q6 *q, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+    char line[256] = {0};
     if(q->n_rides){
         double distancia_media = (q->total_distance/q->n_rides);
         if (modo == 0)
             fprintf(res, "%.3f\n", distancia_media);
         else{
-            mvprintw(informacoespaginas[0]++, 0, "\t%.3f", distancia_media);
-            if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+            mvprintw(informacoespaginas[0], 0, "\t%.3f", distancia_media);
+            sprintf(line, "\t%.3f", distancia_media);
+            paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+            if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
         }
     }
 }

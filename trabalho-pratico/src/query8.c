@@ -113,6 +113,7 @@ void ordena_Q8(){
 }
 
 void printArray_Q8(FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+    char line[256] = {0};
     for(int i = 0; i < array->pos;i++){
         char account_status_driver = getAccountStatusD(lookup_drivers(array->lista[i]->id_driver));
         char account_status_user = getAccStatusU(lookup_users(array->lista[i]->username_user));
@@ -120,8 +121,10 @@ void printArray_Q8(FILE *res, int modo, int *informacoespaginas, char *paginas[]
             if (modo == 0)
                 fprintf(res,"%s;%s;%s;%s\n",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);
             else{
-                mvprintw(informacoespaginas[0]++, 0, "\t%s;%s;%s;%s",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);
-                if (informacoespaginas[0] >= informacoespaginas [2]) novapagina (informacoespaginas, paginas);
+                mvprintw(informacoespaginas[0], 0, "\t%s;%s;%s;%s",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);
+                sprintf(line, "\t%s;%s;%s;%s",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);
+                paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+                if (informacoespaginas[0] >= linhas_por_pagina) novapagina (informacoespaginas, paginas);
             }
         }  
     }
