@@ -58,10 +58,10 @@ int testaQueries1Argumento(int modo,int n_teste,int query){
         sprintf(filename, "Resultados_testes/command%d_output.txt", n_teste);
         res = fopen(filename, "a");
         clock_t t = clock();
-        if(query == 1) query1Exe(res,modo,argumentos[i]);
-        else if(query == 2) query2Exe(res,modo,argumentos[i]);
-        else if(query == 3) query3Exe(res,modo,argumentos[i]);
-        else if(query == 4) exec_Q4(argumentos[i],res,modo);
+        if(query == 1) query1Exe(res,modo,argumentos[i], NULL, NULL);
+        else if(query == 2) query2Exe(res,modo,argumentos[i], NULL, NULL);
+        else if(query == 3) query3Exe(res,modo,argumentos[i], NULL, NULL);
+        else if(query == 4) exec_Q4(argumentos[i],res,modo, NULL, NULL);
         if (res) fclose (res);
         res = fopen(filename, "r");
         t = clock() - t;
@@ -120,10 +120,10 @@ int testaQueries2Argumentos(int modo,int n_teste,int query){
         sprintf(filename, "Resultados_testes/command%d_output.txt", n_teste);
         res = fopen(filename, "a");
         clock_t t = clock();
-        if(query == 5) query5Exe(res,modo,argumentos[linha]);
-        if(query == 7) exec_Q7(argumentos[linha][2],atoi(argumentos[linha][1]),res,modo);
-        if(query == 8) query8Exe(res,modo,argumentos[linha]);
-        if(query == 9) query9Exe(res,modo,argumentos[linha]);
+        if(query == 5) query5Exe(res,modo,argumentos[linha], NULL, NULL);
+        if(query == 7) exec_Q7(argumentos[linha][2],atoi(argumentos[linha][1]),res,modo, NULL, NULL);
+        if(query == 8) query8Exe(res,modo,argumentos[linha], NULL, NULL);
+        if(query == 9) query9Exe(res,modo,argumentos[linha], NULL, NULL);
         if (res) fclose (res);
         res = fopen(filename, "r");
         t = clock() - t;
@@ -156,7 +156,7 @@ void testaQueries3Argumentos(int modo,int n_teste){
         sprintf(filename, "Resultados_testes/command%d_output.txt", n_teste);
         res = fopen(filename, "a");
         clock_t t = clock();
-        query6Exe(res,modo,argumentos[linha]);
+        query6Exe(res,modo,argumentos[linha], NULL, NULL);
         if (res) fclose (res);
         res = fopen(filename, "r");
         t = clock() - t;

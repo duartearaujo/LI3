@@ -10,6 +10,7 @@
 #include "../include/drivers.h"
 #include "../include/dataverification.h"
 #include "../include/cidades.h"
+#include "../include/catalogos.h"
 
 int saltar_pagina (int linha, int paginas) {
     mvprintw (linha,90,"Insira o número da página q deseja ir (1 a %d): ",paginas + 1);
@@ -95,13 +96,7 @@ int iniciaI(int *informacoespaginas,  char *paginas[][linhas_por_pagina]){
     if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
     refresh ();
 
-    int u = iniciaHashUsers (path);
-    int d = iniciaHashDrivers (path);
-    inicializaQ9();
-    iniciaHashCidades();
-    int r = iniciaHashRides (path);
-    if (!(u && d && r)) return 0;
-    ordena_Q9();
+    if (!iniciaHashTables (path)) return 0;
     free (path);
     return 1;
 }
@@ -276,8 +271,17 @@ void main_I () {
     char *paginas[total_paginas][linhas_por_pagina];
     int i = iniciaI(informacoespaginas, paginas);
     if (i) parsequeryI(informacoespaginas, paginas);
+    if (informacoespaginas[0] >= linhas_por_pagina) {
+        erase();
+        mvprintw (0,0, "Libertando Memória...");
+    }
+    else
+        mvprintw (informacoespaginas[0],0, "Libertando Memória...");
+    refresh();
     for (int i = 0; i <= informacoespaginas [2]; i++)
         for (int j = 0; j < linhas_por_pagina; j++) 
             if (paginas[i][j]) free (paginas[i][j]);
+    freeEstruturas ();
+
     endwin();
 }

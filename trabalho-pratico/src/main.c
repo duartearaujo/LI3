@@ -31,7 +31,7 @@ int main(int argc, char **argv){
 
         /*free das hashes e mais*/
         fclose (fp);
+        freeEstruturas();
     }
-    freeEstruturas();
     return 0;
 }
