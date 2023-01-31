@@ -3,4 +3,6 @@
 
 int iniciaHashTables(char *argv);
 
+void freeEstruturas();
+
 #endif
