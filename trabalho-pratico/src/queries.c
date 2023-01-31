@@ -119,7 +119,7 @@ int querieIdentifier(char **argv, int n_querie, int modo, int *informacoespagina
     }
     case 7:{
         clock_t t = clock();
-        r = exec_Q7 (argv [2], atoi (argv[1]), res, modo);
+        r = exec_Q7 (argv [2], atoi (argv[1]), res, modo, informacoespaginas, paginas);
         t = clock () -t;
         if (modo == 0) printf ("Query7: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;

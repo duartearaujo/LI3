@@ -22,7 +22,7 @@ teste: $(MAIN_TESTE)
 Resultados_testes:
 	@mkdir -p $@
 
-debug_teste: CFLAGS = `pkg-config --cflags --libs glib-2.0` -g
+debug_teste: CFLAGS = `pkg-config --cflags --libs glib-2.0` -g -lncurses
 debug_teste: $(MAIN_TESTE)
 
 $(MAIN_TESTE): $(OBJS_TESTE) Resultados_testes

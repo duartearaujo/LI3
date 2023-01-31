@@ -26,11 +26,11 @@ gint organiza_arvore (gconstpointer a, gconstpointer b, gpointer c) {
     return -1;
 }
 
-int exec_Q7 (char *city, int N,FILE *res, int modo) {
+int exec_Q7 (char *city, int N,FILE *res, int modo, int *informacoespaginas,char *paginas[][linhas_por_pagina]) {
     int r = 1;
     if (N){
         ordena_arvore_Q7 (city);
-        printQ7 (city,N, res, modo);
+        r = printQ7 (city,N, res, modo, informacoespaginas, paginas) ;
     }
     return r;
 }
