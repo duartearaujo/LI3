@@ -67,12 +67,7 @@ int Q3Print(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[]
 
 int query3Exe(FILE *res,int modo,char* argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int r = 1;
-    if (atoi (argv)) {
-        if(!arrayOrdenadoU()){
-            createArrayUser();
-            foreach_users_Q3();
-            ordena_Q3();
-        }
+    if (atoi (argv)){
         r = Q3Print(res, atoi(argv), modo, informacoespaginas, paginas);
     }
     return r;

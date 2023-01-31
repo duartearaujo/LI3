@@ -46,7 +46,8 @@ void free_user (User *value) {
 
 int iniciaHashUsers (char *path) {
     FILE *fp = NULL;
-    users = g_hash_table_new_full(g_str_hash, g_str_equal,NULL, (GDestroyNotify)free_user);  /*cria a hashtable dos users*/
+    users = g_hash_table_new_full(g_str_hash, g_str_equal,NULL, (GDestroyNotify)free_user); /*cria a hashtable dos users*/
+    createArrayUser();  
     char *filename = malloc ((strlen (path) + strlen ("/users.csv") + 1)*sizeof (char));  /*alloca espaço para o input(path dos ficheiros) + o nome do ficheiro que se pretende ler*/
     strcpy(filename,path);
     strcat (filename,"/users.csv");  /*concat do path dos ficheiros mais o nome do ficheiro que se vai ler neste case*/
@@ -72,6 +73,7 @@ void adicionaHashUsers (char *line) {
         new ->idade_conta = tempo_De_Vida(strdup(new->account_creation));
         new ->last_ride = NULL;
         g_hash_table_insert(users,new->username,new);
+        guardaUser(new);
     }
 }
 
@@ -256,14 +258,10 @@ void createArrayUser(){
 }
 
 /*Função que guarda os users no ARRAY_USERS e incrementa o campo pos*/
-void guardaUser(gpointer key, User *user, void *a){
+void guardaUser(User *user){
     array->pos++;
     array->user = (User**) realloc(array->user,array->pos * sizeof(User*));
     array->user[(array->pos - 1)] = user;
-}
-
-void foreach_users_Q3 () {
-   g_hash_table_foreach (users,(GHFunc)guardaUser, NULL);
 }
 
 void ordena_Q3(){

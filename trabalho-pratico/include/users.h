@@ -51,13 +51,11 @@ void createArrayUser();
 
 int arrayOrdenadoU();
 
-void guardaUser(gpointer key, User *user, void *a);
+void guardaUser(User *user);
 
 void ordena_Q3();
 
 User* getElement_Q3(int i);
-
-void foreach_users_Q3 ();
 
 void freeArrayU();
 

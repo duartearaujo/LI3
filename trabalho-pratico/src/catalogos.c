@@ -13,6 +13,7 @@ int iniciaHashTables(char *argv){
     iniciaHashCidades();
     int r = iniciaHashRides (argv);
     if (!(u && d && r)) return 0;
+    ordena_Q3();
     ordena_Q9();
     return 1;
 }
