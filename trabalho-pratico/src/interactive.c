@@ -282,5 +282,6 @@ void main_I () {
         for (int j = 0; j < linhas_por_pagina; j++) 
             if (paginas[i][j]) free (paginas[i][j]);
     freeEstruturas ();
+
     endwin();
 }
