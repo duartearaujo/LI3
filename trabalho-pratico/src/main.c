@@ -32,12 +32,6 @@ int main(int argc, char **argv){
         /*free das hashes e mais*/
         fclose (fp);
     }
-    hash_table_destroy_users ();
-    hash_table_destroy_drivers ();
-    destroyHashCidades ();
-    hash_table_destroy_rides ();
-    freeArray();
-    freeArrayU();
-    freeArrayQ9();
+    freeEstruturas();
     return 0;
 }

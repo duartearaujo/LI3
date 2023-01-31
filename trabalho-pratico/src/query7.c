@@ -25,6 +25,8 @@ gint organiza_arvore (gconstpointer a, gconstpointer b, gpointer c) {
 }
 
 void exec_Q7 (char *city, int N,FILE *res, int modo) {
-    ordena_arvore_Q7 (city);
-    printQ7 (city,N, res, modo);
+    if (N){
+        ordena_arvore_Q7 (city);
+        printQ7 (city,N, res, modo);
+    }
 }

@@ -16,3 +16,13 @@ int iniciaHashTables(char *argv){
     ordena_Q9();
     return 1;
 }
+
+void freeEstruturas(){
+    hash_table_destroy_users ();
+    hash_table_destroy_drivers ();
+    destroyHashCidades ();
+    hash_table_destroy_rides ();
+    freeArray();
+    freeArrayU();
+    freeArrayQ9();
+}
