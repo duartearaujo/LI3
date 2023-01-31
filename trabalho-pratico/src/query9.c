@@ -7,6 +7,7 @@
 #include "../include/queries.h"
 #include "../include/drivers.h"
 #include "../include/query9.h"
+#include "../include/interactive.h"
 
 
 int desempate_Q9(const void *p1, const void* p2) {
@@ -31,10 +32,11 @@ int desempate_Q9(const void *p1, const void* p2) {
     return result;
 }
 
-void Q9Print(FILE *res, int t1, int t2, int modo){
+int Q9Print(FILE *res, int t1, int t2, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int t;
     int i = 0;
     int tamanho = getposQ9 ();
+    char line[256] = {0};
     while(i < tamanho){ 
         t = getIdadeViagem_Q9 (i);
         if(t <= t1 && t2 <= t){
@@ -45,18 +47,25 @@ void Q9Print(FILE *res, int t1, int t2, int modo){
             double tip = getTip_Q9 (i);
             if(modo == 0) 
                 fprintf(res, "%s;%s;%d;%s;%.3f\n", id, date, distance, city, tip);
-            else
-                printf("\t%s;%s;%d;%s;%.3f\n", id, date, distance, city, tip);
+            else{
+                mvprintw(informacoespaginas[0], 0, "\t%s;%s;%d;%s;%.3f", id, date, distance, city, tip);
+                sprintf(line, "\t%s;%s;%d;%s;%.3f", id, date, distance, city, tip);
+                paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+                if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+            }
             free (id);
             free (date);
             free (city);
         }
         i++;
     }
+    return 1;
 }
 
-void query9Exe(FILE *res, int modo, char **argv){
+int query9Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+    int r = 1;
     int t1 = tempo_De_Vida(strdup(argv[1]));
     int t2 = tempo_De_Vida(strdup(argv[2]));
-    Q9Print(res, t1, t2, modo);
+    r = Q9Print(res, t1, t2, modo, informacoespaginas, paginas);
+    return r;
 }

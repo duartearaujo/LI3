@@ -8,6 +8,7 @@
 #include "../include/queries.h"
 #include "../include/drivers.h"
 #include "../include/query8.h"
+#include "../include/interactive.h"
 
 struct dados_Q8{
     char *nome_driver;
@@ -111,17 +112,23 @@ void ordena_Q8(){
     qsort (array->lista,(size_t)array->pos, sizeof(dados_Q8*), desempate_Q8);
 }
 
-void printArray_Q8(FILE *res, int modo){
+int printArray_Q8(FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+    char line[256] = {0};
     for(int i = 0; i < array->pos;i++){
         char account_status_driver = getAccountStatusD(lookup_drivers(array->lista[i]->id_driver));
         char account_status_user = getAccStatusU(lookup_users(array->lista[i]->username_user));
         if(account_status_driver == 'a' && account_status_user == 'a') {
             if (modo == 0)
                 fprintf(res,"%s;%s;%s;%s\n",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);
-            else
-                printf("\t%s;%s;%s;%s\n",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);
+            else{
+                mvprintw(informacoespaginas[0], 0, "\t%s;%s;%s;%s",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);
+                sprintf(line, "\t%s;%s;%s;%s",array->lista[i]->id_driver,array->lista[i]->nome_driver,array->lista[i]->username_user,array->lista[i]->nome_user);
+                paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+                if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+            }
         }  
     }
+    return 1;
 }
 
 void freeDados_Q8(dados_Q8* data){
@@ -143,10 +150,12 @@ void freeArray_Q8(){
     }
 }
 
-void query8Exe(FILE *res, int modo, char **argv){
+int query8Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+    int r = 1;
     inicializa_array_Q8(atoi(argv[2]),argv[1][0]);
     foreach_rides_Q8();
     ordena_Q8();
-    printArray_Q8(res, modo);
+    r = printArray_Q8(res, modo, informacoespaginas, paginas);
     freeArray_Q8();
+    return r;
 }

@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
+#include <ncurses.h>
 #include "../include/queries.h"
 #include "../include/cidades.h"
 #include "../include/drivers.h"
 #include "../include/query7.h"
+#include "../include/interactive.h"
 
 gint organiza_arvore (gconstpointer a, gconstpointer b, gpointer c) {
     AvC const* ax = a;
@@ -24,9 +26,11 @@ gint organiza_arvore (gconstpointer a, gconstpointer b, gpointer c) {
     return -1;
 }
 
-void exec_Q7 (char *city, int N,FILE *res, int modo) {
+int exec_Q7 (char *city, int N,FILE *res, int modo) {
+    int r = 1;
     if (N){
         ordena_arvore_Q7 (city);
         printQ7 (city,N, res, modo);
     }
+    return r;
 }

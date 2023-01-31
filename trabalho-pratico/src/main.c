@@ -3,6 +3,7 @@
 #include <string.h>
 #include <glib.h>
 #include <time.h>
+#include <curses.h>
 #include "../include/parse.h"
 #include "../include/users.h"
 #include "../include/rides.h"
@@ -17,8 +18,7 @@
 int main(int argc, char **argv){  
     FILE *fp = NULL;
     if(argc < 2){
-        int i = iniciaI();
-        if (i) parsequeryI();
+        main_I();
     }
     else{
         clock_t t = clock();

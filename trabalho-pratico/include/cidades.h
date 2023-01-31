@@ -1,6 +1,9 @@
 #ifndef Cidades
 #define Cidades
 
+#include <ncurses.h>
+#include "../include/interactive.h"
+
 typedef struct avaliacao_por_cidade AvC;
 
 typedef struct HTree HTree;
@@ -19,7 +22,7 @@ void foreach_tree_city (char *city, double preco_medio []);
 
 void ordena_arvore_Q7 (char *city);
 
-void printQ7 (char *city,int N, FILE *res, int modo);
+int printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
 
 char *getIdC (AvC const* a);
 

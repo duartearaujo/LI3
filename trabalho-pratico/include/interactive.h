@@ -1,8 +1,14 @@
 #ifndef interactive
 #define interactive
 
-int iniciaI();
+#include <ncurses.h>
 
-void parsequeryI();
+#define linhas_por_pagina (LINES-2)
+
+int novapagina(int *informacoespaginas, char *paginas[][linhas_por_pagina]);
+
+int parsequeryI(int *informacoespaginas,char *paginas[][linhas_por_pagina]);
+
+void main_I ();
 
 #endif
