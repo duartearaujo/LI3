@@ -153,8 +153,8 @@ int tempo_De_Vida(char *str){
         int dia = atoi(strsep(&str, "/"));
         int mes = atoi(strsep(&str, "/"));
         int ano = atoi(strsep(&str, "/"));
-        int tempo_ate_conta = 372 * ano + 31 * (mes-1) + dia;
-        int tempo_ate_data = 372 * ANO + 31 * (MES-1) + DIA;
+        int tempo_ate_conta = 10000 * ano + 100 * mes + dia;
+        int tempo_ate_data = 10000 * ANO + 100 * MES + DIA;
         tempo_de_vida = tempo_ate_data - tempo_ate_conta;
         free(temp);
     }

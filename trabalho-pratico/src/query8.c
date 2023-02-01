@@ -45,7 +45,7 @@ dados_Q8* inicializa_dados_Q8(){
 void inicializa_array_Q8(int idade_enunciado,char gender_enunciado){
     array = malloc(sizeof(array_Q8));
     array->pos = 0;
-    array->idade_enunciado = idade_enunciado * 372;
+    array->idade_enunciado = idade_enunciado * 10000;
     array-> genero_enunciado = gender_enunciado;
     array->lista = NULL;
 }

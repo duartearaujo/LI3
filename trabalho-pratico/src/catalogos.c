@@ -9,11 +9,12 @@
 int iniciaHashTables(char *argv){
     int u = iniciaHashUsers (argv);
     int d = iniciaHashDrivers (argv);
-    inicializaQ9();
+    inicializaArrays();
     iniciaHashCidades();
     int r = iniciaHashRides (argv);
     if (!(u && d && r)) return 0;
     ordena_Q3();
+    ordena_Q5Q6();
     ordena_Q9();
     return 1;
 }
@@ -25,5 +26,5 @@ void freeEstruturas(){
     hash_table_destroy_rides ();
     freeArray();
     freeArrayU();
-    freeArrayQ9();
+    freeArrays();
 }

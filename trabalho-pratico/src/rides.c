@@ -26,12 +26,14 @@ struct RIDES{
    char type_car;
 };
 
-struct array_Q9 {
-   RIDES **array;
-   int pos;
+struct array_RIDES {
+   RIDES **array_q9;
+   RIDES **arrayQ5Q6;
+   int pos_q9;
+   int posQ5Q6;
 };
 
-static array_Q9 *array_q9 = NULL;
+static arrayRides* arrays;
 
 void free_ride (RIDES *value) {
    free (value->id);
@@ -43,16 +45,18 @@ void free_ride (RIDES *value) {
    free (value);
 }
 
-void inicializaQ9 (){
-   array_q9 = malloc (sizeof (array_Q9));
-   array_q9->pos = 0;
-   array_q9->array = NULL;
+void inicializaArrays (){
+   arrays = malloc (sizeof (arrayRides));
+   arrays->pos_q9 = 0;
+   arrays->posQ5Q6 = 0;
+   arrays->array_q9 = NULL;
+   arrays->arrayQ5Q6 = NULL;
 }
-
 
 int iniciaHashRides (char *path) {
    FILE *fp = NULL;
    rides = g_hash_table_new_full(g_str_hash, g_str_equal,NULL,(GDestroyNotify) free_ride);
+   inicializaArrays();
    char *filename = malloc ((strlen (path) + strlen ("/rides.csv") + 1)*sizeof (char));
    strcpy(filename,path);
    strcat (filename,"/rides.csv");
@@ -191,6 +195,11 @@ RIDES* GetcontentR(RIDES *ride){
    return NULL;
 }
 
+void adicionaArrayQ5Q6(RIDES *new_ride){
+   arrays->posQ5Q6++;
+   arrays->arrayQ5Q6 = realloc(arrays->arrayQ5Q6,arrays->posQ5Q6 * sizeof(RIDES*));
+   arrays->arrayQ5Q6[arrays->posQ5Q6-1] = new_ride;
+}
 
 void adicionaHashRides(char *line){
    RIDES *new_ride = malloc(sizeof(RIDES));
@@ -211,7 +220,7 @@ void adicionaHashRides(char *line){
       addToCidades (copy->city,copy->distance, getcarD (driver), copy->driver, getNameD(driver), copy->score_driver);
 
       if (strtod(new_ride->tip, NULL)) addQ9 (new_ride);
-
+      adicionaArrayQ5Q6(new_ride);
       free_ride(copy);
    }
 }
@@ -224,8 +233,16 @@ char getcarR (RIDES *ride) {
    return ride->type_car;
 }
 
+char getcarArrays (int pos) {
+   return arrays->arrayQ5Q6[pos]->type_car;
+}
+
 int getdistanceR (RIDES *ride) {
    return ride->distance;
+}
+
+int getdistanceArrays (int pos){
+   return arrays->arrayQ5Q6[pos]->distance;
 }
 
 char *getUsernameR (RIDES *ride) {
@@ -257,35 +274,31 @@ int getIdadeViagem (RIDES *ride) {
 }
 
 char* getId_Q9 (int pos) {
-   return (strdup(array_q9->array[pos]->id));
+   return (strdup(arrays->array_q9[pos]->id));
 }
 
 char* getDate_Q9 (int pos) {
-   return (strdup(array_q9->array[pos]->date));
+   return (strdup(arrays->array_q9[pos]->date));
 }
 
 char* getCity_Q9 (int pos) {
-   return (strdup(array_q9->array[pos]->city));
+   return (strdup(arrays->array_q9[pos]->city));
 }
 
 int getDistance_Q9 (int pos) {
-   return (array_q9->array[pos]->distance);
+   return (arrays->array_q9[pos]->distance);
 }
 
 double getTip_Q9 (int pos) {
-   return (strtod (array_q9->array[pos]->tip, NULL));
+   return (strtod (arrays->array_q9[pos]->tip, NULL));
 }
 
 int getIdadeViagem_Q9 (int pos) {
-   return array_q9->array[pos]->idade_viagem;
+   return arrays->array_q9[pos]->idade_viagem;
 }
 
 int getposQ9 () {
-   return array_q9->pos;
-}
-
-void foreach_rides_Q5 (Q5 *query5) {
-   g_hash_table_foreach (rides,(GHFunc)preco_medio_Q5,query5);
+   return arrays->pos_q9;
 }
 
 void foreach_rides_Q6 (Q6 *q) {
@@ -301,18 +314,36 @@ void hash_table_destroy_rides () {
 }
 
 void addQ9(RIDES *ride){                  
-    array_q9->pos++;
-    array_q9->array = (RIDES**) realloc(array_q9->array,array_q9->pos * sizeof(RIDES*));
-    array_q9->array[(array_q9->pos - 1)] = ride;
+    arrays->pos_q9++;
+    arrays->array_q9 = (RIDES**) realloc(arrays->array_q9,arrays->pos_q9 * sizeof(RIDES*));
+    arrays->array_q9[(arrays->pos_q9 - 1)] = ride;
+}
+
+int ordenaQ5Q6(const void *p1, const void* p2) {
+   RIDES *dados_1 = *((RIDES**) p1);
+   RIDES *dados_2 = *((RIDES**) p2);
+   int result = -1;
+   if(dados_1->idade_viagem > dados_2->idade_viagem) result = 1;
+   else if(dados_1->idade_viagem == dados_2->idade_viagem) result = 0;
+   return result;
+}
+
+void ordena_Q5Q6(){
+   qsort (arrays->arrayQ5Q6,(size_t)arrays->posQ5Q6, sizeof(RIDES*), ordenaQ5Q6);
 }
 
 void ordena_Q9(){  
-    qsort (array_q9->array,(size_t)array_q9->pos, sizeof(RIDES*), desempate_Q9);
+   qsort (arrays->array_q9,(size_t)arrays->pos_q9, sizeof(RIDES*), desempate_Q9);
 }
 
-void freeArrayQ9(){
-    if(array_q9){
-        free(array_q9->array);
-        free(array_q9);
+int getTempoDeVida(int pos){
+   return (arrays->arrayQ5Q6[pos]->idade_viagem);
+}
+
+void freeArrays(){
+    if(arrays){
+        free(arrays->array_q9);
+        free(arrays->arrayQ5Q6);
+        free(arrays);
     }
 }
