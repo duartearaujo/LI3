@@ -7,13 +7,13 @@
 #include "../include/interactive.h"
 
 double preco_medio_Q5(int limite_inferior,int limite_superior){
-    int i = 0, max = getPosQ5Q6();
+    int i = 1, max = getPosQ5Q6();
     double preco_total = 0,preco_medio = 0,numero_viagens = 0;
-    int idade = getTempoDeVida(i);
-    while(idade < limite_superior && i < max ){
-        idade = getTempoDeVida(++i);
+    int idade = getTempoDeVida(0);
+    while(i < max && idade < limite_superior ){
+        idade = getTempoDeVida(i++);
     }
-    while(idade <= limite_inferior&& i < max){
+    while(i < max && idade <= limite_inferior ){
         numero_viagens++;
         char car_class = getcarArrays(i);
         int distancia = getdistanceArrays(i);

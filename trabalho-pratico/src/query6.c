@@ -7,12 +7,12 @@
 #include "../include/interactive.h"
 
 double distancia_media(int limite_inferior, int limite_superior, char *city){
-    int pos = 0, idade = getTempoDeVida(pos), max = getPosQ5Q6();
+    int pos = 1, idade = getTempoDeVida(0), max = getPosQ5Q6();
     double distancia = 0, n_viagens = 0, distancia_media = 0;
-    while(idade < limite_superior && pos < max){
-        idade = getTempoDeVida(++pos);
+    while(pos < max && idade < limite_superior ){
+        idade = getTempoDeVida(pos++);
     }
-    while(idade <= limite_inferior && pos < max){
+    while(pos < max && idade <= limite_inferior ){
         char *cityride = getcityArrays (pos);
         if (!strcmp (city, cityride)){
             n_viagens++;
