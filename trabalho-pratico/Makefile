@@ -15,27 +15,19 @@ MAIN = programa-principal # executable file
 
 MAIN_TESTE = programa-testes
 
-all: $(MAIN)
-
-teste: $(MAIN_TESTE)
+all: $(MAIN) $(MAIN_TESTE)
 
 Resultados_testes:
 	@mkdir -p $@
 
-debug_teste: CFLAGS = `pkg-config --cflags --libs glib-2.0` -g -lncurses
-debug_teste: $(MAIN_TESTE)
+Resultados:
+	@mkdir -p $@
 
 $(MAIN_TESTE): $(OBJS_TESTE) Resultados_testes
 	$(CC)  -o $(MAIN_TESTE) $(OBJS_TESTE) $(CFLAGS) 
 
-clean_teste:
-	@rm -rf src/*.o $(MAIN_TESTE) Resultados_testes
-
-Resultados:
-	@mkdir -p $@
-
 debug: CFLAGS = `pkg-config --cflags --libs glib-2.0` -g -lncurses
-debug: $(MAIN)
+debug: $(MAIN) $(MAIN_TESTE)
 
 $(MAIN): $(OBJS) Resultados
 	$(CC)  -o $(MAIN) $(OBJS) $(CFLAGS) 
@@ -44,7 +36,7 @@ $(MAIN): $(OBJS) Resultados
 	$(CC)  -c $<  -o $@ $(CFLAGS)
 
 clean:
-	@rm -rf src/*.o $(MAIN) Resultados
+	@rm -rf src/*.o $(MAIN) $(MAIN_TESTE) Resultados Resultados_testes
 
 out_clean: 
 	@rm -f Resultados/*.txt
