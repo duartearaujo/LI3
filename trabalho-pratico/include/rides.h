@@ -34,6 +34,10 @@ int getdistanceR (RIDES *ride);
 
 int getdistanceArrays (int pos);
 
+char* getcityArrays (int pos);
+
+int getPosQ5Q6 ();
+
 char *getUsernameR (RIDES *ride);
 
 char *getIdDriverR (RIDES *ride);
@@ -69,8 +73,6 @@ int getposQ9 ();
 int getIdadeViagem (RIDES *ride);
 
 int getposQ9 ();
-
-void foreach_rides_Q6 (Q6 *q);
 
 void foreach_rides_Q8 ();
 

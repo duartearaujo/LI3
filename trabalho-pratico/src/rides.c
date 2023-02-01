@@ -33,7 +33,7 @@ struct array_RIDES {
    int posQ5Q6;
 };
 
-static arrayRides* arrays;
+static arrayRides *arrays = NULL;
 
 void free_ride (RIDES *value) {
    free (value->id);
@@ -56,7 +56,6 @@ void inicializaArrays (){
 int iniciaHashRides (char *path) {
    FILE *fp = NULL;
    rides = g_hash_table_new_full(g_str_hash, g_str_equal,NULL,(GDestroyNotify) free_ride);
-   inicializaArrays();
    char *filename = malloc ((strlen (path) + strlen ("/rides.csv") + 1)*sizeof (char));
    strcpy(filename,path);
    strcat (filename,"/rides.csv");
@@ -245,6 +244,14 @@ int getdistanceArrays (int pos){
    return arrays->arrayQ5Q6[pos]->distance;
 }
 
+char* getcityArrays (int pos){
+   return strdup (arrays->arrayQ5Q6[pos]->city);
+}
+
+int getPosQ5Q6 () {
+   return arrays->posQ5Q6;
+}
+
 char *getUsernameR (RIDES *ride) {
    return strdup (ride->user);
 }
@@ -299,10 +306,6 @@ int getIdadeViagem_Q9 (int pos) {
 
 int getposQ9 () {
    return arrays->pos_q9;
-}
-
-void foreach_rides_Q6 (Q6 *q) {
-   g_hash_table_foreach (rides, (GHFunc)distancia_media, q);
 }
 
 void foreach_rides_Q8 () {

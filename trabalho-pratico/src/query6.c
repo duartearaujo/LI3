@@ -6,40 +6,28 @@
 #include "../include/query6.h"
 #include "../include/interactive.h"
 
-struct Q6{
-    char *city;
-    char *data1;
-    char *data2;
-    double total_distance;
-    int n_rides;
-};
-
-Q6* inicializaQ6 (char *city, char *data1, char *data2){
-    Q6 *new = malloc (sizeof (Q6));
-    new->city = city;
-    new->data1 = data1;
-    new->data2 = data2;
-    new->total_distance = 0;
-    new->n_rides = 0;
-    return new;
-}
-
-void distancia_media(gpointer key, RIDES *ride, Q6 *q){
-    char *city = getcityR(ride);
-    char *data = getDateR(ride);
-    int distance = getdistanceR(ride);
-    if(!strcmp(q->city, city) && ((compareDates(data, q->data1) == 1 && compareDates(data, q->data2) == 0) || !strcmp(data, q->data1) || !strcmp(data, q->data2))){
-        q->n_rides++;
-        q->total_distance += distance;
+double distancia_media(int limite_inferior, int limite_superior, char *city){
+    int pos = 0, idade = getTempoDeVida(pos), max = getPosQ5Q6();
+    double distancia = 0, n_viagens = 0, distancia_media = 0;
+    while(idade < limite_superior && pos < max){
+        idade = getTempoDeVida(++pos);
     }
-    free(city);
-    free(data);
+    while(idade <= limite_inferior && pos < max){
+        char *cityride = getcityArrays (pos);
+        if (!strcmp (city, cityride)){
+            n_viagens++;
+            distancia += getdistanceArrays(pos);
+        }
+        idade = getTempoDeVida(++pos);
+        free (cityride);
+    }
+    if(n_viagens) distancia_media = distancia / n_viagens;
+    return distancia_media;
 }
 
-int printQ6(Q6 *q, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int printQ6(FILE *res, int modo,double distancia_media ,int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     char line[256] = {0};
-    if(q->n_rides){
-        double distancia_media = (q->total_distance/q->n_rides);
+    if(distancia_media){
         if (modo == 0)
             fprintf(res, "%.3f\n", distancia_media);
         else{
@@ -52,18 +40,9 @@ int printQ6(Q6 *q, FILE *res, int modo, int *informacoespaginas, char *paginas[]
     return 1;
 }
 
-void freeQ6(Q6 *q){
-    free(q->city);
-    free(q->data1);
-    free(q->data2);
-    free(q);
-}
-
-int query6Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int query6Exe(FILE *res, int modo, char **argumentos, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int r = 1;
-    Q6* q = inicializaQ6(strdup(argv[1]), strdup(argv[2]), strdup(argv[3]));
-    foreach_rides_Q6(q);
-    r = printQ6(q, res, modo, informacoespaginas, paginas);
-    freeQ6(q);
+    double distancia = distancia_media(tempo_De_Vida(strdup(argumentos[2])),tempo_De_Vida(strdup(argumentos[3])), argumentos [1]);
+    r = printQ6(res,modo,distancia , informacoespaginas, paginas);
     return r;
 }

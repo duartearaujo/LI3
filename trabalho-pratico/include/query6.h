@@ -3,16 +3,10 @@
 
 #include "../include/interactive.h"
 
-typedef struct Q6 Q6;
+double distancia_media(int limite_inferior, int limite_superior, char *city);
 
-Q6* inicializaQ6 (char *city, char *data1, char *data2);
+int printQ6(FILE *res, int modo,double distancia_media ,int *informacoespaginas, char *paginas[][linhas_por_pagina]);
 
-void distancia_media(gpointer key, RIDES *ride, Q6 *q);
-
-int printQ6(Q6 *q, FILE *res, int modo, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
-
-void freeQ6(Q6 *q);
-
-int query6Exe(FILE *res, int modo, char **argv, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
+int query6Exe(FILE *res, int modo, char **argumentos, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
 
 #endif 
