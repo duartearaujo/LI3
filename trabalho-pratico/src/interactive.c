@@ -22,19 +22,20 @@ int saltar_pagina (int linha, int paginas) {
     if (!verificacao || pagina [0] == '0')
         n_pagina = saltar_pagina (linha, paginas);
     else n_pagina = atoi (pagina) - 1;
+    if (n_pagina < 0) n_pagina = saltar_pagina (linha, paginas);
     return n_pagina;
 }
 
 int novapagina(int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
-    mvprintw (informacoespaginas[0],0,"\t\t---- FIM DA PAGINA %d----", informacoespaginas[1] + 1);
-    mvprintw (informacoespaginas[0]+1,0,"n - Proxima pagina       p - Pagina anterior       e - Sair       s - Saltar p/página");
+    mvprintw (informacoespaginas[0],0,"\t\t---- FIM DA PAGINA ----");
+    mvprintw (informacoespaginas[0]+1,0,"p - Pagina anterior       n - Proxima pagina       e - Sair       s - Saltar p/página");
     int ch = getch();
     if (ch == 'n') {
         erase();
         informacoespaginas[1] ++;
         if (informacoespaginas[1] <= informacoespaginas[2]){
             for (int i = 0; i < linhas_por_pagina; i++) if (paginas [informacoespaginas[1]] [i]) mvprintw (i,0,"%s", paginas [informacoespaginas[1]] [i]);
-            novapagina(informacoespaginas, paginas);
+            if (novapagina(informacoespaginas, paginas) == 0) return 0;
         }
         else {
             informacoespaginas[0] = 0;
@@ -47,7 +48,7 @@ int novapagina(int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
         if (informacoespaginas [1])
             informacoespaginas[1]--;
         for (int i = 0; i < linhas_por_pagina; i++) if (paginas [informacoespaginas[1]] [i]) mvprintw (i,0,"%s", paginas [informacoespaginas[1]] [i]);
-        novapagina(informacoespaginas, paginas);
+        if (novapagina(informacoespaginas, paginas) == 0) return 0;
     }
     else if (ch == 's'){
         int pagina = saltar_pagina (informacoespaginas[0]+1,informacoespaginas[2]);
@@ -61,7 +62,7 @@ int novapagina(int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
         else {
             informacoespaginas[1] = pagina;
             for (int i = 0; i < linhas_por_pagina; i++) if (paginas [informacoespaginas[1]] [i]) mvprintw (i,0,"%s", paginas [informacoespaginas[1]] [i]);
-            novapagina(informacoespaginas, paginas);
+            if (novapagina(informacoespaginas, paginas) == 0) return 0;
         }
     }
     else if (ch == 'e')
@@ -89,32 +90,34 @@ int iniciaI(int *informacoespaginas,  char *paginas[][linhas_por_pagina]){
     paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup (line);
     
     refresh ();
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) {free (path);return 0;}
 
     mvprintw (informacoespaginas[0],0,"Carregando os ficheiros...");
     paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("Carregando os ficheiros...");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) {free (path);return 0;}
     refresh ();
 
-    if (!iniciaHashTables (path)) return 0;
+    if (!iniciaHashTables (path)) {free (path);return 0;}
     free (path);
     return 1;
 }
 
 int verifica_input (char **query) {
     int n_query = atoi (query[0]);
+    if (n_query == 1)
+        return (query[1][0] != '\0');
     if (n_query == 2 || n_query == 3)
         return verifica_inteiro (query [1]);
     if (n_query == 5 || n_query == 9) 
-        return (verificadata (query[1]) && verificadata (query [2]));
+        return (query[1] != NULL && query[2] != NULL && verificadata (query[1]) && verificadata (query [2]));
     if (n_query == 4)
         return ( query [1][0] != '\0');
     if (n_query == 6)
-        return ( query [1][0] != '\0' && verificadata (query[2]) && verificadata (query [3]));
+        return ( query [1][0] != '\0' && query[2] != NULL && query[3] != NULL && verificadata (query[2]) && verificadata (query [3]));
     if (n_query == 7)
         return (query [2] && verifica_inteiro (query [1]) && query [2][0] != '\0');
     if (n_query == 8)
-        return ((query[1][0] == 'M' || query[1][0] == 'F') && verifica_inteiro (query [2]));
+        return ((query[1][0] == 'M' || query[1][0] == 'F') && query[2] != NULL && verifica_inteiro (query [2]));
     return -1;
 }
 
@@ -195,31 +198,43 @@ int parsequeryI(int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int n_query = 1;
     char **query = NULL;
     char *q = malloc (sizeof (char) *2);
+    int Nquery_input;
     char *args = malloc (sizeof (char) * 256);
     char line[256] = {0};
 
     mvprintw(informacoespaginas[0],0,"Especifique a query: ");
-    getstr(q);
+    Nquery_input = getch();
 
-    sprintf (line, "Especifique a query: %s", q);
+    sprintf (line, "Especifique a query: %c", Nquery_input);
     paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup (line);    
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
-    
-    int Nquery = atoi (q);
-    if (Nquery < 1 || Nquery > 9){
+    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) {
+        free (query);
+        free (q);
+        free (args);
+        return 0;
+    }
+    if (Nquery_input < '1' || Nquery_input > '9'){
         mvprintw (informacoespaginas[0],0,"Número de query inválido.");
         paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("Número de query inválido.");
         if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
         parsequeryI (informacoespaginas, paginas);
+        free (query);
+        free (q);
+        free (args);
         return 1;
     }
-
+    sprintf (q, "%c", Nquery_input);
+    int Nquery = atoi (q);
     mvprintw(informacoespaginas[0],0,"Insira os argumentos separados por espaço: ");
     getstr (args);
     sprintf (line, "Insira os argumentos separados por espaço: %s", args);
     paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup (line);
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
-
+    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) {
+        free (query);
+        free (q);
+        free (args);
+        return 0;
+    }
     char *temp = args;
     char *token = strsep(&temp," ");
 
@@ -246,12 +261,24 @@ int parsequeryI(int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     if (!verifica_input (query)) {
         mvprintw (informacoespaginas[0],0,"Argumentos inválidos.");
         paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("Argumentos inválidos.");
-        if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
-        parsequeryI (informacoespaginas, paginas);        
+        if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) {
+            free (query);
+            free (q);
+            free (args);
+            return 0;
+        }
+        parsequeryI (informacoespaginas, paginas);      
+        free (query);
+        free (q);
+        free (args);  
         return 1;
     }
-    if (!querieIdentifier(query, n_query++, 1, informacoespaginas, paginas))return 0;
-
+    if (!querieIdentifier(query, n_query++, 1, informacoespaginas, paginas)) {
+        free (query);
+        free (q);
+        free (args);
+        return 0;
+    }
     for (--i; i>= 0; i--) free (query[i]);  /*free do array*/
     free (query);
     free (q);
@@ -278,7 +305,7 @@ void main_I () {
     else
         mvprintw (informacoespaginas[0],0, "Libertando Memória...");
     refresh();
-    for (int i = 0; i <= informacoespaginas [2]; i++)
+    for (int i = 0; i <= informacoespaginas[2]; i++)
         for (int j = 0; j < linhas_por_pagina; j++) 
             if (paginas[i][j]) free (paginas[i][j]);
     freeEstruturas ();
