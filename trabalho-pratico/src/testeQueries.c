@@ -33,7 +33,8 @@ int compareFiles(FILE *fp1, FILE *fp2){
 
 
 int testaQueries1Argumento(int modo,int n_teste,int query){
-    int i = 0,N = 0,inicio = 0,erros = 0;
+    printf("A iniciar os testes da Query %d:\n",query);
+    int i = 0,N = 0,inicio = 0,erros = 0,corretos = 0;
     float time_used = 0;
     char *argumentos[12] = {"ClarPacheco48","000000004780","000000003123","2126","994","0","5216","4090","0","Braga","Coimbra","Roma"};
     if(query == 1){
@@ -66,25 +67,25 @@ int testaQueries1Argumento(int modo,int n_teste,int query){
         res = fopen(filename, "r");
         t = clock() - t;
         time_used = ((float)t)/CLOCKS_PER_SEC;
-        printf ("Query%d: %f\n",query,time_used);
+        printf ("\tQuery%d: %f\n",query,time_used);
         if(time_used >= 10) erros = 2;
         char solucao_teste[33 + n_teste];
         sprintf(solucao_teste, "SolucoesTestes/solucao_teste%d.txt", n_teste);
         solucao = fopen(solucao_teste, "r");
-        if(!compareFiles(res,solucao)) erros = 1;
+        if(compareFiles(res,solucao)) corretos++;
         if (res) fclose (res);
         if (solucao) fclose (solucao);
         n_teste++;
     }
-    if(erros == 1) printf("Query %d está mal implementada!\n",query);
-    else if(erros == 2) printf("Query %d ultrapassou o tempo útil!\n",query);
-    else printf("Query %d não apresenta nenhum erro!\n",query);
+    printf("Query %d : Passou a %d/3 Testes\n\n",query,corretos);
+    if(erros == 2) printf("Query %d ultrapassou o tempo útil!\n\n",query);
     return n_teste;
 }
 
 
 int testaQueries2Argumentos(int modo,int n_teste,int query){
-    int N = 0,erros = 0,linha = 0,inicio = 0;
+    printf("A iniciar os testes da Query %d:\n",query);
+    int N = 0,erros = 0,linha = 0,inicio = 0,corretos = 0;
     float time_used = 0;
     char *argumentos[12][3] = {{NULL,"24/06/2010","26/02/2012"},
                               {NULL,"10/07/2014","20/07/2014"},
@@ -133,19 +134,19 @@ int testaQueries2Argumentos(int modo,int n_teste,int query){
         char solucao_teste[33 + n_teste];
         sprintf(solucao_teste, "SolucoesTestes/solucao_teste%d.txt", n_teste);
         solucao = fopen(solucao_teste, "r");
-        if(!compareFiles(res,solucao)) erros = 1;
+        if(compareFiles(res,solucao)) corretos++;
         if (res) fclose (res);
         if (solucao) fclose (solucao);
         n_teste++;
     }
-    if(erros == 1) printf("Query %d está mal implementada!\n",query);
-    else if(erros == 2) printf("Query %d ultrapassou o tempo útil!\n",query);
-    else printf("Query %d não apresenta nenhum erro!\n",query);
+    printf("Query %d : Passou a %d/3 Testes\n\n",query,corretos);
+    if(erros == 2) printf("Query %d ultrapassou o tempo útil!\n\n",query);
     return n_teste;
 }
 
 void testaQueries3Argumentos(int modo,int n_teste){
-    int linha = 0,erros = 0;
+    printf("A iniciar os testes da Query 6:\n");
+    int linha = 0,erros = 0,corretos = 0;
     float time_used = 0;
     char *argumentos[3][4] = {{NULL,"London","13/08/2019","31/01/2020"},
                               {NULL,"Lisboa","05/05/2018","27/01/2020"},
@@ -166,15 +167,14 @@ void testaQueries3Argumentos(int modo,int n_teste){
         char solucao_teste[33 + n_teste];
         sprintf(solucao_teste, "SolucoesTestes/solucao_teste%d.txt", n_teste);
         solucao = fopen(solucao_teste, "r");
-        if(!compareFiles(res,solucao)) erros = 1;
+        if(compareFiles(res,solucao)) corretos++;
         if (res) fclose (res);
         if (solucao) fclose (solucao);
         n_teste++;
         linha++;
     }
-    if(erros == 1) printf("Query 6 está mal implementada!\n");
-    else if(erros == 2) printf("Query 6 ultrapassou o tempo útil!\n");
-    else printf("Query 6 não apresenta nenhum erro!\n");
+    printf("Query 6 : Passou a %d/3 Testes\n\n",corretos);
+    if(erros == 2) printf("Query 6 ultrapassou o tempo útil!\n\n");
 }
 
 

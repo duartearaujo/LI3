@@ -10,6 +10,13 @@
 #include "../include/query8.h"
 #include "../include/interactive.h"
 
+/* Função utilizada para percorrer um dos dois arrays criados no ficheiro rides.c (array_male, array_female), qual dos arrays é percorrido depende exclusi-
+vamente do valor dado como argumento da query 8 (M ou F).
+A função, tal como já foi referido anteriormente, vai percorrendo o array e, se a idade das contas do user e do driver forem superiores à idade dada como
+argumento, (caso estejamos no modo batch) vai fazer print dos valores pretendidos no ficheiro associado ao resultado da query, caso contrário, ou seja, este-
+jamos no modo interativo, vai fazer print no terminal (a forma do print desta query segue a seguinte forma: id_driver,nome_driver,username(do user),nome_user).
+*/
+
 int printArray_Q8(FILE *res, int modo,char gender_enunciado,int idade_conta_enunciado, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     char line[256] = {0};
     int pos = getPosQ8(gender_enunciado);
@@ -35,6 +42,10 @@ int printArray_Q8(FILE *res, int modo,char gender_enunciado,int idade_conta_enun
     }
     return 1;
 }
+
+/*Função responsável por chamar todas as funções que permitem a execução da query 8.Nesta query em específico só é necessário chamar a função print definida
+em cima.
+*/
 
 int query8Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     int r = 1;
