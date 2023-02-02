@@ -15,6 +15,7 @@ int iniciaHashTables(char *argv){
     if (!(u && d && r)) return 0;
     ordena_Q3();
     ordena_Q5Q6();
+    ordena_Q8();
     ordena_Q9();
     return 1;
 }
@@ -23,7 +24,6 @@ void freeEstruturas(){
     hash_table_destroy_users ();
     hash_table_destroy_drivers ();
     destroyHashCidades ();
-    hash_table_destroy_rides ();
     freeArray();
     freeArrayU();
     freeArrays();

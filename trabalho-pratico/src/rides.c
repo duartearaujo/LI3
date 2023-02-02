@@ -9,8 +9,6 @@
 #include "../include/dataverification.h"
 #include "../include/cidades.h"
 
-static GHashTable* rides;
-
 /*struct onde vão ser armazenados os dados do ficheiro rides.csv*/
 struct RIDES{ 
    char *id;
@@ -26,9 +24,20 @@ struct RIDES{
    char type_car;
 };
 
+struct q8{
+   RIDES* ride;
+   int idade_conta_driver;
+   int idade_conta_user;
+};
+
+
 struct array_RIDES {
    RIDES **array_q9;
    RIDES **arrayQ5Q6;
+   q8 **array_female;
+   q8 **array_male;
+   int pos_female;
+   int pos_male;
    int pos_q9;
    int posQ5Q6;
 };
@@ -45,17 +54,28 @@ void free_ride (RIDES *value) {
    free (value);
 }
 
+q8* inicializa_dados_Q8(){
+   q8* new = malloc(sizeof(q8));
+   new->idade_conta_driver = 0;
+   new->idade_conta_user = 0;
+   new->ride = NULL;
+   return new;
+}
+
 void inicializaArrays (){
    arrays = malloc (sizeof (arrayRides));
+   arrays->pos_female = 0;
+   arrays->pos_male = 0;
    arrays->pos_q9 = 0;
    arrays->posQ5Q6 = 0;
+   arrays->array_female = NULL;
+   arrays->array_male = NULL;
    arrays->array_q9 = NULL;
    arrays->arrayQ5Q6 = NULL;
 }
 
 int iniciaHashRides (char *path) {
    FILE *fp = NULL;
-   rides = g_hash_table_new_full(g_str_hash, g_str_equal,NULL,(GDestroyNotify) free_ride);
    char *filename = malloc ((strlen (path) + strlen ("/rides.csv") + 1)*sizeof (char));
    strcpy(filename,path);
    strcat (filename,"/rides.csv");
@@ -203,11 +223,34 @@ void adicionaArrayQ5Q6(RIDES *new_ride){
 void adicionaHashRides(char *line){
    RIDES *new_ride = malloc(sizeof(RIDES));
    if (separa(line,new_ride,2)) {
-      g_hash_table_insert(rides,new_ride->id,new_ride);
       new_ride ->idade_viagem = tempo_De_Vida (strdup(new_ride->date));
 
       RIDES *copy = GetcontentR(new_ride);
       DRIVERS *driver = lookup_drivers(copy->driver);
+      char gender_Driver = getGenderD(lookup_drivers(copy->driver));
+      char gender_User = getGenderU(lookup_users(copy->user));
+      char account_status_driver = getAccountStatusD(lookup_drivers(new_ride->driver));
+      char account_status_user = getAccStatusU(lookup_users(new_ride->user));
+      if(account_status_driver == 'a' && account_status_user == 'a'){
+         if(gender_Driver == 'M' && gender_User == 'M'){
+            q8* dados = inicializa_dados_Q8();
+            dados->ride = new_ride;
+            dados->idade_conta_driver = get_Idade_Conta_D(lookup_drivers(new_ride->driver));
+            dados->idade_conta_user = get_Idade_Conta_U(lookup_users(new_ride->user));
+            arrays->pos_male++;
+            arrays->array_male = (q8**) realloc(arrays->array_male,arrays->pos_male * sizeof(q8*));
+            arrays->array_male[arrays->pos_male-1] = dados;
+         }
+         else if(gender_Driver == 'F' && gender_User == 'F'){
+            q8* dados = inicializa_dados_Q8();
+            dados->ride = new_ride;
+            dados->idade_conta_driver = get_Idade_Conta_D(lookup_drivers(new_ride->driver));
+            dados->idade_conta_user = get_Idade_Conta_U(lookup_users(new_ride->user));
+            arrays->pos_female++;
+            arrays->array_female = (q8**) realloc(arrays->array_female,arrays->pos_female * sizeof(q8*));
+            arrays->array_female[arrays->pos_female-1] = dados;
+         }
+      }
       addToDriver(driver, copy->score_driver,copy->date,copy->distance, copy->tip);
       
       new_ride->type_car = getcarD (driver);
@@ -248,6 +291,48 @@ char* getcityArrays (int pos){
    return strdup (arrays->arrayQ5Q6[pos]->city);
 }
 
+int getPosQ8 (char gender){
+   if(gender == 'M') return arrays->pos_male;
+   else if(gender == 'F') return arrays->pos_female;
+   return 0;
+}
+
+int get_Idade_Conta_DriverQ8(int pos,char gender){
+   if(gender == 'M') return arrays->array_male[pos]->idade_conta_driver;
+   else if(gender == 'F') return arrays->array_female[pos]->idade_conta_driver;
+   return 0;
+}
+
+int get_Idade_Conta_UserQ8(int pos,char gender){
+   if(gender == 'M') return arrays->array_male[pos]->idade_conta_user;
+   else if(gender == 'F') return arrays->array_female[pos]->idade_conta_user;
+   return 0;
+}
+
+char *getUsernameQ8(int pos,char gender){
+   if(gender == 'M') return strdup(arrays->array_male[pos]->ride->user);
+   if(gender == 'F') return strdup(arrays->array_female[pos]->ride->user);
+   return NULL;
+}
+
+char *getIdDriverQ8(int pos,char gender){
+   if(gender == 'M') return strdup(arrays->array_male[pos]->ride->driver);
+   if(gender == 'F') return strdup(arrays->array_female[pos]->ride->driver);
+   return NULL;
+}
+
+char *getNomeDriverQ8(int pos,char gender){
+   if(gender == 'M') return getNameD(lookup_drivers(arrays->array_male[pos]->ride->driver));
+   if(gender == 'F') return getNameD(lookup_drivers(arrays->array_female[pos]->ride->driver));
+   return NULL;
+}
+
+char *getNomeUserQ8(int pos,char gender){
+   if(gender == 'M') return getNameU(lookup_users(arrays->array_male[pos]->ride->user));
+   if(gender == 'F') return getNameU(lookup_users(arrays->array_female[pos]->ride->user));
+   return NULL;
+}
+
 int getPosQ5Q6 () {
    return arrays->posQ5Q6;
 }
@@ -270,10 +355,6 @@ char *getDateR (RIDES *ride) {
 
 double getTip (RIDES *ride) {
    return strtod(ride->tip,NULL);
-}
-
-RIDES* lookup_rides (char* key) {
-    return (g_hash_table_lookup (rides, key));
 }
 
 int getIdadeViagem (RIDES *ride) {
@@ -308,14 +389,6 @@ int getposQ9 () {
    return arrays->pos_q9;
 }
 
-void foreach_rides_Q8 () {
-   g_hash_table_foreach(rides,(GHFunc)verifica_dados_Q8, NULL);
-}
-
-void hash_table_destroy_rides () {
-   g_hash_table_destroy (rides);
-}
-
 void addQ9(RIDES *ride){                  
     arrays->pos_q9++;
     arrays->array_q9 = (RIDES**) realloc(arrays->array_q9,arrays->pos_q9 * sizeof(RIDES*));
@@ -335,6 +408,31 @@ void ordena_Q5Q6(){
    qsort (arrays->arrayQ5Q6,(size_t)arrays->posQ5Q6, sizeof(RIDES*), ordenaQ5Q6);
 }
 
+int desempate_Q8(const void *p1, const void* p2){
+   q8 *dados_1 = *((q8**) p1);
+   q8 *dados_2 = *((q8**) p2);
+   int result = 1;
+   int idade_conta_driver = dados_1->idade_conta_driver;
+   int idade_conta_driver2 = dados_2->idade_conta_driver;
+   int idade_conta_user = dados_1->idade_conta_user;
+   int idade_conta_user2 = dados_2->idade_conta_user;
+   char *id = dados_1->ride->id;
+   char *id2 = dados_2->ride->id;
+   if (idade_conta_driver > idade_conta_driver2) result = -1;
+   else if(idade_conta_driver== idade_conta_driver2){
+      if(idade_conta_user > idade_conta_user2) result = -1;
+      else if(idade_conta_user == idade_conta_user2){
+         if(atoi(id) < atoi(id2)) result = -1;
+      }
+   }
+   return result;
+}
+
+void ordena_Q8(){  
+   qsort (arrays->array_male,(size_t)arrays->pos_male, sizeof(q8*), desempate_Q8);
+   qsort (arrays->array_female,(size_t)arrays->pos_female, sizeof(q8*), desempate_Q8);
+}
+
 void ordena_Q9(){  
    qsort (arrays->array_q9,(size_t)arrays->pos_q9, sizeof(RIDES*), desempate_Q9);
 }
@@ -343,10 +441,26 @@ int getTempoDeVida(int pos){
    return (arrays->arrayQ5Q6[pos]->idade_viagem);
 }
 
+void freeQ8(q8* dados){
+   free(dados);
+}
+
 void freeArrays(){
-    if(arrays){
-        free(arrays->array_q9);
-        free(arrays->arrayQ5Q6);
-        free(arrays);
-    }
+   if(arrays){
+      int i;
+      free(arrays->array_q9);
+      for(i = 0; i < arrays->posQ5Q6;i++){
+         free_ride(arrays->arrayQ5Q6[i]);
+      }
+      free(arrays->arrayQ5Q6);
+      for(i = 0; i < arrays->pos_male;i++){
+         freeQ8(arrays->array_male[i]);
+      }
+      for(i = 0; i < arrays->pos_female;i++){
+         freeQ8(arrays->array_female[i]);
+      }
+      free(arrays->array_male);
+      free(arrays->array_female);
+      free(arrays);
+   }
 }

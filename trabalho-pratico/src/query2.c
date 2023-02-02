@@ -15,12 +15,13 @@ int desempate_Q2(const void *p1, const void* p2){
     double avaliacao_media2 = getAvaliacaoMediaD(driver_2);
     char *mostRecentRide = getMostRecentRideD(driver_1);
     char *mostRecentRide2 = getMostRecentRideD(driver_2);
+    int verificacao = compareDates(mostRecentRide,mostRecentRide2);
     char *id = getIdD(driver_1);
     char *id2 = getIdD(driver_2);
     if (avaliacao_media > avaliacao_media2) result = -1;
     else if(avaliacao_media == avaliacao_media2){   /*desempate dos drivers(avaliação média =)->verificar as datas*/
-        if(compareDates(mostRecentRide,mostRecentRide2) == 1) result = -1;   /*compareDates = 1 -> primeira data é mais recente*/
-        else if(compareDates(mostRecentRide,mostRecentRide2) == 2){    /*compareDates = 2 -> as duas datas são iguais*/
+        if(verificacao == 1) result = -1;   /*compareDates = 1 -> primeira data é mais recente*/
+        else if(verificacao == 2){    /*compareDates = 2 -> as duas datas são iguais*/
             if(atoi(id) < atoi(id2)) result = -1;  /*se as datas forem iguais então compara-se os id*/
         }
     }

@@ -8,6 +8,8 @@
 
 typedef struct RIDES RIDES;
 
+typedef struct q8 q8;
+
 typedef struct array_RIDES arrayRides;
 
 #include "query4.h"
@@ -21,6 +23,8 @@ int iniciaHashRides (char *path);
 void inicializaArrays ();
 
 void free_ride (RIDES *value);
+
+q8* inicializa_dados_Q8();
 
 int assignsData(RIDES* new_ride ,int pos ,char* token);
 
@@ -36,6 +40,20 @@ int getdistanceArrays (int pos);
 
 char* getcityArrays (int pos);
 
+int getPosQ8 (char gender);
+
+int get_Idade_Conta_DriverQ8(int pos,char gender);
+
+int get_Idade_Conta_UserQ8(int pos,char gender);
+
+char *getUsernameQ8(int pos,char gender);
+
+char *getIdDriverQ8(int pos,char gender);
+
+char *getNomeDriverQ8(int pos,char gender);
+
+char *getNomeUserQ8(int pos,char gender);
+
 int getPosQ5Q6 ();
 
 char *getUsernameR (RIDES *ride);
@@ -49,8 +67,6 @@ char *getDateR (RIDES *ride);
 char *getcityR (RIDES *ride);
 
 double getTip (RIDES *ride);
-
-RIDES* lookup_rides (char* key);
 
 char* getId_Q9 (int pos); 
 
@@ -76,11 +92,13 @@ int getposQ9 ();
 
 void foreach_rides_Q8 ();
 
-void hash_table_destroy_rides ();
-
 void addQ9(RIDES *ride);
 
 void ordena_Q5Q6();
+
+int desempate_Q8(const void *p1, const void* p2);
+
+void ordena_Q8();
 
 void ordena_Q9();
 
