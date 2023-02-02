@@ -9,6 +9,58 @@
 #include "../include/query7.h"
 #include "../include/interactive.h"
 
+struct PrintQ7 {
+    FILE *res;
+    void *paginas;
+    int *informacoespaginas;
+    int N;
+    int modo;
+};
+
+gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
+    PrintQ7 *ficheiro = user_data;
+    AvC* driver = value;
+    char *id = getIdAvC (driver);
+    char line[256] = {0};
+    if (verifica_ativo(id)) {
+        char *name = getNameAvC(driver);
+        double avaliacao_media = getAvaliacaoMediaAvC (driver);
+        if (ficheiro->modo == 0)
+            fprintf (ficheiro->res,"%s;%s;%.3f\n",id,name,avaliacao_media);
+        else{
+            mvprintw (ficheiro->informacoespaginas[0],0,"\t%s;%s;%.3f",id,name,avaliacao_media);
+            sprintf(line, "\t%s;%s;%.3f",id,name,avaliacao_media);
+            copia (ficheiro->informacoespaginas, ficheiro->paginas, line);
+            if (ficheiro->informacoespaginas[0] >= linhas_por_pagina) 
+                    if (novapagina (ficheiro->informacoespaginas, ficheiro->paginas)) {
+                        free (id);
+                        free (name);
+                        return FALSE;
+                    }
+            }
+        free (name);
+        ficheiro->N--;
+    }
+    free (id);
+    if (ficheiro->N)
+        return FALSE;
+    return TRUE;
+}
+
+int printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
+    int r = 1;
+    PrintQ7 *p = malloc(sizeof (PrintQ7));
+    p->N = N;
+    p->res = res;
+    p->modo = modo;
+    p->informacoespaginas = informacoespaginas;
+    p->paginas = paginas;
+    tree_foreach_city (city,p);
+    if (p->N) r = 0; 
+    free (p);
+    return r;
+}
+
 gint organiza_arvore (gconstpointer a, gconstpointer b, gpointer c) {
     AvC const* ax = a;
     AvC const* bx = b;

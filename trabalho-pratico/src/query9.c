@@ -8,7 +8,7 @@
 #include "../include/drivers.h"
 #include "../include/query9.h"
 #include "../include/interactive.h"
-
+#include "../include/datas.h"
 
 int desempate_Q9(const void *p1, const void* p2) {
     RIDES *dados_1 = *((RIDES**) p1);

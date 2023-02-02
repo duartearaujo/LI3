@@ -6,6 +6,7 @@
 #include "../include/users.h"
 #include "../include/queries.h"
 #include "../include/dataverification.h"
+#include "../include/datas.h"
 
 static GHashTable *users;
 

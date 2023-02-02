@@ -151,53 +151,11 @@ void ordena_arvore_Q7 (char *city) {
     }
 }
 
-typedef struct PrintQ7 {
-    FILE *res;
-    void *paginas;
-    int *informacoespaginas;
-    int N;
-    int modo;
-} PrintQ7;
-
-void copia (int *informacoespaginas, char *paginas[][linhas_por_pagina], char line[]) {
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
-}
-
-gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
-    PrintQ7 *ficheiro = user_data;
-    AvC* driver = value;
-    char line[256] = {0};
-    if (verifica_ativo(driver->id)) {
-        if (ficheiro->modo == 0)
-            fprintf (ficheiro->res,"%s;%s;%.3f\n",driver->id, driver->name, driver->avaliacao_media);
-        else{
-            mvprintw (ficheiro->informacoespaginas[0],0,"\t%s;%s;%.3f",driver->id, driver->name, driver->avaliacao_media);
-            sprintf(line, "\t%s;%s;%.3f",driver->id, driver->name, driver->avaliacao_media);
-            copia (ficheiro->informacoespaginas, ficheiro->paginas, line);
-            if (ficheiro->informacoespaginas[0] >= linhas_por_pagina) if (novapagina (ficheiro->informacoespaginas, ficheiro->paginas)) return FALSE;
-        }
-        ficheiro->N--;
-    }
-    if (ficheiro->N)
-        return FALSE;
-    return TRUE;
-}
-
-int printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
-    int r = 1;
-    HTree *c= g_hash_table_lookup (cidades,city);
+void tree_foreach_city (char *city, PrintQ7 *p) {
+    HTree *c = g_hash_table_lookup(cidades, city);
     if (c) {
-        PrintQ7 *p = malloc(sizeof (PrintQ7));
-        p->N = N;
-        p->res = res;
-        p->modo = modo;
-        p->informacoespaginas = informacoespaginas;
-        p->paginas = paginas;
-        g_tree_foreach (c->t, printQ7_aux, p);
-        if (p->N) r = 0; 
-        free (p);
+        g_tree_foreach (c->t,printQ7_aux,p);
     }
-    return r;
 }
 
 char *getIdC (AvC const* a) {
@@ -205,5 +163,17 @@ char *getIdC (AvC const* a) {
 }
 
 double getavaliacaomediaC (AvC const* a) {
+    return a->avaliacao_media;
+}
+
+char *getIdAvC (AvC *a) {
+    return strdup (a->id);
+}
+
+char *getNameAvC (AvC *a) {
+    return strdup (a->name);
+}
+
+double getAvaliacaoMediaAvC (AvC *a) {
     return a->avaliacao_media;
 }

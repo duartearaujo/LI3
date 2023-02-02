@@ -6,6 +6,7 @@
 #include "../include/queries.h"
 #include "../include/query2.h"
 #include "../include/interactive.h"
+#include "../include/datas.h"
 
 int desempate_Q2(const void *p1, const void* p2){
     DRIVERS *driver_1 = GetcontentD(*((DRIVERS**) p1));

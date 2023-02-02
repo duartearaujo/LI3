@@ -7,6 +7,14 @@
 #include "../include/queries.h"
 #include "../include/query1.h"
 #include "../include/interactive.h"
+#include "../include/datas.h"
+
+/*Função para identificar se o input recebido da query 1 é um id(driver) ou um username (user)*/
+int identifyArgument(char *str){  
+    int id = 0;
+    if(str[1] >= 48 && str[1] <= 57) id = 1;
+    return id;
+}
 
 /* Função para fazer print dos valores do driver pedido na query 1 no ficheiro */
 int printvaloresQ1 (DRIVERS *d, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {  

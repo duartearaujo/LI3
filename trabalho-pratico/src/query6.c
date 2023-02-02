@@ -5,6 +5,7 @@
 #include "../include/queries.h"
 #include "../include/query6.h"
 #include "../include/interactive.h"
+#include "../include/datas.h"
 
 double distancia_media(int limite_inferior, int limite_superior, char *city){
     int pos, max = getPosQ5Q6(),idade;

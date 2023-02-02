@@ -8,6 +8,7 @@
 #include "../include/query9.h"
 #include "../include/dataverification.h"
 #include "../include/cidades.h"
+#include "../include/datas.h"
 
 /*struct onde vão ser armazenados os dados do ficheiro rides.csv*/
 struct RIDES{ 

@@ -7,6 +7,7 @@
 #include "../include/queries.h"
 #include "../include/query3.h"
 #include "../include/interactive.h"
+#include "../include/datas.h"
 
 int desempate_Q3(const void *p1, const void* p2){
     User *user_1 = GetcontentU(*((User**) p1));

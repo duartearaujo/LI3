@@ -5,6 +5,7 @@
 #include "../include/queries.h"
 #include "../include/drivers.h"
 #include "../include/interactive.h"
+#include "../include/datas.h"
 
 double preco_medio_Q5(int limite_inferior,int limite_superior){
     int i, max = getPosQ5Q6(), idade;

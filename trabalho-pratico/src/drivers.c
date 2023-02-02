@@ -7,6 +7,7 @@
 #include "../include/drivers.h"
 #include "../include/query7.h"
 #include "../include/dataverification.h"
+#include "../include/datas.h"
 
 static GHashTable* drivers;
 

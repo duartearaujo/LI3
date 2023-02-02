@@ -12,6 +12,10 @@
 #include "../include/cidades.h"
 #include "../include/catalogos.h"
 
+void copia (int *informacoespaginas, char *paginas[][linhas_por_pagina], char line[]) {
+    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+}
+
 int saltar_pagina (int linha, int paginas) {
     mvprintw (linha,90,"Insira o número da página q deseja ir (1 a %d): ",paginas + 1);
     char pagina [6];

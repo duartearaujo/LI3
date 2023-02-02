@@ -3,6 +3,7 @@
 
 #include <ncurses.h>
 #include "../include/interactive.h"
+#include "../include/query7.h"
 
 typedef struct avaliacao_por_cidade AvC;
 
@@ -22,10 +23,16 @@ void foreach_tree_city (char *city, double preco_medio []);
 
 void ordena_arvore_Q7 (char *city);
 
-int printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
-
 char *getIdC (AvC const* a);
 
 double getavaliacaomediaC (AvC const* a);
+
+char *getIdAvC (AvC *a);
+
+char *getNameAvC (AvC *a);
+
+double getAvaliacaoMediaAvC (AvC *a);
+
+void tree_foreach_city (char *city, PrintQ7 *p);
 
 #endif
