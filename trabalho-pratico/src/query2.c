@@ -37,7 +37,7 @@ int desempate_Q2(const void *p1, const void* p2){
 
 
 /*faz print dos valores da query 2*/
-int printfArray(FILE *res, int N, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int printfArray(FILE *res, int N, int modo){
     int print = 0, i=0,j=0;
     char line[256] = {0};
     while (i< N){
@@ -50,10 +50,12 @@ int printfArray(FILE *res, int N, int modo, int *informacoespaginas, char *pagin
             if (modo == 0)
                 fprintf(res,"%s;%s;%.3f\n",id,name,avaliacao_media);
             else{
-                mvprintw(informacoespaginas[0], 0, "\t%s;%s;%.3f",id,name,avaliacao_media);
                 sprintf(line, "\t%s;%s;%.3f",id,name,avaliacao_media);
-                paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
-                if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+                if (!copia (strdup (line))) {
+                    free (name);
+                    free (id);
+                    return 0;
+                }
             }
             print++;
             i++;
@@ -66,7 +68,7 @@ int printfArray(FILE *res, int N, int modo, int *informacoespaginas, char *pagin
    return 1;
 }
 
-int query2Exe(FILE *res,int modo, char *argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int query2Exe(FILE *res,int modo, char *argv){
     int r = 1;
     if (atoi (argv)) {
         if(!arrayOrdenado()){
@@ -74,7 +76,7 @@ int query2Exe(FILE *res,int modo, char *argv, int *informacoespaginas, char *pag
             foreach_drivers_Q2 ();
             ordena_Q2();
         }
-        r = printfArray(res,atoi(argv),modo,informacoespaginas,paginas);
+        r = printfArray(res,atoi(argv),modo);
     }
     return r;
 }

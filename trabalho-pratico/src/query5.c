@@ -36,24 +36,22 @@ double preco_medio_Q5(int limite_inferior,int limite_superior){
     return preco_medio;
 }
 
-int printQ5 (FILE *res, int modo,double preco_medio, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
+int printQ5 (FILE *res, int modo,double preco_medio) {
     char line[256] = {0};
     if(preco_medio){
         if (modo == 0)
             fprintf (res, "%.3f\n", preco_medio);
         else{
-            mvprintw (informacoespaginas[0], 0, "\t%.3f", preco_medio);
             sprintf(line, "\t%.3f", preco_medio);
-            paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
-            if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+            if (!copia (strdup (line))) return 0;
         }
     }
     return 1;
 }
 
-int query5Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int query5Exe(FILE *res, int modo, char **argv){
     int r = 1;
     double preco_medio = preco_medio_Q5(tempo_De_Vida(strdup(argv[1])),tempo_De_Vida(strdup(argv[2])));
-    r = printQ5(res, modo,preco_medio,informacoespaginas, paginas);
+    r = printQ5(res, modo,preco_medio);
     return r;
 }

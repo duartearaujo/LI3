@@ -19,7 +19,7 @@
 #include "../include/query9.h"
 
 /*função usada para responder às queries, ou chamar as funções que resolvem as queries */
-int querieIdentifier(char **argv, int n_querie, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {  
+int querieIdentifier(char **argv, int n_querie, int modo) {  
     FILE *res = NULL;
     int q = atoi (argv[0]);
     int r = 1; 
@@ -29,71 +29,69 @@ int querieIdentifier(char **argv, int n_querie, int modo, int *informacoespagina
         res = fopen(filename, "a");
     }
     else {
-        mvprintw (informacoespaginas[0],0,"Resultado:");
-        paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("Resultado:");
-        if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+        if (!copia (strdup ("Resultado:")));
     }
     switch (q)  /*q == nº da query que queremos responder*/
     {
     case 1: {
         clock_t t = clock();
-        r= query1Exe(res,modo,argv[1],informacoespaginas,paginas);
+        r= query1Exe(res,modo,argv[1]);
         t = clock () -t;
         if (modo == 0) printf ("Query1: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 2: {
         clock_t t = clock();
-        r = query2Exe(res,modo,argv[1],informacoespaginas,paginas);
+        r = query2Exe(res,modo,argv[1]);
         t = clock () -t;
         if (modo == 0) printf ("Query2: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 3: {
         clock_t t = clock();
-        r = query3Exe(res,modo,argv[1],informacoespaginas,paginas);
+        r = query3Exe(res,modo,argv[1]);
         t = clock () -t;
         if (modo == 0) printf ("Query3: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 4: {
         clock_t t = clock();
-        r = exec_Q4 (argv[1], res, modo, informacoespaginas, paginas);
+        r = exec_Q4 (argv[1], res, modo);
         t = clock () -t;
         if (modo == 0) printf ("Query4: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 5: {
         clock_t t = clock();
-        r = query5Exe(res,modo,argv, informacoespaginas, paginas);
+        r = query5Exe(res,modo,argv);
         t = clock () -t;
         if (modo == 0) printf ("Query5: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 6: {
         clock_t t = clock();
-        r = query6Exe(res,modo,argv,informacoespaginas,paginas);
+        r = query6Exe(res,modo,argv);
         t = clock () -t;
         if (modo == 0) printf ("Query6: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 7:{
         clock_t t = clock();
-        r = exec_Q7 (argv [2], atoi (argv[1]), res, modo, informacoespaginas, paginas);
+        r = exec_Q7 (argv [2], atoi (argv[1]), res, modo);
         t = clock () -t;
         if (modo == 0) printf ("Query7: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 8: {
         clock_t t = clock();
-        r = query8Exe(res,modo,argv,informacoespaginas,paginas);
+        r = query8Exe(res,modo,argv);
         t = clock () -t;
         if (modo == 0) printf ("Query8: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;
     }
     case 9: {
         clock_t t = clock();
-        r = query9Exe(res,modo,argv,informacoespaginas,paginas);
+        r = query9Exe(res,modo,argv);
         t = clock () -t;
         if (modo == 0) printf ("Query9: %f\n", ((float)t)/CLOCKS_PER_SEC);
         break;

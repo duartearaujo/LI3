@@ -5,6 +5,6 @@
 #include "../include/interactive.h"
 #include "../include/parse.h"
 
-int querieIdentifier(char **argv, int n_querie, int i, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
+int querieIdentifier(char **argv, int n_querie, int modo);
 
 #endif

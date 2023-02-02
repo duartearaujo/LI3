@@ -11,8 +11,6 @@
 
 struct PrintQ7 {
     FILE *res;
-    void *paginas;
-    int *informacoespaginas;
     int N;
     int modo;
 };
@@ -28,15 +26,12 @@ gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
         if (ficheiro->modo == 0)
             fprintf (ficheiro->res,"%s;%s;%.3f\n",id,name,avaliacao_media);
         else{
-            mvprintw (ficheiro->informacoespaginas[0],0,"\t%s;%s;%.3f",id,name,avaliacao_media);
             sprintf(line, "\t%s;%s;%.3f",id,name,avaliacao_media);
-            copia (ficheiro->informacoespaginas, ficheiro->paginas, line);
-            if (ficheiro->informacoespaginas[0] >= linhas_por_pagina) 
-                    if (novapagina (ficheiro->informacoespaginas, ficheiro->paginas)) {
-                        free (id);
-                        free (name);
-                        return FALSE;
-                    }
+                if (!copia (strdup (line))) {
+                    free (name);
+                    free (id);
+                    return FALSE;
+                }
             }
         free (name);
         ficheiro->N--;
@@ -47,14 +42,12 @@ gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
     return TRUE;
 }
 
-int printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
+int printQ7 (char *city,int N, FILE *res, int modo) {
     int r = 1;
     PrintQ7 *p = malloc(sizeof (PrintQ7));
     p->N = N;
     p->res = res;
     p->modo = modo;
-    p->informacoespaginas = informacoespaginas;
-    p->paginas = paginas;
     tree_foreach_city (city,p);
     if (p->N) r = 0; 
     free (p);
@@ -78,11 +71,11 @@ gint organiza_arvore (gconstpointer a, gconstpointer b, gpointer c) {
     return -1;
 }
 
-int exec_Q7 (char *city, int N,FILE *res, int modo, int *informacoespaginas,char *paginas[][linhas_por_pagina]) {
+int exec_Q7 (char *city, int N,FILE *res, int modo) {
     int r = 1;
     if (N){
         ordena_arvore_Q7 (city);
-        r = printQ7 (city,N, res, modo, informacoespaginas, paginas) ;
+        r = printQ7 (city,N, res, modo) ;
     }
     return r;
 }

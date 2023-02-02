@@ -16,8 +16,7 @@ A função, tal como já foi referido anteriormente, vai percorrendo o array e, 
 argumento, (caso estejamos no modo batch) vai fazer print dos valores pretendidos no ficheiro associado ao resultado da query, caso contrário, ou seja, este-
 jamos no modo interativo, vai fazer print no terminal (a forma do print desta query segue a seguinte forma: id_driver,nome_driver,username(do user),nome_user).
 */
-
-int printArray_Q8(FILE *res, int modo,char gender_enunciado,int idade_conta_enunciado, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int printArray_Q8(FILE *res, int modo,char gender_enunciado,int idade_conta_enunciado){
     char line[256] = {0};
     int pos = getPosQ8(gender_enunciado);
     for(int i = 0; i < pos && get_Idade_Conta_DriverQ8(i,gender_enunciado) >= idade_conta_enunciado;i++){
@@ -29,10 +28,14 @@ int printArray_Q8(FILE *res, int modo,char gender_enunciado,int idade_conta_enun
             if (modo == 0)
                 fprintf(res,"%s;%s;%s;%s\n",id_driver,nome_driver,username,nome_user);
             else{
-                mvprintw(informacoespaginas[0], 0, "\t%s;%s;%s;%s",id_driver,nome_driver,username,nome_user);
                 sprintf(line, "\t%s;%s;%s;%s",id_driver,nome_driver,username,nome_user);
-                paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
-                if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+                if (!copia (strdup (line))) {
+                    free(username);
+                    free(id_driver);
+                    free(nome_driver);
+                    free(nome_user);
+                    return 0;
+                }
             }
             free(username);
             free(id_driver);
@@ -46,10 +49,9 @@ int printArray_Q8(FILE *res, int modo,char gender_enunciado,int idade_conta_enun
 /* Função responsável por chamar todas as funções que permitem a execução da query 8.Nesta query em específico só é necessário chamar a função print definida
 em cima.
 */
-
-int query8Exe(FILE *res, int modo, char **argv, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int query8Exe(FILE *res, int modo, char **argv){
     int r = 1;
-    if(argv[1][0] == 'M') printArray_Q8(res,modo,argv[1][0],atoi(argv[2])*10000,informacoespaginas,paginas);
-    else if(argv[1][0] == 'F') printArray_Q8(res,modo,argv[1][0],atoi(argv[2])*10000,informacoespaginas,paginas);
+    if(argv[1][0] == 'M') printArray_Q8(res,modo,argv[1][0],atoi(argv[2])*10000);
+    else if(argv[1][0] == 'F') printArray_Q8(res,modo,argv[1][0],atoi(argv[2])*10000);
     return r;
 }

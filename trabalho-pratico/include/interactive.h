@@ -3,13 +3,13 @@
 
 #include <ncurses.h>
 
-#define linhas_por_pagina (LINES-2)
+typedef struct paginas_interativo paginas_interativo; 
 
-void copia (int *informacoespaginas, char *paginas[][linhas_por_pagina], char line[]);
+int copia (char *line);
 
-int novapagina(int *informacoespaginas, char *paginas[][linhas_por_pagina]);
+int novapagina();
 
-int parsequeryI(int *informacoespaginas,char *paginas[][linhas_por_pagina]);
+int parsequeryI();
 
 void main_I ();
 

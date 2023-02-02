@@ -18,7 +18,7 @@ typedef struct array_RIDES arrayRides;
 #include "query8.h"
 #include "query9.h"
 
-int iniciaHashRides (char *path);
+int iniciaEstruturasRides (char *path);
 
 void inicializaArrays ();
 

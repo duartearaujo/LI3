@@ -10,8 +10,8 @@ gint organiza_arvore (gconstpointer a, gconstpointer b, gpointer c);
 
 gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data);
 
-int printQ7 (char *city,int N, FILE *res, int modo, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
+int printQ7 (char *city,int N, FILE *res, int modo);
 
-int exec_Q7 (char *city,int N ,FILE *res, int modo, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
+int exec_Q7 (char *city,int N ,FILE *res, int modo);
 
 #endif

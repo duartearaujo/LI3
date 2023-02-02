@@ -5,8 +5,8 @@
 
 int desempate_Q3(const void *p1, const void* p2);
 
-int Q3Print(FILE *res, int N, int modo, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
+int Q3Print(FILE *res, int N, int modo);
 
-int query3Exe(FILE *res,int modo,char* argv, int *informacoespaginas,char *paginas[][linhas_por_pagina]);
+int query3Exe(FILE *res,int modo,char* argv);
 
 #endif

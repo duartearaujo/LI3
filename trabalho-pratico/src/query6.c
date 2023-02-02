@@ -25,24 +25,22 @@ double distancia_media(int limite_inferior, int limite_superior, char *city){
     return distancia_media;
 }
 
-int printQ6(FILE *res, int modo,double distancia_media ,int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int printQ6(FILE *res, int modo,double distancia_media){
     char line[256] = {0};
     if(distancia_media){
         if (modo == 0)
             fprintf(res, "%.3f\n", distancia_media);
         else{
-            mvprintw(informacoespaginas[0], 0, "\t%.3f", distancia_media);
             sprintf(line, "\t%.3f", distancia_media);
-            paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
-            if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+            if (!copia (strdup (line))) return 0;
         }
     }
     return 1;
 }
 
-int query6Exe(FILE *res, int modo, char **argumentos, int *informacoespaginas, char *paginas[][linhas_por_pagina]){
+int query6Exe(FILE *res, int modo, char **argumentos){
     int r = 1;
     double distancia = distancia_media(tempo_De_Vida(strdup(argumentos[2])),tempo_De_Vida(strdup(argumentos[3])), argumentos [1]);
-    r = printQ6(res,modo,distancia , informacoespaginas, paginas);
+    r = printQ6(res,modo,distancia);
     return r;
 }

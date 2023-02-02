@@ -12,8 +12,20 @@
 #include "../include/cidades.h"
 #include "../include/catalogos.h"
 
-void copia (int *informacoespaginas, char *paginas[][linhas_por_pagina], char line[]) {
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup(line);
+#define linhas_por_pagina 30
+#define total_paginas 335
+struct paginas_interativo {
+    int informacoespaginas[3];
+    char *pages[total_paginas][linhas_por_pagina];
+};
+
+static paginas_interativo *paginas = NULL;
+
+int copia (char *line) {
+    mvprintw (paginas->informacoespaginas[0], 0, "%s",line);
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = line;
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina ()) return 0;
+    return 1;
 }
 
 int saltar_pagina (int linha, int paginas) {
@@ -30,75 +42,75 @@ int saltar_pagina (int linha, int paginas) {
     return n_pagina;
 }
 
-int novapagina(int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
-    mvprintw (informacoespaginas[0],0,"\t\t---- FIM DA PAGINA ----");
-    mvprintw (informacoespaginas[0]+1,0,"p - Pagina anterior       n - Proxima pagina       e - Sair       s - Saltar p/página");
+int novapagina() {
+    mvprintw (paginas->informacoespaginas[0],0,"\t\t---- FIM DA PAGINA ----");
+    mvprintw (paginas->informacoespaginas[0]+1,0,"p - Pagina anterior       n - Proxima pagina       e - Sair       s - Saltar p/página");
     int ch = getch();
     if (ch == 'n') {
         erase();
-        informacoespaginas[1] ++;
-        if (informacoespaginas[1] <= informacoespaginas[2]){
-            for (int i = 0; i < linhas_por_pagina; i++) if (paginas [informacoespaginas[1]] [i]) mvprintw (i,0,"%s", paginas [informacoespaginas[1]] [i]);
-            if (novapagina(informacoespaginas, paginas) == 0) return 0;
+        paginas->informacoespaginas[1] ++;
+        if (paginas->informacoespaginas[1] <= paginas->informacoespaginas[2]){
+            for (int i = 0; i < linhas_por_pagina; i++) if (paginas->pages[paginas->informacoespaginas[1]] [i]) mvprintw (i,0,"%s", paginas->pages[paginas->informacoespaginas[1]] [i]);
+            if (novapagina(paginas->informacoespaginas, paginas) == 0) return 0;
         }
         else {
-            informacoespaginas[0] = 0;
-            informacoespaginas[2]++;
+            paginas->informacoespaginas[0] = 0;
+            paginas->informacoespaginas[2]++;
         }
         return 1;
     }
     else if (ch == 'p') {
         erase();
-        if (informacoespaginas [1])
-            informacoespaginas[1]--;
-        for (int i = 0; i < linhas_por_pagina; i++) if (paginas [informacoespaginas[1]] [i]) mvprintw (i,0,"%s", paginas [informacoespaginas[1]] [i]);
-        if (novapagina(informacoespaginas, paginas) == 0) return 0;
+        if (paginas->informacoespaginas [1])
+            paginas->informacoespaginas[1]--;
+        for (int i = 0; i < linhas_por_pagina; i++) if (paginas->pages[paginas->informacoespaginas[1]] [i]) mvprintw (i,0,"%s", paginas->pages[paginas->informacoespaginas[1]] [i]);
+        if (novapagina(paginas->informacoespaginas, paginas) == 0) return 0;
     }
     else if (ch == 's'){
-        int pagina = saltar_pagina (informacoespaginas[0]+1,informacoespaginas[2]);
+        int pagina = saltar_pagina (paginas->informacoespaginas[0]+1,paginas->informacoespaginas[2]);
         erase();
-        if (pagina > informacoespaginas[2]) {
-            informacoespaginas[0] = 0;
-            informacoespaginas[2]++;
-            informacoespaginas[1] = informacoespaginas[2];
+        if (pagina > paginas->informacoespaginas[2]) {
+            paginas->informacoespaginas[0] = 0;
+            paginas->informacoespaginas[2]++;
+            paginas->informacoespaginas[1] = paginas->informacoespaginas[2];
             return 1;
         }
         else {
-            informacoespaginas[1] = pagina;
-            for (int i = 0; i < linhas_por_pagina; i++) if (paginas [informacoespaginas[1]] [i]) mvprintw (i,0,"%s", paginas [informacoespaginas[1]] [i]);
-            if (novapagina(informacoespaginas, paginas) == 0) return 0;
+            paginas->informacoespaginas[1] = pagina;
+            for (int i = 0; i < linhas_por_pagina; i++) if (paginas->pages[paginas->informacoespaginas[1]] [i]) mvprintw (i,0,"%s", paginas->pages[paginas->informacoespaginas[1]] [i]);
+            if (novapagina(paginas->informacoespaginas, paginas) == 0) return 0;
         }
     }
     else if (ch == 'e')
         return 0;
-    else novapagina(informacoespaginas, paginas);
+    else novapagina(paginas->informacoespaginas, paginas);
     return -1;
 }
 
-int iniciaI(int *informacoespaginas,  char *paginas[][linhas_por_pagina]){
+int iniciaI(){
 
-    mvprintw (informacoespaginas[0],0,"PROJETO DE LI3");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("PROJETO DE LI3");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"PROJETO DE LI3");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("PROJETO DE LI3");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
 
-    mvprintw (informacoespaginas[0],0,"by Filipe Rodrigues, João Coelho e Duarte Araújo");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("by Filipe Rodrigues, João Coelho e Duarte Araújo");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"by Filipe Rodrigues, João Coelho e Duarte Araújo");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("by Filipe Rodrigues, João Coelho e Duarte Araújo");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
 
     char *path = malloc (sizeof (char) * 256);
-    mvprintw(informacoespaginas[0],0,"Insira o path para os ficheiros: ");
+    mvprintw(paginas->informacoespaginas[0],0,"Insira o path para os ficheiros: ");
     getstr(path);
 
     char line[256];
     sprintf (line, "Insira o path para os ficheiros: %s", path);
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup (line);
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup (line);
     
     refresh ();
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) {free (path);return 0;}
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) {free (path);return 0;}
 
-    mvprintw (informacoespaginas[0],0,"Carregando os ficheiros...");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("Carregando os ficheiros...");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) {free (path);return 0;}
+    mvprintw (paginas->informacoespaginas[0],0,"Carregando os ficheiros...");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("Carregando os ficheiros...");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) {free (path);return 0;}
     refresh ();
 
     if (!iniciaHashTables (path)) {free (path);return 0;}
@@ -125,79 +137,79 @@ int verifica_input (char **query) {
     return -1;
 }
 
-int menudequeries (int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
-    informacoespaginas[0]++;
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
-    mvprintw (informacoespaginas[0],0,"Menu de Queries:");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("Menu de Queries:");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+int menudequeries () {
+    paginas->informacoespaginas[0]++;
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"Menu de Queries:");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("Menu de Queries:");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     
-    mvprintw (informacoespaginas[0],0,"Query |                                               Descrição                                                       | Argumentos");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("Query |                                               Descrição                                                       | Argumentos");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"Query |                                               Descrição                                                       | Argumentos");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("Query |                                               Descrição                                                       | Argumentos");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     
-    mvprintw (informacoespaginas[0],0,"  1   | Resumo de um perfil (User ou driver).                                                                           | Id/Username");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("  1   | Resumo de um perfil (User ou driver).                                                                           | Id/Username");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"  1   | Resumo de um perfil (User ou driver).                                                                           | Id/Username");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("  1   | Resumo de um perfil (User ou driver).                                                                           | Id/Username");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     
-    mvprintw (informacoespaginas[0],0,"  2   | Listar os N condutores com maior avaliação média.                                                            | N");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("  2   | Listar os N condutores com maior avaliação média.                                                            | N");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"  2   | Listar os N condutores com maior avaliação média.                                                            | N");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("  2   | Listar os N condutores com maior avaliação média.                                                            | N");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     
-    mvprintw (informacoespaginas[0],0,"  3   | Listar os N utilizadores com maior distância viajada.                                                          | N");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("  3   | Listar os N utilizadores com maior distância viajada.                                                          | N");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"  3   | Listar os N utilizadores com maior distância viajada.                                                          | N");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("  3   | Listar os N utilizadores com maior distância viajada.                                                          | N");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     
-    mvprintw (informacoespaginas[0],0,"  4   | Preço médio das viagens numa cidade.                                                                          | Cidade");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("  4   | Preço médio das viagens numa cidade.                                                                          | Cidade");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"  4   | Preço médio das viagens numa cidade.                                                                          | Cidade");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("  4   | Preço médio das viagens numa cidade.                                                                          | Cidade");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     
-    mvprintw (informacoespaginas[0],0,"  5   | Preço médio das viagens entre duas datas:                                                                     | Data1 Data2");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("  5   | Preço médio das viagens entre duas datas:                                                                     | Data1 Data2");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"  5   | Preço médio das viagens entre duas datas:                                                                     | Data1 Data2");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("  5   | Preço médio das viagens entre duas datas:                                                                     | Data1 Data2");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     
-    mvprintw (informacoespaginas[0],0,"  6   | Distância média percorrida, numa determinada cidade, num dado intervalo de tempo.                             | Cidade Data1 Data2");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("  6   | Distância média percorrida, numa determinada cidade, num dado intervalo de tempo.                             | Cidade Data1 Data2");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"  6   | Distância média percorrida, numa determinada cidade, num dado intervalo de tempo.                             | Cidade Data1 Data2");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("  6   | Distância média percorrida, numa determinada cidade, num dado intervalo de tempo.                             | Cidade Data1 Data2");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     
-    mvprintw (informacoespaginas[0],0,"  7   | Listar os N condutores com maior avaliação média numa cidade.                                                | N Cidade");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("  7   | Listar os N condutores com maior avaliação média numa cidade.                                                | N Cidade");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"  7   | Listar os N condutores com maior avaliação média numa cidade.                                                | N Cidade");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("  7   | Listar os N condutores com maior avaliação média numa cidade.                                                | N Cidade");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     
-    mvprintw (informacoespaginas[0],0,"  8   | Listar todas as viagens nas quais o utilizador e o condutor são do mesmo género e têm perfis com X ou mais anos.| M/F X");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("  8   | Listar todas as viagens nas quais o utilizador e o condutor são do mesmo género e têm perfis com X ou mais anos.| M/F X");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"  8   | Listar todas as viagens nas quais o utilizador e o condutor são do mesmo género e têm perfis com X ou mais anos.| M/F X");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("  8   | Listar todas as viagens nas quais o utilizador e o condutor são do mesmo género e têm perfis com X ou mais anos.| M/F X");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     
-    mvprintw (informacoespaginas[0],0,"  9   | Listar as viagens nas quais o passageiro deu gorjeta num dado intervalo de tempo.                               | Data1 Data2");
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("  9   | Listar as viagens nas quais o passageiro deu gorjeta num dado intervalo de tempo.                               | Data1 Data2");
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    mvprintw (paginas->informacoespaginas[0],0,"  9   | Listar as viagens nas quais o passageiro deu gorjeta num dado intervalo de tempo.                               | Data1 Data2");
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("  9   | Listar as viagens nas quais o passageiro deu gorjeta num dado intervalo de tempo.                               | Data1 Data2");
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     
-    informacoespaginas[0]++;
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    paginas->informacoespaginas[0]++;
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     return 1;
 }
 
-int continuacao (int *informacoespaginas, char *paginas[][linhas_por_pagina]) {
+int continuacao () {
     int confirmacao;
     char line[31];
-    mvprintw (informacoespaginas[0],0, "Pretende continuar?(y or n): ");
+    mvprintw (paginas->informacoespaginas[0],0, "Pretende continuar?(y or n): ");
     confirmacao = getch();
     sprintf (line, "Pretende continuar?(y or n): %c", confirmacao);
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup (line); 
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup (line); 
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
     if (confirmacao != 'y' && confirmacao != 'n') {
-        mvprintw (informacoespaginas[0],0,"Formato inválido de resposta.");
-        paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("Formato inválido de resposta.");     
-        if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
-        continuacao (informacoespaginas, paginas);
+        mvprintw (paginas->informacoespaginas[0],0,"Formato inválido de resposta.");
+        paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("Formato inválido de resposta.");     
+        if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
+        continuacao (paginas->informacoespaginas, paginas);
         return 1;
     }
-    if (confirmacao == 'y') parsequeryI(informacoespaginas, paginas);
+    if (confirmacao == 'y') parsequeryI(paginas->informacoespaginas, paginas);
     return 1;
 }
 
-int parsequeryI(int *informacoespaginas, char *paginas[][linhas_por_pagina]){
-    if (!menudequeries (informacoespaginas,paginas)) return 0;
+int parsequeryI(){
+    if (!menudequeries ()) return 0;
     int i = 1;
     int n_query = 1;
     char **query = NULL;
@@ -206,22 +218,22 @@ int parsequeryI(int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     char *args = malloc (sizeof (char) * 256);
     char line[256] = {0};
 
-    mvprintw(informacoespaginas[0],0,"Especifique a query: ");
+    mvprintw(paginas->informacoespaginas[0],0,"Especifique a query: ");
     Nquery_input = getch();
 
     sprintf (line, "Especifique a query: %c", Nquery_input);
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup (line);    
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) {
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup (line);    
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) {
         free (query);
         free (q);
         free (args);
         return 0;
     }
     if (Nquery_input < '1' || Nquery_input > '9'){
-        mvprintw (informacoespaginas[0],0,"Número de query inválido.");
-        paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("Número de query inválido.");
-        if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) return 0;
-        parsequeryI (informacoespaginas, paginas);
+        mvprintw (paginas->informacoespaginas[0],0,"Número de query inválido.");
+        paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("Número de query inválido.");
+        if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
+        parsequeryI (paginas->informacoespaginas, paginas);
         free (query);
         free (q);
         free (args);
@@ -229,11 +241,11 @@ int parsequeryI(int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     }
     sprintf (q, "%c", Nquery_input);
     int Nquery = atoi (q);
-    mvprintw(informacoespaginas[0],0,"Insira os argumentos separados por espaço: ");
+    mvprintw(paginas->informacoespaginas[0],0,"Insira os argumentos separados por espaço: ");
     getstr (args);
     sprintf (line, "Insira os argumentos separados por espaço: %s", args);
-    paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup (line);
-    if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) {
+    paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup (line);
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) {
         free (query);
         free (q);
         free (args);
@@ -263,21 +275,21 @@ int parsequeryI(int *informacoespaginas, char *paginas[][linhas_por_pagina]){
         i++;
     }
     if (!verifica_input (query)) {
-        mvprintw (informacoespaginas[0],0,"Argumentos inválidos.");
-        paginas[informacoespaginas[1]] [informacoespaginas[0]++] = strdup ("Argumentos inválidos.");
-        if (informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (informacoespaginas, paginas)) {
+        mvprintw (paginas->informacoespaginas[0],0,"Argumentos inválidos.");
+        paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = strdup ("Argumentos inválidos.");
+        if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) {
             free (query);
             free (q);
             free (args);
             return 0;
         }
-        parsequeryI (informacoespaginas, paginas);      
+        parsequeryI (paginas->informacoespaginas, paginas);      
         free (query);
         free (q);
         free (args);  
         return 1;
     }
-    if (!querieIdentifier(query, n_query++, 1, informacoespaginas, paginas)) {
+    if (!querieIdentifier(query, n_query++, 1)) {
         free (query);
         free (q);
         free (args);
@@ -287,31 +299,29 @@ int parsequeryI(int *informacoespaginas, char *paginas[][linhas_por_pagina]){
     free (query);
     free (q);
     free (args);
-    if (!continuacao (informacoespaginas, paginas)) return 0;
+    if (!continuacao (paginas->informacoespaginas, paginas)) return 0;
     return 1;
 }
 
 void main_I () {
     initscr();
     refresh();
-    int informacoespaginas[3];
-    informacoespaginas [0] = 0; //Linha atual
-    informacoespaginas [1] = 0; //Pagina atual
-    informacoespaginas [2] = 0; //Maior página
-    int total_paginas = 10000 / linhas_por_pagina;  // Total number of pages
-    char *paginas[total_paginas][linhas_por_pagina];
-    int i = iniciaI(informacoespaginas, paginas);
-    if (i) parsequeryI(informacoespaginas, paginas);
-    if (informacoespaginas[0] >= linhas_por_pagina) {
+    paginas = malloc (sizeof (paginas_interativo));
+    paginas->informacoespaginas [0] = 0; //Linha atual
+    paginas->informacoespaginas [1] = 0; //Pagina atual
+    paginas->informacoespaginas [2] = 0; //Maior página
+    int i = iniciaI();
+    if (i) parsequeryI();
+    if (paginas->informacoespaginas[0] >= linhas_por_pagina) {
         erase();
         mvprintw (0,0, "Libertando Memória...");
     }
     else
-        mvprintw (informacoespaginas[0],0, "Libertando Memória...");
+        mvprintw (paginas->informacoespaginas[0],0, "Libertando Memória...");
     refresh();
-    for (int i = 0; i <= informacoespaginas[2]; i++)
+    for (int i = 0; i <= paginas->informacoespaginas[2]; i++)
         for (int j = 0; j < linhas_por_pagina; j++) 
-            if (paginas[i][j]) free (paginas[i][j]);
+            if (paginas->pages[i][j]) free (paginas->pages[i][j]);
     freeEstruturas ();
 
     endwin();
