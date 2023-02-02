@@ -12,23 +12,19 @@ typedef struct q8 q8;
 
 typedef struct array_RIDES arrayRides;
 
-#include "query4.h"
-#include "query5.h"
-#include "query6.h"
-#include "query8.h"
-#include "query9.h"
-
-int iniciaEstruturasRides (char *path);
+q8* inicializa_dados_Q8();
 
 void inicializaArrays ();
 
-void free_ride (RIDES *value);
-
-q8* inicializa_dados_Q8();
+int iniciaEstruturasRides (char *path);
 
 int assignsData(RIDES* new_ride ,int pos ,char* token);
 
-void adicionaHashRides(char *line);
+void adicionaEstruturasRides(char *line);
+
+char *getcityR (RIDES *ride);
+
+char* getcityArrays (int pos);
 
 char getcarR (RIDES *ride);
 
@@ -37,8 +33,6 @@ char getcarArrays (int pos);
 int getdistanceR (RIDES *ride);
 
 int getdistanceArrays (int pos);
-
-char* getcityArrays (int pos);
 
 int getPosQ8 (char gender);
 
@@ -56,6 +50,8 @@ char *getNomeUserQ8(int pos,char gender);
 
 int getPosQ5Q6 ();
 
+int getTempoDeVida(int pos);
+
 char *getUsernameR (RIDES *ride);
 
 char *getIdDriverR (RIDES *ride);
@@ -64,9 +60,9 @@ char *getIdR (RIDES *ride);
 
 char *getDateR (RIDES *ride);
 
-char *getcityR (RIDES *ride);
-
 double getTip (RIDES *ride);
+
+int getIdadeViagem (RIDES *ride);
 
 char* getId_Q9 (int pos); 
 
@@ -82,17 +78,13 @@ int getIdadeViagem_Q9 (int pos);
 
 int getposQ9 ();
 
-int getIdadeViagem (RIDES *ride);
-
 int getposQ9 ();
 
-int getIdadeViagem (RIDES *ride);
-
 int getposQ9 ();
-
-void foreach_rides_Q8 ();
 
 void addQ9(RIDES *ride);
+
+int ordenaQ5Q6(const void *p1, const void* p2);
 
 void ordena_Q5Q6();
 
@@ -102,7 +94,9 @@ void ordena_Q8();
 
 void ordena_Q9();
 
-int getTempoDeVida(int pos);
+void free_ride (RIDES *value);
+
+void freeQ8(q8* dados);
 
 void freeArrays();
 

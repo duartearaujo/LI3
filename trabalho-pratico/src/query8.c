@@ -7,7 +7,6 @@
 #include "../include/rides.h"
 #include "../include/queries.h"
 #include "../include/drivers.h"
-#include "../include/query8.h"
 #include "../include/interactive.h"
 
 /* Função utilizada para percorrer um dos dois arrays criados no ficheiro rides.c (array_male, array_female), qual dos arrays é percorrido depende exclusi-
@@ -26,9 +25,9 @@ int printArray_Q8(FILE *res, int modo,char gender_enunciado,int idade_conta_enun
             char *nome_driver = getNomeDriverQ8(i,gender_enunciado);
             char *nome_user = getNomeUserQ8(i,gender_enunciado);
             if (modo == 0)
-                fprintf(res,"%s;%s;%s;%s\n",id_driver,nome_driver,username,nome_user);
+                fprintf(res,"%s;%s;%s;%s\n",id_driver,nome_driver,username,nome_user);  /*Modo Batch.*/
             else{
-                sprintf(line, "\t%s;%s;%s;%s",id_driver,nome_driver,username,nome_user);
+                sprintf(line, "\t%s;%s;%s;%s",id_driver,nome_driver,username,nome_user);  /*Modo Interativo.*/
                 if (!copia (strdup (line))) {
                     free(username);
                     free(id_driver);

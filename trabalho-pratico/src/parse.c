@@ -51,7 +51,7 @@ void parser(FILE *fp, int h) {
             fun_criar = &adicionaHashDrivers;  /*criar membros da hashtable dos drivers*/
             break;
         case 3:
-            fun_criar = &adicionaHashRides;  /*criar membros da hashtable dos rides*/
+            fun_criar = &adicionaEstruturasRides;  /*criar membros da hashtable dos rides*/
             break;
     }
     while ((read = getline(&line, &len, fp)) != -1){

@@ -18,12 +18,12 @@
 #include "../include/query8.h"
 #include "../include/query9.h"
 
-/*função usada para responder às queries, ou chamar as funções que resolvem as queries */
+/* Função usada para responder às queries, ou chamar as funções que resolvem as queries */
 int queryHandler(char **argv, int n_querie, int modo) {  
     FILE *res = NULL;
     int q = atoi (argv[0]);
     int r = 1; 
-    if(modo == 0){ // modo Batch
+    if(modo == 0){  /*Modo Batch.*/
         char filename [29 + n_querie];
         sprintf(filename, "Resultados/command%d_output.txt", n_querie);
         res = fopen(filename, "a");
