@@ -2,19 +2,20 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glib.h>
-#include <ncurses.h>
-#include "../include/queries.h"
+#include "../include/query7.h"
 #include "../include/cidades.h"
 #include "../include/drivers.h"
-#include "../include/query7.h"
 #include "../include/interactive.h"
 
+/* Struct auxiliar para dar print do resultado da query 7. Possui o ficheiro no caso do modo bath, número de prints e modo de print*/
 struct PrintQ7 {
     FILE *res;
     int N;
     int modo;
 };
 
+/* Função que se encarrega dos prints da query 7. A cada elemento da travessia inorder da árvore pretendida é feito getters, print do resultado e free das variáveis necessárias.
+Quando faz N prints é retornado TRUE para acabar a travessia.*/
 gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
     PrintQ7 *ficheiro = user_data;
     AvC* driver = value;
@@ -23,9 +24,9 @@ gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
     if (verifica_ativo(id)) {
         char *name = getNameAvC(driver);
         double avaliacao_media = getAvaliacaoMediaAvC (driver);
-        if (ficheiro->modo == 0)
+        if (ficheiro->modo == 0) /* Modo Batch*/
             fprintf (ficheiro->res,"%s;%s;%.3f\n",id,name,avaliacao_media);
-        else{
+        else{ /* Modo Interativo*/
             sprintf(line, "\t%s;%s;%.3f",id,name,avaliacao_media);
                 if (!copia (strdup (line))) {
                     free (name);
@@ -42,6 +43,7 @@ gboolean printQ7_aux (gpointer key, gpointer value, gpointer user_data) {
     return TRUE;
 }
 
+/* Cria a estrutura PrintQ7 e atribui os valores necessários. Chama a tree_foreach_city para começar a travessia e assim dar print ao resultado.*/
 int printQ7 (char *city,int N, FILE *res, int modo) {
     int r = 1;
     PrintQ7 *p = malloc(sizeof (PrintQ7));
@@ -54,6 +56,8 @@ int printQ7 (char *city,int N, FILE *res, int modo) {
     return r;
 }
 
+/* Função de comparação para inserir AvC's nas árvores de acordo com a query 7. Compara a avaliação média e devolve os valores de maneira q a árvore fique ordenada de forma decrescente.
+Se as avaliações forem iguais é ordenado segundo o id dos drivers.*/
 gint organiza_arvore (gconstpointer a, gconstpointer b, gpointer c) {
     AvC const* ax = a;
     AvC const* bx = b;
@@ -71,6 +75,7 @@ gint organiza_arvore (gconstpointer a, gconstpointer b, gpointer c) {
     return -1;
 }
 
+/* Função de execução da query 7. Se N != 0 é chamada a função de ordenação da query 7 e depois a função de print.*/
 int exec_Q7 (char *city, int N,FILE *res, int modo) {
     int r = 1;
     if (N){

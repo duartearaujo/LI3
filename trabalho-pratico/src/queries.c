@@ -19,7 +19,7 @@
 #include "../include/query9.h"
 
 /*função usada para responder às queries, ou chamar as funções que resolvem as queries */
-int querieIdentifier(char **argv, int n_querie, int modo) {  
+int queryHandler(char **argv, int n_querie, int modo) {  
     FILE *res = NULL;
     int q = atoi (argv[0]);
     int r = 1; 

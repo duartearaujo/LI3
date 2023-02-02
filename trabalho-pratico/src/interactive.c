@@ -5,22 +5,24 @@
 #include <ncurses.h>
 #include "../include/interactive.h"
 #include "../include/queries.h"
-#include "../include/users.h"
-#include "../include/rides.h"
-#include "../include/drivers.h"
-#include "../include/dataverification.h"
-#include "../include/cidades.h"
 #include "../include/catalogos.h"
+#include "../include/dataverification.h"
 
+/* Defenição de linhas_por_pagina com o valor 30.*/
 #define linhas_por_pagina 30
+
+/* Defenição de total_paginas com o valor 335 (~10000(linhas) / linhas_por_pagina).*/
 #define total_paginas 335
+
+/* Struct para guardar informações sobre as páginas do modo interativo.*/
 struct paginas_interativo {
     int informacoespaginas[3];
     char *pages[total_paginas][linhas_por_pagina];
 };
 
-static paginas_interativo *paginas = NULL;
+static paginas_interativo *paginas = NULL; /* Static para declarar a estrutura globalmente apenas no ficheiro interactive.c*/
 
+/* Função que faz print da linha que vem de outros ficheiros no terminal e guarda a linha na página.*/
 int copia (char *line) {
     mvprintw (paginas->informacoespaginas[0], 0, "%s",line);
     paginas->pages[paginas->informacoespaginas[1]] [paginas->informacoespaginas[0]++] = line;
@@ -28,6 +30,10 @@ int copia (char *line) {
     return 1;
 }
 
+/* Função que trata da funcionaliade de saltar para uma página à escolha do utilizador. Se o número inserido for:
+    inválido: a função é chamda recursivamente
+    maior que o número de páginas existente: é criado uma nova página
+*/
 int saltar_pagina (int linha, int paginas) {
     mvprintw (linha,90,"Insira o número da página q deseja ir (1 a %d): ",paginas + 1);
     char pagina [6];
@@ -42,6 +48,12 @@ int saltar_pagina (int linha, int paginas) {
     return n_pagina;
 }
 
+/* Função para funcionalidades de final de página. É pedido para inserir uma letra q corresponde a um comando:
+p - Move para a página anterior.
+n - Move para a página seguinte. Se não houver cria uma nova.
+e - Fecha o programa.
+s - Salta para uma página à escolha do utilizador.
+*/
 int novapagina() {
     mvprintw (paginas->informacoespaginas[0],0,"\t\t---- FIM DA PAGINA ----");
     mvprintw (paginas->informacoespaginas[0]+1,0,"p - Pagina anterior       n - Proxima pagina       e - Sair       s - Saltar p/página");
@@ -87,6 +99,7 @@ int novapagina() {
     return -1;
 }
 
+/* Inicia o modo interativo. Primeiro pede o path dos ficheiros, se for inválido o programa acaba.*/
 int iniciaI(){
 
     mvprintw (paginas->informacoespaginas[0],0,"PROJETO DE LI3");
@@ -118,6 +131,7 @@ int iniciaI(){
     return 1;
 }
 
+/* Função que verifica se o input de argumentos dado pelo utilizador é válido para a query pedida. A verificação utiliza funções do módulo dataverication.h*/
 int verifica_input (char **query) {
     int n_query = atoi (query[0]);
     if (n_query == 1)
@@ -137,6 +151,7 @@ int verifica_input (char **query) {
     return -1;
 }
 
+/* Função para dar print ao resumo de cada querie.*/
 int menudequeries () {
     paginas->informacoespaginas[0]++;
     if (paginas->informacoespaginas[0] >= linhas_por_pagina) if (!novapagina (paginas->informacoespaginas, paginas)) return 0;
@@ -189,6 +204,8 @@ int menudequeries () {
     return 1;
 }
 
+/* Função para a funcionalidade de continuação do programa. Realiza um pedido de um char y ou n. Se o char não corresponder a nenhum dos dois a função é chamada recursivamente. Se for 'y'
+o é chamada a função parsequeryI para a continuação do programa, se for 'n' p programa acaba.*/
 int continuacao () {
     int confirmacao;
     char line[31];
@@ -208,6 +225,8 @@ int continuacao () {
     return 1;
 }
 
+/* Função para realizar os pedidos de queries do utilizador. Primeiro pede para o utilizador especificar a query que deseja executar, sendo feito uma verificação se o número é válido.
+De seguida é pedido os argumentos que passam por uma verificação com auxílio da função verifica_input. É chamada a função querieidentifier para a execução da query e por fim é feita confimação se o utilizidador que continuar a executar o programa.*/
 int parsequeryI(){
     if (!menudequeries ()) return 0;
     int i = 1;
@@ -289,7 +308,7 @@ int parsequeryI(){
         free (args);  
         return 1;
     }
-    if (!querieIdentifier(query, n_query++, 1)) {
+    if (!queryHandler(query, n_query++, 1)) {
         free (query);
         free (q);
         free (args);
@@ -303,6 +322,8 @@ int parsequeryI(){
     return 1;
 }
 
+/* Main do modo interativo. Inicia a struct do modo, prenche o array de ints sobre as informações de cada página. Chama a função iniciaI para iniciar o programa. De seguida chama a função parsequeryI para resolver as queries.
+Por fim, para encerrar o programa, é feito os free's necessários.*/
 void main_I () {
     initscr();
     refresh();
