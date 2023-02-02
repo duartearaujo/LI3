@@ -7,9 +7,12 @@
 #define MES 10
 #define ANO 2022
 
-/*compara duas datas || return value == 1 se a primeira é mais recente que a segunda
-return value == 0 se a primeira é mais antiga que a segunda
-return value == 2 se as datas são iguais */
+/* Função que compara duas datas.
+return value == 1 se a primeira é mais recente que a segunda.
+return value == 0 se a primeira é mais antiga que a segunda.
+return value == 2 se as datas são iguais.
+*/
+
 int compareDates(char *str, char *string){  
     int r = 0;
     if(str && !string) r = 1;
@@ -36,6 +39,8 @@ int compareDates(char *str, char *string){
     return r;
 }
 
+/* Função que calcula a diferença de dias entre a data de referência(09/10/2022) e uma data dada como argumento.*/
+
 int tempo_De_Vida(char *str){
     int tempo_de_vida;
     char *temp = str;
@@ -52,7 +57,8 @@ int tempo_De_Vida(char *str){
     return tempo_de_vida;
 }
 
-/*verifica que idade tem o user/driver(usando a data dada no enunciado "09/10/2022")*/
+/* Verifica que idade tem o user/driver(usando a data de referência dada no enunciado "09/10/2022").*/
+
 int calculaIdade(char *str){  
     int idade = 0;
     int dia = atoi(strsep(&str, "/"));

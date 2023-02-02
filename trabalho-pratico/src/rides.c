@@ -75,7 +75,7 @@ void inicializaArrays (){
    arrays->arrayQ5Q6 = NULL;
 }
 
-int iniciaHashRides (char *path) {
+int iniciaEstruturasRides (char *path) {
    FILE *fp = NULL;
    char *filename = malloc ((strlen (path) + strlen ("/rides.csv") + 1)*sizeof (char));
    strcpy(filename,path);

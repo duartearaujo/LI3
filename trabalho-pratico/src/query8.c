@@ -43,7 +43,7 @@ int printArray_Q8(FILE *res, int modo,char gender_enunciado,int idade_conta_enun
     return 1;
 }
 
-/*Função responsável por chamar todas as funções que permitem a execução da query 8.Nesta query em específico só é necessário chamar a função print definida
+/* Função responsável por chamar todas as funções que permitem a execução da query 8.Nesta query em específico só é necessário chamar a função print definida
 em cima.
 */
 
