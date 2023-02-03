@@ -35,4 +35,6 @@ double getAvaliacaoMediaAvC (AvC *a);
 
 void tree_foreach_city (char *city, PrintQ7 *p);
 
+int existscity (char *city);
+
 #endif
