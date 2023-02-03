@@ -12,25 +12,25 @@ static GHashTable *users;
 
 /*Struct para guardar os valores referentes a cada user */
 struct user {    
-    char* username;
-    char* name;
-    char* data;
-    char* account_creation;
-    char* last_ride;
-    double total_gasto;
-    int acc_avaliation;
-    int idade_conta;
-    int n_viagens;
-    int distance;
-    char account_status;
-    char gender;
+    char* username; /**<Campo que indica o username do user*/
+    char* name; /**<Campo que indica o nome do user*/
+    char* data; /**<Campo que indica a data de nascimento do user*/
+    char* account_creation; /**<Campo que indica a data de criação da conta*/
+    char* last_ride; /**<Campo que indica a data da última viagem do user*/
+    double total_gasto; /**<Campo que indica o total gasto do user*/
+    int acc_avaliation; /**<Campo que indica a avaliação total do user*/
+    int idade_conta; /**<Campo que indica a idade da conta*/
+    int n_viagens; /**<Campo que indica o número de viagens do user*/
+    int distance; /**<Campo que indica a distância percorrida pelo user*/
+    char account_status; /**<Campo que indica o status da conta*/
+    char gender; /**<Campo que indica o género do user*/
 };
 
 /*struct auxiliar usada para realizar a query 3*/
 struct ARRAY_USERS{
-    int ordenado;
-    int pos; /*posição na qual queremos inserir a próxima struct user*/
-    User **user; /*array de users*/
+    int ordenado; /**<Indica se o array está ordenado ou não*/
+    int pos; /**<Posição na qual queremos inserir a próxima struct user*/
+    User **user; /**<Array de users*/
 };
 
 static ARRAY_USERS *array = NULL;
@@ -44,6 +44,7 @@ void free_user (User *value) {
     free(value->last_ride);
     free (value);
 }
+
 
 int iniciaHashUsers (char *path) {
     FILE *fp = NULL;
@@ -156,6 +157,7 @@ int atribui (User *user, int pos, char *info) {
     return 1;
 }
 
+/*Função que trata das estatísticas do user, adicionando os dados das viagens do mesmo*/
 void addToUser (User *user, int distance, char *tip, int car_class, int avaliation, char *date) {
     switch (car_class) /*calcula os valores dependendo do int q identifica o tipo de carro.*/ 
       {
@@ -183,6 +185,7 @@ void addToUser (User *user, int distance, char *tip, int car_class, int avaliati
     user->distance += distance;
 }
 
+/*Retorna uma cópia da estrutura user*/
 User* GetcontentU(User *u) {
     if (u) {
         User *copy = malloc (sizeof (User));  
@@ -202,50 +205,62 @@ User* GetcontentU(User *u) {
     return NULL;
 }
 
+/*Retorna o nome do user*/
 char *getNameU (User *u) {
     return strdup (u->name);
 }
 
+/*Retorna o género do user*/
 char getGenderU (User *u) {
     return u->gender;
 }
 
+/*Retorna o status da conta do user*/
 char getAccStatusU (User *u) {
     return u->account_status;
 }
 
+/*Retorna a data de nascimento do user*/
 char *getDataU (User *u) {
     return strdup (u->data);
 }
 
+/*Retorna o número de viagens correspondente ao user*/
 int getNViagensU (User *u) {
     return u->n_viagens;
 }
 
+/*Retorna o total gasto do user*/
 double getTotalGastoU (User *u) {
     return u->total_gasto;
 }
 
+/*Retorna a avaliação do user*/
 int getAccAvaliationU (User *u) {
     return u->acc_avaliation;
 }
 
+/*Retorna o username do user*/
 char *getUsername(User* user){
     return strdup(user -> username);
 }
 
+/*Retorna a data da última viagem do user*/
 char *getLastRide(User* user){
     return (user->last_ride ? strdup(user -> last_ride) : NULL);
 }
 
+/*Retorna o campo da distância do user*/
 int getDistance(User* user){
     return user -> distance;
 }
 
+/*Retorna a idade da conta do user*/
 int get_Idade_Conta_U(User* user){
     return user->idade_conta;
 }
 
+/*Retorna o user correspondente à key recebida como argumento*/
 User* lookup_users (char* key) {
     return (g_hash_table_lookup (users, key));
 }
@@ -265,16 +280,19 @@ void guardaUser(User *user){
     array->user[(array->pos - 1)] = user;
 }
 
+/*Função que faz o quicksort do array dos users*/
 void ordena_Q3(){
     qsort (array->user,(size_t)array->pos, sizeof(User*), desempate_Q3);
     array->ordenado = 1;
 }
 
+/*Função que verifica se o array está ordenado ou não*/
 int arrayOrdenadoU(){
     if(!array) return 0;
     return array->ordenado;
 }
 
+/*Retorna o conteúdo da estrutura user*/
 User* getElement_Q3(int i){
     return GetcontentU(array->user[i]);
 }
@@ -287,6 +305,7 @@ void freeArrayU(){
     }
 }
 
+/*Faz free da hashtable dos users*/
 void hash_table_destroy_users () {
     g_hash_table_destroy (users);
 }
