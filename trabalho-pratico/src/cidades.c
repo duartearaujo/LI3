@@ -195,3 +195,10 @@ char *getNameAvC (AvC *a) {
 double getAvaliacaoMediaAvC (AvC *a) {
     return a->avaliacao_media;
 }
+
+/* Verifica se existe a cidade recebida*/
+int existscity (char *city) {
+    HTree *c = g_hash_table_lookup (cidades,city);
+    if (c) return 1;
+    return 0;
+}

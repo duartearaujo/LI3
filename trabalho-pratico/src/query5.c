@@ -14,29 +14,31 @@ das viagens dentro do intervalo.
 double preco_medio_Q5(int limite_inferior,int limite_superior){
     int i, max = getPosQ5Q6(), idade;
     double preco_total = 0,preco_medio = 0,numero_viagens = 0;
-    for (i = 0; i < max && getTempoDeVida(i) < limite_superior; i++);
-    if (i < max) idade = getTempoDeVida(i);
-    while(i < max && idade <= limite_inferior ){
-        numero_viagens++;
-        char car_class = getcarArrays(i);
-        int distancia = getdistanceArrays(i);
-        switch (identifie_car_class_char(car_class)) /*Custo por quilômetro depende da car_class do carro.*/
-        {
-        case 0:
-            preco_total += distancia * 0.62 + 3.25;
-            break;
-        case 1:
-            preco_total += distancia * 0.79 + 4;
-            break;
-        case 2:
-            preco_total  += distancia * 0.94 + 5.20;
-            break;
-        default:
-            break;
+    if (getTempoDeVida (max-1) > limite_superior) {
+        for (i = 0; i < max && getTempoDeVida(i) < limite_superior; i++);
+        if (i < max) idade = getTempoDeVida(i);
+        while(i < max && idade <= limite_inferior ){
+            numero_viagens++;
+            char car_class = getcarArrays(i);
+            int distancia = getdistanceArrays(i);
+            switch (identifie_car_class_char(car_class)) /*Custo por quilômetro depende da car_class do carro.*/
+            {
+            case 0:
+                preco_total += distancia * 0.62 + 3.25;
+                break;
+            case 1:
+                preco_total += distancia * 0.79 + 4;
+                break;
+            case 2:
+                preco_total  += distancia * 0.94 + 5.20;
+                break;
+            default:
+                break;
+            }
+            idade = getTempoDeVida(++i);
         }
-        idade = getTempoDeVida(++i);
+        if(numero_viagens) preco_medio = preco_total / numero_viagens;  /*Calcula a média dos preços das viagens.*/
     }
-    if(numero_viagens) preco_medio = preco_total / numero_viagens;  /*Calcula a média dos preços das viagens.*/
     return preco_medio;
 }
 

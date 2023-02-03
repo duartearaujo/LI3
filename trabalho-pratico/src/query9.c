@@ -37,32 +37,34 @@ int desempate_Q9(const void *p1, const void* p2) {
 int Q9Print(FILE *res, int t1, int t2, int modo){
     int t;
     int i = 0;
-    int tamanho = getposQ9 ();
+    int tamanho = getposQ9 (), max = getPosQ5Q6();
     char line[256] = {0};
-    while(i < tamanho){ 
-        t = getIdadeViagem_Q9 (i);
-        if(t <= t1 && t2 <= t){ /*Verifica se a data da viagem se encontra no intervalo de tempo desejado*/
-            char *id = getId_Q9 (i);
-            char *date = getDate_Q9 (i);
-            int distance = getDistance_Q9 (i);
-            char *city = getCity_Q9 (i);
-            double tip = getTip_Q9 (i);
-            if(modo == 0) /*Modo batch*/
-                fprintf(res, "%s;%s;%d;%s;%.3f\n", id, date, distance, city, tip);
-            else{ /*Modo interativo*/
-                sprintf(line, "\t%s;%s;%d;%s;%.3f", id, date, distance, city, tip);
-                if (!copia (strdup (line))) {
-                    free (id);
-                    free (date);
-                    free (city);
-                    return 0;
+    if (getTempoDeVida (max-1) > t2 && t1 >= 0) {
+        while(i < tamanho){ 
+            t = getIdadeViagem_Q9 (i);
+            if(t <= t1 && t2 <= t){ /*Verifica se a data da viagem se encontra no intervalo de tempo desejado*/
+                char *id = getId_Q9 (i);
+                char *date = getDate_Q9 (i);
+                int distance = getDistance_Q9 (i);
+                char *city = getCity_Q9 (i);
+                double tip = getTip_Q9 (i);
+                if(modo == 0) /*Modo batch*/
+                    fprintf(res, "%s;%s;%d;%s;%.3f\n", id, date, distance, city, tip);
+                else{ /*Modo interativo*/
+                    sprintf(line, "\t%s;%s;%d;%s;%.3f", id, date, distance, city, tip);
+                    if (!copia (strdup (line))) {
+                        free (id);
+                        free (date);
+                        free (city);
+                        return 0;
+                    }
                 }
+                free (id);
+                free (date);
+                free (city);
             }
-            free (id);
-            free (date);
-            free (city);
+            i++;
         }
-        i++;
     }
     return 1;
 }
