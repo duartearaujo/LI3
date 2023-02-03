@@ -9,9 +9,9 @@
 
 /* Struct auxiliar para dar print do resultado da query 7. Possui o ficheiro no caso do modo bath, número de prints e modo de print*/
 struct PrintQ7 {
-    FILE *res;
-    int N;
-    int modo;
+    FILE *res; /**< Ficheiro para guardar o output. Pode ser NULL no caso de estar no modo interativo*/
+    int N; /**< Número de elementos para retornar*/
+    int modo; /**< Modo que o programa se encontra*/
 };
 
 /* Função que se encarrega dos prints da query 7. A cada elemento da travessia inorder da árvore pretendida é feito getters, print do resultado e free das variáveis necessárias.

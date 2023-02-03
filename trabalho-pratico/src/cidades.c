@@ -11,11 +11,11 @@ static GHashTable *cidades;
 
 /* Struct para guardar informacões úteis às queries 4 e 7*/
 struct avaliacao_por_cidade {
-    char *name, *id;
-    int n_viagens;
-    int avaliacao_total;
-    double avaliacao_media;
-    double preco_total;
+    char *name, *id; /**< Campos para guardar o nome e id do driver*/
+    int n_viagens; /**< Campo para guardar o número total de viagens na cidade do driver*/
+    int avaliacao_total; /**< Campo para guardar o total de todas as avaliacoes na cidade do driver*/
+    double avaliacao_media; /**< Campo para guardar a avaliação média do driver na cidade do driver*/
+    double preco_total; /**< Campo para guardar o preco total de todas as viagens na cidade do driver*/
 };
 
 /* Struct para colocar na Hash Table cidades. Contém uma árvore de AvC* e um int para indicar se a árvore está ordenada de acordo com as exigências da query 7*/
