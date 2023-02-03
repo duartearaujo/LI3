@@ -12,17 +12,17 @@
 
 /* Struct onde vão ser armazenados os dados do ficheiro rides.csv.*/
 struct RIDES{ 
-   char *id;
-   char *date;
-   char *driver;
-   char *user;
-   char *city;
-   char *tip;
-   int score_user;
-   int score_driver;
-   int distance;
-   int idade_viagem;
-   char type_car;
+   char *id; /**< Campo para guardar o id da viagem.*/
+   char *date; /**< Campo para guardar a data da viagem.*/
+   char *driver; /**< Campo para guardar o id do driver da viagem.*/
+   char *user; /**< Campo para guardar o username do user da viagem.*/
+   char *city; /**< Campo para guardar a cidade da viagem.*/
+   char *tip; /**< Campo para guardar a tip da viagem.*/
+   int score_user; /**< Campo para guardar a classificação dada pelo user da viagem.*/
+   int score_driver; /**< Campo para guardar a classificação dada pelo driver da viagem.*/
+   int distance; /**< Campo para guardar a distância percorrida durante a viagem.*/
+   int idade_viagem; /**< Campo para guardar a idade da viagem.*/
+   char type_car; /**< Campo para guardar o tipo do carro utilizado na viagem.*/
 };
 
 /* Struct usada nos arrays do query 8.*/

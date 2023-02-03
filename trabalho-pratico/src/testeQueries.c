@@ -19,6 +19,7 @@
 #include "../include/query9.h"
 #include "../include/catalogos.h"
 
+/* Verifica se dois ficheiros dados como argumento são iguais ou não.Esta funcção é utilizada para verificar se o resultado do teste é igual à solução ou não.*/
 int compareFiles(FILE *fp1, FILE *fp2){
     int ch1 = getc(fp1);
     int ch2 = getc(fp2);
@@ -30,8 +31,9 @@ int compareFiles(FILE *fp1, FILE *fp2){
     return 0;
 }
 
-
-
+/* Cria o ficheiro onde o resultado do teste vai ser escrito e chama as funções que executam as queries para escrever o resultado nesse mesmo ficheiro.
+Depois abre o file onde a solução do respetivo teste se encontra e chama a função que compara dois ficheiros para verificar se o resultado obtido está
+certo ou não. Esta função é utilizada para fazer os testes das queries que recebem um único argumento.*/
 int testaQueries1Argumento(int modo,int n_teste,int query){
     printf("A iniciar os testes da Query %d:\n",query);
     int i = 0,N = 0,inicio = 0,erros = 0,corretos = 0;
@@ -57,12 +59,12 @@ int testaQueries1Argumento(int modo,int n_teste,int query){
         FILE *res = NULL,*solucao = NULL;
         char filename [37 + n_teste];
         sprintf(filename, "Resultados_testes/command%d_output.txt", n_teste);
-        res = fopen(filename, "a");
+        res = fopen(filename, "a"); /**< Cria o ficheiro onde o resultado do teste vai ser escrito.*/
         clock_t t = clock();
-        if(query == 1) query1Exe(res,modo,argumentos[i]);
-        else if(query == 2) query2Exe(res,modo,argumentos[i]);
-        else if(query == 3) query3Exe(res,modo,argumentos[i]);
-        else if(query == 4) exec_Q4(argumentos[i],res,modo);
+        if(query == 1) query1Exe(res,modo,argumentos[i]); /**< Executa a query 1 caso o argumento dado seja 1.*/
+        else if(query == 2) query2Exe(res,modo,argumentos[i]); /**< Executa a query 2 caso o argumento dado seja 2.*/
+        else if(query == 3) query3Exe(res,modo,argumentos[i]); /**< Executa a query 3 caso o argumento dado seja 3.*/
+        else if(query == 4) exec_Q4(argumentos[i],res,modo); /**< Executa a query 4 caso o argumento dado seja 4.*/
         if (res) fclose (res);
         res = fopen(filename, "r");
         t = clock() - t;
@@ -72,7 +74,7 @@ int testaQueries1Argumento(int modo,int n_teste,int query){
         char solucao_teste[33 + n_teste];
         sprintf(solucao_teste, "SolucoesTestes/solucao_teste%d.txt", n_teste);
         solucao = fopen(solucao_teste, "r");
-        if(compareFiles(res,solucao)) corretos++;
+        if(compareFiles(res,solucao)) corretos++; /**< Verifica se o resultado do teste está certo.*/
         if (res) fclose (res);
         if (solucao) fclose (solucao);
         n_teste++;
@@ -82,7 +84,9 @@ int testaQueries1Argumento(int modo,int n_teste,int query){
     return n_teste;
 }
 
-
+/* Cria o ficheiro onde o resultado do teste vai ser escrito e chama as funções que executam as queries para escrever o resultado nesse mesmo ficheiro.
+Depois abre o file onde a solução do respetivo teste se encontra e chama a função que compara dois ficheiros para verificar se o resultado obtido está
+certo ou não. Esta função é utilizada para fazer os testes das queries que recebem dois argumentos.*/
 int testaQueries2Argumentos(int modo,int n_teste,int query){
     printf("A iniciar os testes da Query %d:\n",query);
     int N = 0,erros = 0,linha = 0,inicio = 0,corretos = 0;
@@ -119,12 +123,12 @@ int testaQueries2Argumentos(int modo,int n_teste,int query){
         FILE *res = NULL,*solucao = NULL;
         char filename [37 + n_teste];
         sprintf(filename, "Resultados_testes/command%d_output.txt", n_teste);
-        res = fopen(filename, "a");
+        res = fopen(filename, "a"); /**< Cria o ficheiro onde o resultado do teste vai ser escrito.*/
         clock_t t = clock();
-        if(query == 5) query5Exe(res,modo,argumentos[linha]);
-        if(query == 7) exec_Q7(argumentos[linha][2],atoi(argumentos[linha][1]),res,modo);
-        if(query == 8) query8Exe(res,modo,argumentos[linha]);
-        if(query == 9) query9Exe(res,modo,argumentos[linha]);
+        if(query == 5) query5Exe(res,modo,argumentos[linha]); /**< Executa a query 5 caso o argumento dado seja 5.*/
+        if(query == 7) exec_Q7(argumentos[linha][2],atoi(argumentos[linha][1]),res,modo); /**< Executa a query 7 caso o argumento dado seja 7.*/
+        if(query == 8) query8Exe(res,modo,argumentos[linha]); /**< Executa a query 8 caso o argumento dado seja 8.*/
+        if(query == 9) query9Exe(res,modo,argumentos[linha]); /**< Executa a query 9 caso o argumento dado seja 9.*/
         if (res) fclose (res);
         res = fopen(filename, "r");
         t = clock() - t;
@@ -134,7 +138,7 @@ int testaQueries2Argumentos(int modo,int n_teste,int query){
         char solucao_teste[33 + n_teste];
         sprintf(solucao_teste, "SolucoesTestes/solucao_teste%d.txt", n_teste);
         solucao = fopen(solucao_teste, "r");
-        if(compareFiles(res,solucao)) corretos++;
+        if(compareFiles(res,solucao)) corretos++; /**< Verifica se o resultado do teste está certo.*/
         if (res) fclose (res);
         if (solucao) fclose (solucao);
         n_teste++;
@@ -144,6 +148,9 @@ int testaQueries2Argumentos(int modo,int n_teste,int query){
     return n_teste;
 }
 
+/* Cria o ficheiro onde o resultado do teste vai ser escrito e chama as funções que executam as queries para escrever o resultado nesse mesmo ficheiro.
+Depois abre o file onde a solução do respetivo teste se encontra e chama a função que compara dois ficheiros para verificar se o resultado obtido está
+certo ou não. Esta função é utilizada para fazer os testes da query 6 já que é a única que recebe três argumentos.*/
 void testaQueries3Argumentos(int modo,int n_teste){
     printf("A iniciar os testes da Query 6:\n");
     int linha = 0,erros = 0,corretos = 0;
@@ -155,9 +162,9 @@ void testaQueries3Argumentos(int modo,int n_teste){
         FILE *res = NULL,*solucao = NULL;
         char filename [37 + n_teste];
         sprintf(filename, "Resultados_testes/command%d_output.txt", n_teste);
-        res = fopen(filename, "a");
+        res = fopen(filename, "a"); /**< Cria o ficheiro onde o resultado do teste vai ser escrito.*/
         clock_t t = clock();
-        query6Exe(res,modo,argumentos[linha]);
+        query6Exe(res,modo,argumentos[linha]); /**< Executa a query 6.*/
         if (res) fclose (res);
         res = fopen(filename, "r");
         t = clock() - t;
@@ -167,7 +174,7 @@ void testaQueries3Argumentos(int modo,int n_teste){
         char solucao_teste[33 + n_teste];
         sprintf(solucao_teste, "SolucoesTestes/solucao_teste%d.txt", n_teste);
         solucao = fopen(solucao_teste, "r");
-        if(compareFiles(res,solucao)) corretos++;
+        if(compareFiles(res,solucao)) corretos++; /**< Verifica se o resultado do teste está certo.*/
         if (res) fclose (res);
         if (solucao) fclose (solucao);
         n_teste++;
@@ -177,7 +184,7 @@ void testaQueries3Argumentos(int modo,int n_teste){
     if(erros == 2) printf("Query 6 ultrapassou o tempo útil!\n\n");
 }
 
-
+/* Função main dos testes automáticos. São chamadas as funções que fazem os testes para cada query.*/
 int main(int argc,char **argv){
     int r = iniciaHashTables(argv[1]);
     int n_teste = 1;
