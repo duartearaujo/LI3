@@ -133,7 +133,7 @@ int testaQueries2Argumentos(int modo,int n_teste,int query){
         res = fopen(filename, "r");
         t = clock() - t;
         time_used = ((float)t)/CLOCKS_PER_SEC;
-        printf ("Query%d: %f\n",query,time_used);
+        printf ("\tQuery%d: %f\n",query,time_used);
         if(time_used >= 10) erros = 2;
         char solucao_teste[33 + n_teste];
         sprintf(solucao_teste, "SolucoesTestes/solucao_teste%d.txt", n_teste);
@@ -169,7 +169,7 @@ void testaQueries3Argumentos(int modo,int n_teste){
         res = fopen(filename, "r");
         t = clock() - t;
         time_used = ((float)t)/CLOCKS_PER_SEC;
-        printf ("Query6: %f\n",time_used);
+        printf ("\tQuery6: %f\n",time_used);
         if(time_used >= 10) erros = 2;
         char solucao_teste[33 + n_teste];
         sprintf(solucao_teste, "SolucoesTestes/solucao_teste%d.txt", n_teste);
